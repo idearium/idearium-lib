@@ -13,6 +13,16 @@ module.exports = {
     Config: require('./lib/config'),
     Loader: require('./lib/loader'),
     Email: require('./lib/email'),
-    Hash: require('./lib/hash')
+    Hash: require('./lib/hash'),
+
+    // Common
+    common: {
+        config: require('./common/config'),
+        exception: require('./common/exception'),
+        mq: {
+            client: require('./common/mq/client'),
+            messages: require('./common/mq/messages'),
+        },
+    },
 
 };

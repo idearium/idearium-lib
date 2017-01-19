@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## 1.0.0-alpha.7
+
+- Added the `common` object.
+
 ## 1.0.0-alpha.6
 
 - Added the `Email` class and passing tests.
