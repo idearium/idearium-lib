@@ -43,6 +43,7 @@ const parseCsv = (data, options) => new Promise((resolve, reject) => {
         stream = new Duplex();
 
         stream.push(data);
+        // Pass null to signal the end of the file.
         stream.push(null);
 
     }
