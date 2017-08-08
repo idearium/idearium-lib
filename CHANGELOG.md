@@ -2,7 +2,11 @@
 
 This file is a history of the changes made to idearium-lib.
 
-## Unreleased
+## 1.0.0-alpha.18
+
+- Added new `util.parseCsv(data, options)` method. This can be used to parse a csv and takes a readable stream or buffered data contents as the first parameter. You can also transform the csv contents using an `options.transform` function or use any options listed here http://csv.adaltas.com/parse/.
+
+## 1.0.0-alpha.17
 
 - Removed `processJobs` from `common/kue.js`.
 - `common/kue-queue.js` will now throw an error if `!config.get('kuePrefix')`.
