@@ -24,7 +24,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(false);
-        expect(_fields).to.have.all.keys('email', 'username');
+        expect(_fields).to.have.keys('email', 'username');
         expect(options.limit).to.equal(20);
 
     });
@@ -41,7 +41,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(false);
-        expect(_fields).to.have.all.keys('email', 'username');
+        expect(_fields).to.have.keys('email', 'username');
         expect(options.limit).to.equal(10);
 
     });
@@ -57,7 +57,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(true);
-        expect(_fields).to.have.all.keys('email', 'username');
+        expect(_fields).to.have.keys('email', 'username');
         expect(options.limit).to.equal(10);
 
     });
@@ -72,7 +72,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(true);
-        expect(_fields).to.be.undefined;
+        expect(_fields).to.have.keys('_id');
         expect(options.limit).to.equal(10);
 
     });
@@ -89,7 +89,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(false);
-        expect(_fields).to.have.all.keys('email', 'username');
+        expect(_fields).to.have.keys('email', 'username');
 
     });
 
@@ -104,7 +104,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(true);
-        expect(_fields).to.have.all.keys('email', 'username');
+        expect(_fields).to.have.keys('email', 'username');
 
     });
 
@@ -118,7 +118,7 @@ describe('query', function () {
 
         expect(_conditions._id.toString()).to.equal('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).to.equal(true);
-        expect(_fields).to.be.undefined;
+        expect(_fields).to.have.keys('_id');
 
     });
 
