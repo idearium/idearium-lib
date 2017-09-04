@@ -8,8 +8,7 @@ This file is a history of the changes made to idearium-lib.
 
 ## 1.0.0-alpha.19
 
-- Add the `common/crypto` library, and tests.- Add the `common/crypto` library, and tests.
-
+- Add the `common/crypto` library, and tests.
 
 ## 1.0.0-alpha.18
 
