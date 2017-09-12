@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## 1.0.0-alpha.19
+
+- Add the `common/crypto` library, and tests.
+
 ## 1.0.0-alpha.18
 
 - Added new `util.parseCsv(data, options)` method. This can be used to parse a csv and takes a readable stream or buffered data contents as the first parameter. You can also transform the csv contents using an `options.transform` function or use any options listed here http://csv.adaltas.com/parse/.
