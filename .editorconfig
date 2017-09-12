@@ -1,13 +1,16 @@
-; editorconfig.org
 root = true
 
 [*]
-end_of_line = lf
 charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-indent_style = space
+end_of_line = lf
 indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
 
-[*.{yml,yaml}]
+[*.{raml,styl,yaml,yml}]
+indent_size = 2
+
+# Because the `npm` cli resets it when you use `--save` or `--save-dev`.
+[package.json]
 indent_size = 2

@@ -38,6 +38,7 @@
     "validator": "6.2.1"
   },
   "devDependencies": {
+    "@idearium/eslint-config": "latest",
     "chai": "3.5.0",
     "chai-as-promised": "5.3.0",
     "copy-dir": "0.3.0",
