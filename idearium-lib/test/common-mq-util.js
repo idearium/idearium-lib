@@ -8,10 +8,7 @@ const { expect } = require('chai');
 const { mq } = require('../');
 
 const dir = path.resolve(__dirname, '..', 'lib-mq-manager');
-const exchange = 'update';
 const file = 'test-file';
-const queue = 'lib.app.test.update';
-const routingKey = 'lib.app.test.update';
 
 /* eslint-disable max-nested-callbacks */
 describe('common/mq/util', function () {
@@ -53,25 +50,44 @@ describe('common/mq/util', function () {
         const mqManager = new mq.Manager(dir);
 
         // eslint-disable-next-line global-require
-        const { consume } = require('../common/mq/util');
+        const { consume, publish } = require('../common/mq/util');
 
         message.consume = consume((data) => {
 
-            expect(data).to.eql([{ 'will-publish-a-message': true }]);
+            expect(data).to.eql([{ 'will-execute-consumers': true }]);
 
-            done();
-
-            return Promise.resolve();
+            return Promise.resolve(done());
 
         }, {
-            exchange,
-            queue,
-            routingKey,
+            exchange: 'update',
+            queue: 'lib.app.test.update.wec',
+            routingKey: 'lib.app.test.update.wec',
         });
 
-        console.log(message);
+        message.publish = (publish({
+            exchange: 'update',
+            routingKey: 'lib.app.test.update.wec',
+        }));
 
-        mqManager.addListener('load', () => mqManager.registerConsumers());
+        // Catch and proxy any errors to `done`.
+        try {
+
+            // This will be cached.
+            let mqMessages = require('../common/mq/messages');
+
+            // Wait until everything is loaded.
+            mqManager.addListener('load', () => {
+
+                // Run this manually, as it will have already run once.
+                return mqManager.registerConsumers()
+                    .then(() => mqManager.publish(file, { 'will-execute-consumers': true }))
+                    .catch(done);
+
+            });
+
+        } catch (e) {
+            return done(e);
+        }
 
     });
 
@@ -83,8 +99,8 @@ describe('common/mq/util', function () {
         const { publish } = require('../common/mq/util');
 
         message.publish = (publish({
-            exchange,
-            routingKey,
+            exchange: 'update',
+            routingKey: 'lib.app.test.update.wpm',
         }));
 
         mqManager.addListener('load', () => {
