@@ -45,8 +45,6 @@ describe('common/mq/util', function () {
 
     it('will execute consumers', function (done) {
 
-        this.timeout(15000);
-
         const mqManager = new mq.Manager(dir);
 
         // eslint-disable-next-line global-require
