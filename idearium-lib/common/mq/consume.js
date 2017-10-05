@@ -1,54 +1,8 @@
 'use strict';
 
 const client = require('./client');
-const debug = require('debug')('idearium-lib:common:mq:util');
-const { isArray } = require('../../').util;
-
-/**
- * Publish a MQ message.
- * @param {Object} options The publish options.
- * @param {String} options.exchange The exchange string.
- * @param {Object} [options.exchangeOptions={ durable: true }] The exchange options.
- * @param {String} [options.exchangeType='topic'] The exchange type.
- * @param {String} [options.publishOptions={ persistent: true }] The publishing options.
- * @param {String} options.routingKey The routingKey.
- * @return {Function} Returns a function that publishes the message.
- */
-const publish = options => data => client.publish((channel) => {
-
-    const {
-        exchange,
-        exchangeOptions,
-        exchangeType,
-        publishOptions,
-        routingKey,
-    } = Object.assign({
-        exchangeOptions: { durable: true },
-        exchangeType: 'topic',
-        publishOptions: { persistent: true },
-    }, options);
-
-    return channel.assertExchange(exchange, exchangeType, exchangeOptions)
-        .then(() => {
-
-            debug('Publishing message: %O', {
-                data,
-                exchange,
-                routingKey,
-            });
-
-            return channel.publish(
-                exchange,
-                routingKey,
-                Buffer.from(JSON.stringify(data)),
-                publishOptions
-            );
-
-        })
-        .then(() => debug(`Published to ${exchange} exchange: %O`, { data }))
-        .catch(err => debug('MQ error: %O', err));
-
-});
+const debug = require('debug')('idearium-lib:common:mq:consume');
+const { isArray, ack } = require('../../').util;
 
 /**
  * Consume a MQ message.
@@ -99,7 +53,7 @@ const consume = (action, options) => () => client.consume((channel) => {
 
             debug('MQ error reading data: %O', { err, msg: msg.content.toString() });
 
-            return channel.ack(msg);
+            return ack(channel, msg);
 
         }
 
@@ -107,13 +61,13 @@ const consume = (action, options) => () => client.consume((channel) => {
             data = [data];
         }
 
-        action(data)
-            .then(() => channel.ack(msg))
+        return action(data)
+            .then(() => ack(channel, msg))
             .catch((err) => {
 
                 debug('Error processing message: %O', err);
 
-                return channel.ack(msg);
+                return ack(channel, msg);
 
             });
 
@@ -127,4 +81,4 @@ const consume = (action, options) => () => client.consume((channel) => {
 
 });
 
-module.exports = { consume, publish };
+module.exports = { consume };

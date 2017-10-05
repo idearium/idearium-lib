@@ -5,6 +5,8 @@ const has = require('./has');
 const is = require('./is');
 const parse = require('./parse');
 const to = require('./to');
+const resolve = require('./resolve');
+
 // Destructure to remove deprecated and conflicting apis.
 const { debuglog, deprecate, format, inherits, inspect } = require('util');
 
@@ -16,5 +18,6 @@ module.exports = Object.assign(
     has,
     is,
     parse,
+    resolve,
     to
 );

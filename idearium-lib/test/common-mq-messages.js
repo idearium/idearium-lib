@@ -121,27 +121,16 @@ describe('common/mq/messages', function () {
         try {
 
             // This will be cached.
-            let mqMessages = require('../common/mq/messages');
+            // eslint-disable-next-line global-require
+            const mqMessages = require('../common/mq/messages');
 
-            // Wait until everything is loaded.
-            mqMessages.addListener('load', () => {
-
-                // Wait until everything is connected again.
-                mqClient.addListener('connect', function () {
-
-                    // Publish a test message.
-                    require('../messages/test.js').publish({'common-mq-messages-test': true});
-
-                });
-
-                // Handle any errors.
-                mqClient.addListener('error', done);
-
-                // Run this manually, as it will have already run once.
-                return mqMessages.registerConsumers()
-                    .then(() => mqClient.reconnect());
-
+            // Once everything is loaded, publish.
+            mqMessages.addListener('load', function () {
+                message.publish({ 'common-mq-messages-test': true });
             });
+
+            // Load the message.
+            mqMessages.load();
 
         } catch (e) {
             return done(e);
