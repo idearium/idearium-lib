@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## 1.0.0-alpha.21
+
+- Fixed a typo in `mq.connection`. Changed `Promise.resolved` to `Promise.resolve`. Added a test case specific for this.
+
 ## 1.0.0-alpha.20
 
 - Refactored the query methods to allow all query `conditions` and `options`. i.e. you can now pass in `limit` through the `options` object rather than adding a query chain method `.limit()`.

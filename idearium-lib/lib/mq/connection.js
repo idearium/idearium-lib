@@ -117,7 +117,7 @@ class Connection extends EventEmitter {
 
         // Don't attempt if we don't have a connection.
         if (!this.connection) {
-            return Promise.resolved();
+            return Promise.resolve();
         }
 
         debug('Disconnecting...');
