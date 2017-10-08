@@ -2,7 +2,7 @@
 
 This file is a history of the changes made to idearium-lib.
 
-## Unreleased
+## 1.0.0-alpha.21
 
 - Fixed a typo in `mq.connection`. Changed `Promise.resolved` to `Promise.resolve`. Added a test case specific for this.
 
