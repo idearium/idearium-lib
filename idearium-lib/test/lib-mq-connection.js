@@ -64,7 +64,7 @@ describe('class mq.Connection', function () {
             const ideariumMq = new mq.Connection(conf.rabbitUrl);
 
             ideariumMq.disconnect()
-                .then(done)
+                .then(() => done())
                 .catch(done);
 
         });
