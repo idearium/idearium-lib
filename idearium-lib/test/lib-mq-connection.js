@@ -58,7 +58,18 @@ describe('class mq.Connection', function () {
 
     describe('gracefully disconnects', function () {
 
-        it('RabbitMQ', function (done) {
+        it('when not connected', function (done) {
+
+            // Setup an instance of the class.
+            const ideariumMq = new mq.Connection(conf.rabbitUrl);
+
+            ideariumMq.disconnect()
+                .then(done)
+                .catch(done);
+
+        });
+
+        it('from RabbitMQ', function (done) {
 
             this.timeout(10000);
 
