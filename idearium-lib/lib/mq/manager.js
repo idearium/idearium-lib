@@ -78,7 +78,7 @@ class Manager extends EventEmitter {
     /**
      * Publish a message
      * @param  {String} messageName Message name (should match the name of the message file)
-     * @return {[type]}             [description]
+     * @return {Promise}            A promise that will resolve when the message has published.
      */
     publish (messageName, ...args) {
 

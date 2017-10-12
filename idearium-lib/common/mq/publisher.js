@@ -8,7 +8,7 @@ const log = require('../log')('idearium-lib:common:mq/publisher');
  * Check if a RabbitMQ message exists before publishing.
  * @param {String} type Message type.
  * @param {Object} data Message data.
- * @return {Void} Publishes the message.
+ * @return {Promise} Publishes the message.
  */
 const publish = (type, data) => {
 
@@ -16,10 +16,10 @@ const publish = (type, data) => {
         return log.error(`Message of type: ${type} not found`);
     }
 
-    // Publish the message.
-    manager.messages[type].publish(data);
+    log.debug({ data, type }, `Publishing message of type: ${type}`);
 
-    return log.debug({ data, type }, `Publishing message of type: ${type}`);
+    // Publish the message (returning a Promise).
+    return manager.messages[type].publish(data);
 
 }
 
