@@ -10,6 +10,16 @@ var expect = require('chai').expect,
 
 describe('class mq.Manager', function () {
 
+    before(function (done) {
+
+        fs.mkdir(dir, function () {
+
+            fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": "" };', done);
+
+        });
+
+    });
+
     describe('will throw an Error', function () {
 
         it('if a path is not provided', function () {
@@ -26,17 +36,6 @@ describe('class mq.Manager', function () {
     });
 
     describe('with the messages directory', function () {
-
-        before(function (done) {
-
-            fs.mkdir(dir, function () {
-
-                fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": "" };', done);
-
-            });
-
-        });
-
 
         it('will load messages and fire an event', function (done) {
 
@@ -80,12 +79,52 @@ describe('class mq.Manager', function () {
 
         });
 
-        after(function (done) {
-            fs.unlink(path.join(dir, 'test.js'), function () {
-                fs.rmdir(dir, done);
+
+    });
+
+    describe('publish', function () {
+
+        it('will return a promise', function (done) {
+
+            var mqManager = new mq.Manager(dir);
+
+            require(path.join(dir, 'test.js')).publish = function (data) {
+                return Promise.resolve();
+            };
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', {'will-publish-a-message': true});
+                expect(publishResult instanceof Promise).to.be.true;
+                done();
+
             });
+
         });
 
+        it('will create and return a promise', function (done) {
+
+            var mqManager = new mq.Manager(dir);
+
+            require(path.join(dir, 'test.js')).publish = function (data) {
+            };
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', {'will-publish-a-message': true});
+                expect(publishResult instanceof Promise).to.be.true;
+                done();
+
+            });
+
+        });
+
+    });
+
+    after(function (done) {
+        fs.unlink(path.join(dir, 'test.js'), function () {
+            fs.rmdir(dir, done);
+        });
     });
 
 });
