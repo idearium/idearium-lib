@@ -80,7 +80,7 @@ class Manager extends EventEmitter {
      * @param  {String} messageName Message name (should match the name of the message file)
      * @return {[type]}             [description]
      */
-    publish (messageName) {
+    publish (messageName, ...args) {
 
         /* eslint-disable padded-blocks */
         if (!this.messages[messageName]) {
@@ -95,9 +95,7 @@ class Manager extends EventEmitter {
         /* eslint-enable padded-blocks */
 
         // Remove first argument and publish.
-        // eslint-disable-next-line prefer-rest-params
-        const argsArray = [].slice.call(arguments).slice(1);
-        const result = this.messages[messageName].publish.apply(this, argsArray);
+        const result = this.messages[messageName].publish.apply(this, args);
 
         // If a promise is returned by the messages publish function, return it.
         /* eslint-disable padded-blocks */
