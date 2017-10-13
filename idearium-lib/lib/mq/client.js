@@ -128,23 +128,31 @@ class Client extends Connection {
     /**
      * Add a message to publisher queue
      * @param  {Function} fn Publisher function
+     * @returns {Promise} A promise that will be resolved or rejected.
      */
-    publish(fn) {
+    publish (fn) {
 
-        this.publisherQueue.push(fn, (err) => {
+        /* eslint-disable padded-blocks */
+        if (!this.connection) {
+            this.connect();
+        }
+        /* eslint-enable padded-blocks */
 
-            if (err) {
-                this.logError(err);
-                debug('Unable to register a publisher, re-queue publisher in ' + this.queueTimeout / 1000 + 's');
-                // re-queue in 5 seconds
-                setTimeout(() => { this.publish(fn); }, this.queueTimeout);
-            }
+        return new Promise((resolve, reject) => {
+
+            this.publisherQueue.push(fn, (err, ...args) => {
+
+                /* eslint-disable padded-blocks */
+                if (err) {
+                    reject(err);
+                }
+                /* eslint-enable padded-blocks */
+
+                resolve(...args);
+
+            });
 
         });
-
-        if (!this.connection) {
-            return this.connect();
-        }
 
     }
 
