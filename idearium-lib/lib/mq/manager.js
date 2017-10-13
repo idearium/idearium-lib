@@ -78,34 +78,40 @@ class Manager extends EventEmitter {
     /**
      * Publish a message
      * @param  {String} messageName Message name (should match the name of the message file)
-     * @return {Promise}            A promise that will resolve when the message has published.
+     * @return {Promise}            A promise that will resolve when the message has published, or be rejected if an error occurs.
      */
     publish (messageName, ...args) {
 
-        /* eslint-disable padded-blocks */
-        if (!this.messages[messageName]) {
-            throw new Error(`"${messageName}" message is not defined.`);
-        }
-        /* eslint-enable padded-blocks */
+        return new Promise((resolve, reject) => {
 
-        /* eslint-disable padded-blocks */
-        if (!this.messages[messageName].publish) {
-            return;
-        }
-        /* eslint-enable padded-blocks */
+            /* eslint-disable padded-blocks */
+            if (!this.messages[messageName]) {
+                return reject(new Error(`"${messageName}" message is not defined.`));
+            }
+            /* eslint-enable padded-blocks */
 
-        // Remove first argument and publish.
-        const result = this.messages[messageName].publish.apply(this, args);
+            /* eslint-disable padded-blocks */
+            if (!this.messages[messageName].publish) {
+                return reject(new Error(`"${messageName}".publish is not defined.`));
+            }
+            /* eslint-enable padded-blocks */
 
-        // If a promise is returned by the messages publish function, return it.
-        /* eslint-disable padded-blocks */
-        if (result instanceof Promise) {
-            return result;
-        }
-        /* eslint-enable padded-blocks */
+            // Remove first argument and publish.
+            const publishPromise = this.messages[messageName].publish.apply(this, args);
 
-        // Otherwise, assume everything went okay.
-        return Promise.resolve();
+            // If a promise is returned by the messages publish function, return it.
+            if (publishPromise instanceof Promise) {
+
+                return publishPromise
+                    .then(resolve)
+                    .catch(reject);
+
+            }
+
+            // Otherwise, assume everything went okay.
+            return resolve();
+
+        });
 
     }
 

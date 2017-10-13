@@ -1,7 +1,6 @@
 'use strict';
 
 const manager = require('./messages');
-const { hasProperty } = require('../../lib/util');
 const log = require('../log')('idearium-lib:common:mq/publisher');
 
 /**
@@ -12,15 +11,13 @@ const log = require('../log')('idearium-lib:common:mq/publisher');
  */
 const publish = (type, data) => {
 
-    if (!hasProperty(manager.messages, type)) {
-        return log.error(`Message of type: ${type} not found`);
-    }
+    return manager.publish(type, data)
+        .then(() => {
 
-    log.debug({ data, type }, `Publishing message of type: ${type}`);
+            log.debug({ data, type }, `Publishing message of type: ${type}`);
 
-    // Publish the message (returning a Promise).
-    return manager.messages[type].publish(data);
+        });
 
-}
+};
 
 module.exports = publish;
