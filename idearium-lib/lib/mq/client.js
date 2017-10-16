@@ -144,11 +144,11 @@ class Client extends Connection {
 
                 /* eslint-disable padded-blocks */
                 if (err) {
-                    reject(err);
+                    return reject(err);
                 }
                 /* eslint-enable padded-blocks */
 
-                resolve(...args);
+                return resolve(...args);
 
             });
 
