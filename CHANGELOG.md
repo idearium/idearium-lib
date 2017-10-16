@@ -2,6 +2,12 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## 1.0.0-alpha.22
+
+- Update `mq.Manager().publish` to pass on a `Promise` if one was returned from the `message.publish` function, otherwise return `Promise.resolve()` by default.
+- Update `mq.Client().publish` to return a `Promise`.
+- Update `common/mq/publisher` to return a `Promise`.
+
 ## 1.0.0-alpha.21
 
 - Fixed a typo in `mq.connection`. Changed `Promise.resolved` to `Promise.resolve`. Added a test case specific for this.

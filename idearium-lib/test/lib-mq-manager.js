@@ -2,21 +2,34 @@
 
 /* eslint-env node, mocha */
 
-var expect = require('chai').expect,
-    path = require('path'),
-    fs = require('fs'),
-    dir = path.resolve(__dirname, '..', 'lib-mq-manager'),
-    mq = require('..').mq;
+const path = require('path');
+const fs = require('fs');
+const dir = path.resolve(__dirname, '..', 'lib-mq-manager');
+
+const { mq } = require('..');
+const { expect } = require('chai');
 
 describe('class mq.Manager', function () {
+
+    before(function (done) {
+
+        fs.mkdir(dir, function () {
+
+            fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": "" };', done);
+
+        });
+
+    });
 
     describe('will throw an Error', function () {
 
         it('if a path is not provided', function () {
 
-            var fn = function () {
+            const fn = () => {
+
                 // eslint-disable-next-line no-unused-vars
-                var ideariumMq = new mq.Manager();
+                const ideariumMq = new mq.Manager();
+
             };
 
             expect(fn).to.throw(Error, /path parameter is required/);
@@ -26,17 +39,6 @@ describe('class mq.Manager', function () {
     });
 
     describe('with the messages directory', function () {
-
-        before(function (done) {
-
-            fs.mkdir(dir, function () {
-
-                fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": "" };', done);
-
-            });
-
-        });
-
 
         it('will load messages and fire an event', function (done) {
 
@@ -80,10 +82,122 @@ describe('class mq.Manager', function () {
 
         });
 
-        after(function (done) {
-            fs.unlink(path.join(dir, 'test.js'), function () {
-                fs.rmdir(dir, done);
+
+    });
+
+    describe('publish', function () {
+
+        it('will return a resolved promise', function (done) {
+
+            const mqManager = new mq.Manager(dir);
+
+            // eslint-disable-next-line global-require
+            require(path.join(dir, 'test.js')).publish = () => Promise.resolve();
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
+
+                expect(publishResult instanceof Promise).to.be.true;
+
+                publishResult
+                    .then(() => done())
+                    .catch(done);
+
             });
+
+        });
+
+        it('will return a rejected promise', function (done) {
+
+            const mqManager = new mq.Manager(dir);
+
+            // eslint-disable-next-line global-require
+            require(path.join(dir, 'test.js')).publish = () => Promise.reject(new Error('Rejected.'));
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
+
+                expect(publishResult instanceof Promise).to.be.true;
+
+                publishResult
+                    .then(() => done(new Error('Should not have resolved')))
+                    .catch(() => done());
+
+            });
+
+        });
+
+        it('will create and return a resolved promise', function (done) {
+
+            const mqManager = new mq.Manager(dir);
+
+            // eslint-disable-next-line global-require, no-empty-function
+            require(path.join(dir, 'test.js')).publish = () => {};
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
+
+                expect(publishResult instanceof Promise).to.be.true;
+
+                publishResult
+                    .then(() => done())
+                    .catch(done);
+
+            });
+
+        });
+
+        it('will reject publishing missing message types', function (done) {
+
+            const mqManager = new mq.Manager(dir);
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test-missing-message', {});
+
+                expect(publishResult instanceof Promise).to.be.true;
+
+                publishResult
+                    .then(() => done(new Error('Should not have resolved.')))
+                    .catch(() => done());
+
+            });
+
+        });
+
+        it('will reject publishing messages without a publish function', function (done) {
+
+            const mqManager = new mq.Manager(dir);
+            // eslint-disable-next-line global-require
+            const message = require(path.join(dir, 'test.js'));
+
+            delete message.publish;
+
+            mqManager.addListener('load', function () {
+
+                const publishResult = mqManager.publish('test', {});
+
+                expect(publishResult instanceof Promise).to.be.true;
+
+                publishResult
+                    .then(() => done(new Error('Should not have resolved.')))
+                    .catch(() => done());
+
+            });
+
+        });
+
+    });
+
+    after(function (done) {
+
+        fs.unlink(path.join(dir, 'test.js'), function () {
+
+            fs.rmdir(dir, done);
+
         });
 
     });
