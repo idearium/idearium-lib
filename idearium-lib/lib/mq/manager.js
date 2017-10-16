@@ -69,8 +69,7 @@ class Manager extends EventEmitter {
         const { messages } = this;
 
         return Promise.all(Object.keys(messages)
-            // eslint-disable-next-line no-undefined
-            .filter(messageName => messages[messageName].consume !== undefined)
+            .filter(messageName => typeof messages[messageName].consume !== 'undefined')
             .map(messageName => messages[messageName].consume()));
 
     }
