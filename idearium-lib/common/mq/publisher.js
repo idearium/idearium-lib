@@ -12,11 +12,8 @@ const log = require('../log')('idearium-lib:common:mq/publisher');
 const publish = (type, data) => {
 
     return manager.publish(type, data)
-        .then(() => {
-
-            log.debug({ data, type }, `Publishing message of type: ${type}`);
-
-        });
+        .then(() => log.debug({ data, type }, `Published message of type: ${type}`))
+        .catch(err => log.error({ err }, `Could not publish message of type: ${type}`));
 
 };
 
