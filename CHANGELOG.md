@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## Unreleased
+
+- Update `common/mq/publisher` to log error messages.
+
 ## 1.0.0-alpha.22
 
 - Update `mq.Manager().publish` to pass on a `Promise` if one was returned from the `message.publish` function, otherwise return `Promise.resolve()` by default.
