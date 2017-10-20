@@ -2,7 +2,7 @@
 
 This file is a history of the changes made to idearium-lib.
 
-## Unreleased
+## 1.0.0-alpha.23
 
 - Update `common/mq/publisher` to log error messages.
 
