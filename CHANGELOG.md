@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## Unreleased
+
+- Make `options.filter` required for the query methods. Previously this would default to an empty filter if there was a typo in the options object which would cause unexpected results.
+
 ## 1.0.0-alpha.23
 
 - Update `common/mq/publisher` to log error messages.

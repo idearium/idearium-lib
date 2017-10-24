@@ -19,8 +19,11 @@
  */
 const getOptions = (options) => {
 
+    if (!options || !options.filter) {
+        throw new Error('A filter object must be provided');
+    }
+
     const defaults = {
-        filter: {},
         lean: true,
         limit: 10,
         projection: '_id',
@@ -28,7 +31,7 @@ const getOptions = (options) => {
 
     Object.assign(defaults, options);
 
-    // * must be passed to return all fields.
+    // * Must be passed to return all fields.
     if (options.projection === '*') {
         delete defaults.projection;
     }
