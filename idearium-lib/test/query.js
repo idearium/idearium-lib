@@ -122,4 +122,10 @@ describe('query', function () {
 
     });
 
+    it('will error if no filter option is provided', function () {
+
+        expect(() => findOne(userModel)).to.throw(Error, 'A filter object must be provided');
+
+    });
+
 });
