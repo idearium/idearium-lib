@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## 1.0.0-alpha.24
+
+- Improve error handling with `lib.util.parseCsv`.
+
 ## 1.0.0-alpha.23
 
 - Update `common/mq/publisher` to log error messages.
