@@ -12,6 +12,7 @@ module.exports = {
     utils: require('./lib/utils'),
 
     // Export classes here.
+    Api: require('./lib/api'),
     Config: require('./lib/config'),
     Loader: require('./lib/loader'),
     Email: require('./lib/email'),
