@@ -9,6 +9,7 @@ const {
     isObject,
     isProduction,
     isStaging,
+    isTest,
 } = require('../lib/util');
 
 describe('util-is', function () {
@@ -31,6 +32,10 @@ describe('util-is', function () {
 
     it('is production environment', function () {
         expect(isProduction('PrOdUcTiOn')).to.equal(true);
+    });
+
+    it('is test environment', function () {
+        expect(isTest('TesT')).to.equal(true);
     });
 
     it('should be equal', function () {
