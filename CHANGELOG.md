@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## Unreleased
+
+- Disabled OPBEAT when in test mode.
+
 ## 1.0.0-alpha.25
 
 - Added a new `Api` class to help generate consistent REST apis.

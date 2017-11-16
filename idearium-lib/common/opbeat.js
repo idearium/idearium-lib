@@ -2,13 +2,14 @@
 
 const config = require('./config');
 const opbeat = require('opbeat');
-const { isDevelopment } = require('../lib/util');
+const { isDevelopment, isTest } = require('../lib/util');
 
 // Determine if Opbeat should be enabled.
 // eslint-disable-next-line no-process-env
 const includeOpbeat = Object.keys(process.env)
     .includes('OPBEAT_OVERRIDE');
-const opbeatEnabled = includeOpbeat || !isDevelopment(config.get('env'));
+const env = config.get('env');
+const opbeatEnabled = includeOpbeat || (!isDevelopment(env) && !isTest(env));
 
 // Setup Opbeat to query the data.
 opbeat.start({
