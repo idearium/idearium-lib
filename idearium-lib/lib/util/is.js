@@ -50,6 +50,13 @@ const isProduction = str => str.toLowerCase() === 'production';
  */
 const isStaging = str => str.toLowerCase() === 'staging';
 
+/**
+ * Determine if the environment is test.
+ * @param {String} str String to compare.
+ * @return {Boolean} True if the environment is test.
+ */
+const isTest = str => str.toLowerCase() === 'test';
+
 module.exports = {
     isArray,
     isBeta,
@@ -58,4 +65,5 @@ module.exports = {
     isObject,
     isProduction,
     isStaging,
+    isTest,
 };
