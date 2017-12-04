@@ -36,16 +36,16 @@ const consume = (action, options) => () => client.consume((channel) => {
 
     const processMessage = (msg) => {
 
-        debug('Consuming message: %O', {
-            data: msg.content.toString(),
-            exchange,
-            queue,
-            routingKey,
-        });
-
         let data;
 
         try {
+            
+            debug('Consuming message: %O', {
+                data: JSON.parse(msg.content.toString()),
+                exchange,
+                queue,
+                routingKey,
+            });
 
             data = JSON.parse(msg.content.toString());
 
