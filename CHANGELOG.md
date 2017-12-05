@@ -4,7 +4,7 @@ This file is a history of the changes made to idearium-lib.
 
 ## Unreleased
 
-- Added `bunyan-prettystream` for the local environment.
+- Added `bunyan-prettystream` for the local environment. This can be manually enabled by creating a `Logger` with `pretty` set to true.
 
 ## 1.0.0-alpha.26
 
