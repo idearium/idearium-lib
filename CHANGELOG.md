@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## Unreleased
+
+- Added `bunyan-prettystream` for the local environment.
+
 ## 1.0.0-alpha.26
 
 - Disabled OPBEAT when in test mode.
