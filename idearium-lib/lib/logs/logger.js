@@ -58,7 +58,7 @@ function getStreams (_streams) {
 
         // Are we going to log to stdErr?
         if (this.stdErr) {
-            this._streams.push(this.stdErrStream());
+            this._streams.push(this.stdErrStream(this.local));
         }
 
         // Are we going to log remotely?
@@ -158,10 +158,11 @@ class Logger {
 
     /**
      * Retrieve a stderr stream.
+     * @param {Boolean} [isLocal=false] Set to true for local debugging.
      * @return {object} A stderr stream for Bunyan.
      */
-    stdErrStream () {
-        return new pkgStreams.StdErr(this.name, this.level, this.context).forBunyan();
+    stdErrStream (isLocal = false) {
+        return new pkgStreams.StdErr(this.name, this.level, this.context).forBunyan(isLocal);
     }
 
     /**

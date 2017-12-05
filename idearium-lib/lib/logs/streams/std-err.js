@@ -1,5 +1,12 @@
 'use strict';
 
+const PrettyStream = require('bunyan-prettystream');
+
+const prettyStdOut = new PrettyStream();
+
+// Prettify the bunyan json stream.
+prettyStdOut.pipe(process.stdout);
+
 /**
  * A class to be used as a Bunyan stream. It will take the information and log via `debug`.
  */
@@ -31,14 +38,15 @@ class StdErr {
 
     /**
      * Produce an object suitable to describe a Bunyan stream.
+     * @param {Boolean} [isLocal=false] Set to true for local debugging.
      * @return {object} An object that Bunyan can pass a stream.
      */
-    forBunyan () {
+    forBunyan (isLocal = false) {
 
         return {
             name: this.name,
             level: this.level,
-            stream: this
+            stream: isLocal ? prettyStdOut : this,
         }
 
     }
