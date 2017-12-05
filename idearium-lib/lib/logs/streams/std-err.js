@@ -38,15 +38,15 @@ class StdErr {
 
     /**
      * Produce an object suitable to describe a Bunyan stream.
-     * @param {Boolean} [isLocal=false] Set to true for local debugging.
+     * @param {Boolean} [pretty=false] Set to true for pretty bunyan streams.
      * @return {object} An object that Bunyan can pass a stream.
      */
-    forBunyan (isLocal = false) {
+    forBunyan (pretty = false) {
 
         return {
             name: this.name,
             level: this.level,
-            stream: isLocal ? prettyStdOut : this,
+            stream: pretty ? prettyStdOut : this,
         }
 
     }
