@@ -39,7 +39,7 @@ const consume = (action, options) => () => client.consume((channel) => {
         let data;
 
         try {
-            
+
             debug('Consuming message: %O', {
                 data: JSON.parse(msg.content.toString()),
                 exchange,
@@ -51,7 +51,7 @@ const consume = (action, options) => () => client.consume((channel) => {
 
         } catch (err) {
 
-            debug('MQ error reading data: %O', { err, msg: msg.content.toString() });
+            debug('MQ error reading data: %O', { data: msg.content.toString(), err });
 
             return ack(channel, msg);
 
@@ -65,7 +65,7 @@ const consume = (action, options) => () => client.consume((channel) => {
             .then(() => ack(channel, msg))
             .catch((err) => {
 
-                debug('Error processing message: %O', err);
+                debug('Error processing message: %O', { data, err });
 
                 return ack(channel, msg);
 
@@ -77,7 +77,7 @@ const consume = (action, options) => () => client.consume((channel) => {
         .then(() => channel.assertQueue(queue, queueOptions))
         .then(() => channel.bindQueue(queue, exchange, routingKey))
         .then(() => channel.consume(queue, processMessage, consumeOptions))
-        .catch(err => debug('MQ error: %O', err));
+        .catch(err => debug('MQ error: %O', { err }));
 
 });
 

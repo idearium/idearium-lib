@@ -45,7 +45,7 @@ const publish = options => data => client.publish((channel) => {
 
         })
         .then(() => debug(`Published to ${exchange} exchange: %O`, { data }))
-        .catch(err => debug('MQ error: %O', err));
+        .catch(err => debug('MQ error: %O', { err }));
 
 });
 
