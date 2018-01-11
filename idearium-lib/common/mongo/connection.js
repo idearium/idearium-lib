@@ -1,39 +1,49 @@
 'use strict';
 
-// We require a slightly different setup here, to allow an SSL connection to MongoDB.
-
-const mongoose = require('mongoose');
-const config = require('../config');
-const certs = require('./certs');
 const debug = require('debug')('idearium-lib:common:mongo/connection');
+const mongoose = require('mongoose');
 
-// Options will go here.
-const opts = {};
-
-// Turn on Promise support.
+// Use native promises for database queries.
 mongoose.Promise = global.Promise;
 
-// Once the certs have loaded, we'll update the options and connect.
-certs.
-    then(loadedCerts => {
+/**
+ * Create mongoose connections.
+ * @example
+ * // returns [db]
+ * connect([
+     {
+         options: {
+             ssl: true,
+             sslValidate: true,
+         },
+         uri: mongodb://localhost:27017/admin,
+     },
+ ])
+ * @param {Array} connections Mongo connections.
+ * @param {Object} [connections.options] Mongo connections.
+ * @param {String} [connections.uri] Mongo connections.
+ * @param {Object} connections.options Mongo connections.
+ * @return {Promise} Returns an array of connections.
+ */
+const connect = (connections) => new Promise((resolve, reject) => {
 
-        if (loadedCerts.length) {
+    require('./certs')
+      .then(loadedCerts => Promise.all(connections.map(({ options, uri }) => {
 
-            opts.mongos = {
-                ssl: true,
-                sslCA: loadedCerts,
-                sslValidate: true,
-            };
+          const defaults = { useMongoClient: true };
 
-        }
+          if (loadedCerts.length) {
+              defaults.sslCA = loadedCerts;
+          }
 
-        debug(`Connecting to database ${Object.keys(opts).length > 0 ? 'with' : 'without'} SSL.`);
+          debug(`Connecting to database: ${uri} ${loadedCerts.length > 0 ? 'with' : 'without'} SSL`);
 
-        // Connect to Mongo on Compose.io using the certificates loaded.
-        mongoose.connect(config.get('dbUrl'), opts);
+          return mongoose.connect(uri, Object.assign({}, defaults, options));
 
-    });
+      })))
+      .then(resolve)
+      .catch(reject);
 
+});
 
-// Export mongoose
-module.exports = mongoose;
+module.exports = connect;
