@@ -27,10 +27,10 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Dynamically determine the IP address of the VM.
-    config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+    config.hostmanager.ip_resolver = proc do |vm|
         ip = ''
-        if hostname = (vm.ssh_info && vm.ssh_info[:host])
-            vm.communicate.execute("/bin/hostname -I | cut -d ' ' -f 2") do |type, contents|
+        if (vm.ssh_info && vm.ssh_info[:host])
+            vm.communicate.execute("/bin/hostname -I | cut -d ' ' -f 2") do |_type, contents|
                 ip = contents.split()[0]
             end
         end
