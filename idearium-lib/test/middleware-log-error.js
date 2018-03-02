@@ -59,6 +59,16 @@ describe('middleware.logError', function () {
 
     });
 
+    // Clear the log file after each run.
+    afterEach(function (done) {
+
+        const file = path.join(process.cwd(), 'logs', 'error.log');
+
+        // Create or empty the file
+        fs.writeFile(file, '', 'utf-8', done);
+
+    });
+
     it('is an Express middleware function', function () {
 
         let middlewareFn = lib.middleware.logError;
