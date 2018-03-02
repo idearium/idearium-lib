@@ -28,6 +28,10 @@ configure_dependencies() {
     # Install gulp.
     npm install -g gulp
 
+    # A temp folder for building npm modules
+    mkdir -p /npm
+    chown vagrant:vagrant /npm
+
 }
 
 # Execute the function above, in an idempotent function.

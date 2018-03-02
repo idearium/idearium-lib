@@ -22,20 +22,11 @@ __Please note:__ this has only been tested on Mac OS X environments.
 Follow these steps to setup the VM:
 
 - [Host]    `cd` into the directory containing this Git repository.
-- [Host]    Execute `vagrant up --provider=virtualbox` to have Vagrant create a virtual machine.
+- [Host]    Execute `vagrant up` to have Vagrant create a virtual machine.
 
 With the VM started, update it to the latest setup (including a kernel update which is important for Docker):
 
-- [Host]    `vagrant ssh`.
-- [Guest]   `sudo apt-get update` to update the Aptitude repositories.
-- [Guest]   `sudo apt-get -y dist-upgrade` (you might have to answer a few prompts).
-- [Guest]   With everything updated reload the VM, type `exit` or `CTRL + d`.
-- [Host]    `./reload.sh`.
-
-Everything should be updated and ready to go. Once the VM has restarted, continue with the process:
-
 - [Host]    Execute `vagrant ssh` to be provided with a bash shell within the virtual machine.
-- [Guest]   Get into the `/vagrant` directory, by executing `cd /vagrant`.
 - [Guest]   Setup NPM the test environment with `lib-test-setup`.
 
 ## Testing
@@ -47,7 +38,6 @@ Using the `lib-test-setup` and `lib-test` scripts, Docker and Docker Compose are
 This repository has a complete test suite, which can be run by:
 
 - [Host]    Execute `vagrant ssh` to be provided with a bash shell within the virtual machine.
-- [Guest]   Get into the `/vagrant` directory, by executing `cd /vagrant`.
 - [Guest]   If you've only just restarted the virtual machine, execute `dc up -d`.
 - [Guest]   Then you can execute `lib-test` to run the tests, as many times as you need.
 
@@ -60,7 +50,6 @@ Every commit and push of this repository is tested by Codefresh, https://g.codef
 If you want to run any other NPM command within the context of the container:
 
 - [Host]    Execute `vagrant ssh` to be provided with a bash shell within the virtual machine.
-- [Guest]   Get into the `/vagrant` directory, by executing `cd /vagrant`.
 - [Guest]   If you've only just restarted the virtual machine, execute `dc up -d`.
 - [Guest]   Execute `lib-test {npm-command}` to run an NPM command. For example, `lib-test whoami` to run `npm whoami` within the context of `./idearium-lib` within the container.
 
@@ -69,7 +58,6 @@ If you want to run any other NPM command within the context of the container:
 In order to publish this package to NPM, you need to log into NPM to provide authentication details. Follow these steps:
 
 - [Host]    Execute `vagrant ssh` to be provided with a bash shell within the virtual machine.
-- [Guest]   Get into the `/vagrant` directory, by executing `cd /vagrant`.
 - [Guest]   Execute `npm login` and follow the prompts.
 
 Each Idearium developer should have their own NPM account, that is a member of the `@idearium` organisation.

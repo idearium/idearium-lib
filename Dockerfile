@@ -1,7 +1,7 @@
 FROM smebberson/alpine-nodejs:latest
 
 # Setup dockerize.
-ENV DOCKERIZE_VERSION v0.3.0
+ENV DOCKERIZE_VERSION v0.6.0
 RUN apk add --no-cache curl openssl && \
     curl -sSL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar -C /usr/local/bin -xzvf - && \
     apk del curl openssl
@@ -19,4 +19,4 @@ COPY ./idearium-lib /app
 
 # Use dockerize to wait for RabbitMQ to be ready.
 # This will help to minimize issues on Codefresh.
-CMD ["dockerize", "-wait", "tcp://rabbitmq:5672", "npm", "test"]
+CMD ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "20s", "npm", "test"]
