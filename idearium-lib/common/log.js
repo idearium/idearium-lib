@@ -26,6 +26,7 @@ const log = (context, name = 'application') => {
         level: logLevel,
         local: logLocation.toLowerCase() === 'local',
         name,
+        pretty: logLocation.toLowerCase() === 'local',
         remote: logLocation.toLowerCase() === 'remote',
         serializers: {
             err: bunyan.stdSerializers.err,

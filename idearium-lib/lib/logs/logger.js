@@ -58,7 +58,7 @@ function getStreams (_streams) {
 
         // Are we going to log to stdErr?
         if (this.stdErr) {
-            this._streams.push(this.stdErrStream());
+            this._streams.push(this.stdErrStream(this.pretty));
         }
 
         // Are we going to log remotely?
@@ -99,6 +99,7 @@ class Logger {
         this.level = opts.level || 'warn';
         this.remote = typeof opts.remote === 'undefined' ? false : opts.remote;
         this.token = opts.token || undefined;
+        this.pretty = opts.pretty || false;
         this.local = typeof opts.local === 'undefined' ? true : opts.local;
         this.stdErr = typeof opts.stdErr === 'undefined' ? false : opts.stdErr;
         this.dir = opts.dir || path.join(path.resolve(process.cwd()), 'logs');
@@ -158,10 +159,11 @@ class Logger {
 
     /**
      * Retrieve a stderr stream.
+     * @param {Boolean} [pretty=false] Set to true for pretty bunyan streams.
      * @return {object} A stderr stream for Bunyan.
      */
-    stdErrStream () {
-        return new pkgStreams.StdErr(this.name, this.level, this.context).forBunyan();
+    stdErrStream (pretty = false) {
+        return new pkgStreams.StdErr(this.name, this.level, this.context).forBunyan(pretty);
     }
 
     /**
