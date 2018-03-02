@@ -3,34 +3,57 @@
 
 VAGRANTFILE_API_VERSION = "2"
 
+require "json"
+
+def fail_with_message(msg)
+    fail Vagrant::Errors::VagrantError.new, msg
+end
+
 # Make sure we have the vagrant-hostmanager plugin. No point in going forward with out it.
 if !(Vagrant.has_plugin?('vagrant-hostmanager'))
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n"
 end
 
-require "json"
-
 # Load in external config
-config_file = "#{File.dirname(__FILE__)}/vagrant.json"
-vm_ext_conf = JSON.parse(File.read(config_file))
+CONFIG_PATH = __dir__
+config_file = File.join(CONFIG_PATH, 'vagrant.json')
+
+if File.exists?(config_file)
+  custom_config = JSON.parse(File.read(config_file))
+else
+  fail_with_message "#{config_file} was not found. Please set `CONFIG_PATH` in your Vagrantfile."
+end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
+    # Dynamically determine the IP address of the VM.
+    config.hostmanager.ip_resolver = proc do |vm|
+        ip = ''
+        if (vm.ssh_info && vm.ssh_info[:host])
+            vm.communicate.execute("/bin/hostname -I | cut -d ' ' -f 2") do |_type, contents|
+                ip = contents.split()[0]
+            end
+        end
+        ip
+    end
+
     # Every Vagrant virtual environment requires a box to build off of.
-    config.vm.box = "boxcutter/ubuntu1604"
-    config.vm.box_version = "2.0.18"
+    config.vm.box = custom_config['box_path']
+    config.vm.box_version = custom_config['box_version']
 
     # VM configuration for vmware_fusion
     config.vm.provider "vmware_fusion" do |v|
-        v.vmx["memsize"] = vm_ext_conf["memory"]
-        v.vmx["numvcpus"] = vm_ext_conf["cpus"]
+        v.vmx["memsize"] = custom_config["memory"]
+        v.vmx["numvcpus"] = custom_config["cpus"]
+        v.gui = false
     end
 
     # VM configuration for virtualbox
     config.vm.provider "virtualbox" do |v|
 
-        v.memory = vm_ext_conf["memory"]
-        v.cpus = vm_ext_conf["cpus"]
+        v.memory = custom_config["memory"]
+        v.cpus = custom_config["cpus"]
+        v.gui = false
 
         # Make VirtualBox work like VMware and use the host's resolving as a DNS proxy in NAT mode
         # https://www.virtualbox.org/manual/ch09.html#nat_host_resolver_proxy
@@ -39,16 +62,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # define the hostname
-    config.vm.hostname = vm_ext_conf["hostname"]
+    config.vm.hostname = custom_config["hostname"]
 
     # Setup hostmanager plugin.
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
-    config.hostmanager.aliases = %W(#{vm_ext_conf['hostAliases']})
+    config.hostmanager.aliases = %W(#{custom_config['hostAliases']})
 
     # Create a private network, which allows host-only access to the machine
     # using a specific IP.
-    config.vm.network "private_network", ip: vm_ext_conf["ip"]
+    config.vm.network 'private_network', type: 'dhcp'
 
     # Create a public network, which generally matched to bridged network.
     # Bridged networks make the machine appear as another physical device on
@@ -62,38 +85,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder ".", "/vagrant"
     # config.vm.synced_folder ".", "/vagrant", type: 'nfs'
 
-    # Provision with shell, nice and simple :)
-    # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device" messages --> mitchellh/vagrant#1673
-    config.vm.provision :shell , inline: "(grep -q 'mesg n' /root/.profile && sed -i '/mesg n/d' /root/.profile && echo 'Ignore the previous error, fixing this now...') || exit 0;"
-
-    # configuration step 1: set timezone
-    config.vm.provision "shell", path: "vagrant/timezone.sh", args: "#{vm_ext_conf['timezone']}"
-
-    # configuration step 2: apt-get
-    config.vm.provision "shell", path: "vagrant/apt-get.sh"
-
-    # configuration step 3: docker (latest version)
-    config.vm.provision "shell", path: "vagrant/docker.sh"
-
-    # configuration step 4: compose
-    config.vm.provision "shell", path: "vagrant/docker-compose.sh"
-
-    # configuration step 5: git
-    config.vm.provision "shell", path: "vagrant/git.sh"
-
-    # configuration step 6: nodejs
-    config.vm.provision "shell", path: "vagrant/nodejs.sh"
-
-    # configuration step 7: ruby
-    config.vm.provision "shell", path: "vagrant/ruby.sh"
-
-    # configuration step 8: setup ENV variables
+    # configuration step 1: setup environment variables
     config.vm.provision "shell", path: "vagrant/env.sh"
 
-    # configuration step 9: setup the development environment
+    # configuration step 2: install development dependencies
     config.vm.provision "shell", path: "vagrant/dependencies.sh"
-
-    # configuration step 10: clean (remove unccessary data and GBs)
-    config.vm.provision "shell", path: "vagrant/clean.sh"
 
 end
