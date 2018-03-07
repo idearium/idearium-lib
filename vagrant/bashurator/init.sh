@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 if [[ -z $BASHURATOR_DIR ]]; then
     BASHURATOR_DIR="$(dirname "${BASH_SOURCE[0]}")"

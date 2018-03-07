@@ -1,4 +1,5 @@
-FROM smebberson/alpine-nodejs:latest
+FROM smebberson/alpine-nodejs:6.8.4
+LABEL maintainer="scott@idearium.io,allan@idearium.io"
 
 # Setup dockerize.
 ENV DOCKERIZE_VERSION v0.6.0

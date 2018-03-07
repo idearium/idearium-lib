@@ -10,7 +10,7 @@ def fail_with_message(msg)
 end
 
 # Make sure we have the vagrant-hostmanager plugin. No point in going forward with out it.
-if !(Vagrant.has_plugin?('vagrant-hostmanager'))
+unless Vagrant.has_plugin?('vagrant-hostmanager')
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n"
 end
 
