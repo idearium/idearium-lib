@@ -13,6 +13,7 @@ const moment = require('moment');
 const sendRequestToMandrill = function sendRequestToMandrill (apiKey, message, callback) {
 
     const mandrillClient = new mandrill.Mandrill(apiKey);
+    const data = { async: true };
 
     // Convert message.to string to an array.
     if (!Array.isArray(message.to)) {
@@ -28,15 +29,15 @@ const sendRequestToMandrill = function sendRequestToMandrill (apiKey, message, c
     if (message.sendAt) {
 
         // eslint-disable-next-line camelcase
-        message.send_at = message.sendAt;
+        data.send_at = message.sendAt;
         delete message.sendAt;
 
     }
 
-    mandrillClient.messages.send({
-        async: true,
-        message,
-    }, result => callback(null, result), callback);
+    // Now that we've formatted the message object, add it to the data struct.
+    data.message = message;
+
+    mandrillClient.messages.send(data, result => callback(null, result), callback);
 
 };
 
