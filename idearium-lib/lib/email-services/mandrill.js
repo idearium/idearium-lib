@@ -41,12 +41,12 @@ const sendRequestToMandrill = function sendRequestToMandrill (apiKey, message, c
 
 };
 
-class MandrillService {
+class Mandrill {
 
     /**
-     * Construct an instance of the MandrillService class.
+     * Construct an instance of the Mandrill class.
      * @param  {String} apiKey Mandrill API key specific.
-     * @return {Object}        MandrillService instance.
+     * @return {Object}        Mandrill instance.
      */
     constructor (apiKey) {
 
@@ -110,4 +110,4 @@ class MandrillService {
 
 }
 
-module.exports = MandrillService;
+module.exports = Mandrill;
