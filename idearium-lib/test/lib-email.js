@@ -1,10 +1,10 @@
 /* eslint-env node, mocha */
-
 'use strict';
 
-var expect = require('chai').expect,
-    lib = require('../'),
-    mandrillApiKey = '1234';
+const { expect } = require('chai');
+const lib = require('../');
+const mandrillApiKey = '1234';
+const Mitm = require('mitm');
 
 describe('class Email', function () {
 
@@ -52,130 +52,182 @@ describe('class Email', function () {
 
     });
 
-    describe('send email', function () {
+    describe('Mandrill', function () {
 
-        it('should fail, if "html" and "text" is not provided', function (done) {
+        describe('send', function () {
 
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+            it('should fail, if "html" and "text" is not provided', function (done) {
 
-            expect(function (){
-                email.send({}, function () {});
-            }).to.throw(Error, '"message.html" and "message.text" is missing, one of these fields is required.');
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
 
-            return done();
+                expect(function (){
+                    email.send({}, function () {});
+                }).to.throw(Error, '"message.html" and "message.text" is missing, one of these fields is required.');
 
-        });
+                return done();
 
-        it('should fail, if "fromEmail" is not provided', function (done) {
+            });
 
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+            it('should fail, if "fromEmail" is not provided', function (done) {
 
-            expect(function (){
-                email.send({ html: '<p>hello</p>'}, function () {});
-            }).to.throw(Error, '"message.fromEmail" field is either missing or is empty.');
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
 
-            return done();
+                expect(function (){
+                    email.send({ html: '<p>hello</p>'}, function () {});
+                }).to.throw(Error, '"message.fromEmail" field is either missing or is empty.');
 
-        });
+                return done();
 
-        it('should fail, if "to" is not provided', function (done) {
+            });
 
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+            it('should fail, if "to" is not provided', function (done) {
 
-            expect(function (){
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com'
+                    }, function () {});
+                }).to.throw(Error, '"message.to" field is either missing or is empty.');
+
+                return done();
+
+            });
+
+            it('should fail, if "to" is not of type String or Array', function (done) {
+
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com',
+                        'to': {}
+                    }, function () {});
+                }).to.throw(Error, '"message.to" must be of type String or Array.');
+
+                return done();
+
+            });
+
+            it('should fail, if "to" (String) has an invalid email', function (done) {
+
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com',
+                        'to': 'test@test'
+                    }, function () {});
+                }).to.throw(Error, 'test@test is not a valid email address.');
+
+                return done();
+
+            });
+
+            it('should fail, if "to" is an empty Array', function (done) {
+
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com',
+                        'to': []
+                    }, function () {});
+                }).to.throw(Error, '"message.to" Array field is empty.');
+
+                return done();
+
+            });
+
+            it('should fail, if "to" Array has a missing email field', function (done) {
+
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com',
+                        'to': [{ name: 'test' }]
+                    }, function () {});
+                }).to.throw(Error, 'Missing "email" field in one of the "message.to" Array.');
+
+                return done();
+
+            });
+
+            it('should fail, if "to" Array has an invalid email', function (done) {
+
+                let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
+                expect(function (){
+                    email.send({
+                        'html': '<p>hello</p>',
+                        'fromEmail': 'from@test.com',
+                        'to': [{
+                            'name': 'test',
+                            'email': 'test@test'
+                        }]
+                    }, function () {});
+                }).to.throw(Error, 'test@test is not a valid email address.');
+
+                return done();
+
+            });
+
+            it('should support the sendAt property', function (done) {
+
+                // eslint-disable-next-line new-cap
+                const mitm = Mitm();
+                const email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+
                 email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com'
-                }, function () {});
-            }).to.throw(Error, '"message.to" field is either missing or is empty.');
+                    fromEmail: 'from@test.com',
+                    html: '<p>hello</p>',
+                    sendAt: '2004',
+                    subject: 'Subject',
+                    to: [
+                        {
+                            email: 'test@test.com',
+                            name: 'test',
+                        },
+                    ],
+                }, function (err) {
 
-            return done();
+                    return done(err);
 
-        });
+                });
 
-        it('should fail, if "to" is not of type String or Array', function (done) {
+                mitm.on('request', function (req) {
 
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+                    let body = '';
 
-            expect(function (){
-                email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com',
-                    'to': {}
-                }, function () {});
-            }).to.throw(Error, '"message.to" must be of type String or Array.');
+                    /* eslint-disable max-nested-callbacks */
+                    req.on('data', data => (body += data));
 
-            return done();
+                    req.on('end', () => {
 
-        });
+                        expect(body).to.match(/send_at":"2004/);
+                        expect(body).to.not.match(/sendAt/);
 
-        it('should fail, if "to" (String) has an invalid email', function (done) {
+                        // Disable this, so it doesn't error other issues.
+                        mitm.disable();
 
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
+                        return done();
 
-            expect(function (){
-                email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com',
-                    'to': 'test@test'
-                }, function () {});
-            }).to.throw(Error, 'test@test is not a valid email address.');
+                    });
+                    /* eslint-enable max-nested-callbacks */
 
-            return done();
+                });
 
-        });
-
-        it('should fail, if "to" is an empty Array', function (done) {
-
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
-
-            expect(function (){
-                email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com',
-                    'to': []
-                }, function () {});
-            }).to.throw(Error, '"message.to" Array field is empty.');
-
-            return done();
-
-        });
-
-        it('should fail, if "to" Array has a missing email field', function (done) {
-
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
-
-            expect(function (){
-                email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com',
-                    'to': [{ name: 'test' }]
-                }, function () {});
-            }).to.throw(Error, 'Missing "email" field in one of the "message.to" Array.');
-
-            return done();
-
-        });
-
-        it('should fail, if "to" Array has an invalid email', function (done) {
-
-            let email = new lib.Email(mandrillApiKey, lib.emailServices.Mandrill);
-
-            expect(function (){
-                email.send({
-                    'html': '<p>hello</p>',
-                    'fromEmail': 'from@test.com',
-                    'to': [{
-                        'name': 'test',
-                        'email': 'test@test'
-                    }]
-                }, function () {});
-            }).to.throw(Error, 'test@test is not a valid email address.');
-
-            return done();
+            });
 
         });
 
     });
+
 
 });
