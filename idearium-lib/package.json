@@ -1,6 +1,6 @@
 {
   "name": "@idearium/idearium-lib",
-  "version": "1.0.0-alpha.26",
+  "version": "1.0.0-alpha.27",
   "description": "A Node.js shared library for Idearium applications.",
   "main": "index.js",
   "directories": {
@@ -44,6 +44,7 @@
     "chai-as-promised": "5.3.0",
     "copy-dir": "0.3.0",
     "express": "4.14.0",
+    "gulp": "3.9.1",
     "gulp-bump": "2.1.0",
     "istanbul": "0.4.5",
     "minimist": "1.2.0",

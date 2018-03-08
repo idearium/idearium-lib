@@ -2,7 +2,7 @@
 
 This file is a history of the changes made to idearium-lib.
 
-## Unreleased
+## 1.0.0-alpha.27
 
 - Updated `lib.emailServices.Mandrill` to support the `sendAt` property.
 - Refactored the name of `lib.emailServices.Mandrill` class to be `Mandrill` rather than `MandrillService`.
