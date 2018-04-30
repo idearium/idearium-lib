@@ -40,18 +40,18 @@ const consume = (action, options) => () => client.consume((channel) => {
 
         try {
 
+            data = JSON.parse(msg.content.toString());
+            
             debug('Consuming message: %O', {
-                data: JSON.parse(msg.content.toString()),
+                data,
                 exchange,
                 queue,
                 routingKey,
             });
 
-            data = JSON.parse(msg.content.toString());
-
         } catch (err) {
 
-            debug('MQ error reading data: %O', { data: msg.content.toString(), err });
+            debug('MQ error reading data: %O', { data: (msg.content || '').toString(), err });
 
             return ack(channel, msg);
 
