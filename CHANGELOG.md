@@ -2,6 +2,11 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## Unreleased
+
+- Replaced Opbeat with Elastic APM.
+- Added an Elastic APM usage guide.
+
 ## 1.0.0-alpha.27
 
 - Updated `lib.emailServices.Mandrill` to support the `sendAt` property.

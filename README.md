@@ -62,3 +62,33 @@ In order to publish this package to NPM, you need to log into NPM to provide aut
 
 Each Idearium developer should have their own NPM account, that is a member of the `@idearium` organisation.
 Now you have everything required to start coding and testing.
+
+## Elastic APM
+
+The Elastic APM module should be required at the top of the `app.js` and `server.js` files.
+
+The top of these files should look something like this:
+```javascript
+'use strict';
+
+require('./lib/apm');
+```
+
+### Catching errors
+
+To catch errors and send them to the APM server:
+```javascript
+const apm = require('./lib/apm');
+
+// Usually the first error middleware
+linz.app.use(apm.middleware.connect());
+```
+
+### Setting the user context
+
+In order to track requests in more detail, the apm user context should also be set before the other routes.
+```javascript
+const { apm } = require('./idearium-lib/middleware');
+
+app.use(apm);
+```
