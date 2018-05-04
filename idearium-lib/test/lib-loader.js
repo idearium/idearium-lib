@@ -7,7 +7,8 @@ var path = require('path'),
     chai = require('chai'),
     should = chai.should(), // eslint-disable-line no-unused-vars
     expect = chai.expect,
-    lib = require('../'),
+    Config = require('../lib/config'),
+    Loader = require('../lib/loader'),
     dir = path.resolve(__dirname, 'lib');
 
 describe('class Loader', function () {
@@ -29,7 +30,7 @@ describe('class Loader', function () {
     it('should throw, if the dir parameter is not provided', function () {
 
         return function () {
-            return new lib.Config().load();
+            return new Config().load();
         }.should.throw(Error, /dir/);
 
     });
@@ -38,7 +39,7 @@ describe('class Loader', function () {
 
         it('should load files', function (done) {
 
-            var loader = new lib.Loader();
+            var loader = new Loader();
 
             loader.load(dir).then(function (files) {
 
@@ -51,7 +52,7 @@ describe('class Loader', function () {
 
         it('should load files without camel case key names', function (done) {
 
-            var loader = new lib.Loader();
+            var loader = new Loader();
 
             loader.camelCase = false;
 
@@ -66,7 +67,7 @@ describe('class Loader', function () {
 
         it('should load files with class case key names', function (done) {
 
-            var loader = new lib.Loader();
+            var loader = new Loader();
 
             loader.classCase = true;
 
@@ -84,7 +85,7 @@ describe('class Loader', function () {
     describe('works synchronously', function () {
 
         // Create a synchronous instance of the loader.
-        var loader = new lib.Loader();
+        var loader = new Loader();
         loader.sync = true;
 
         it('should load files', function () {

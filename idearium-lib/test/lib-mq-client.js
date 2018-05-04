@@ -3,7 +3,7 @@
 /* eslint-env node, mocha */
 
 var expect = require('chai').expect,
-    mq = require('..').mq,
+    mq = require('../lib/mq'),
     conf = require('./conf');
 
 describe('class mq.Client', function () {

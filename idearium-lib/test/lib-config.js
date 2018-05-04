@@ -5,7 +5,7 @@
 var expect = require('chai').expect,
     path = require('path'),
     fs = require('fs'),
-    lib = require('../'),
+    Config = require('../lib/config'),
     dir = path.resolve(__dirname, '..', 'config');
 
 describe('class Config', function () {
@@ -24,14 +24,14 @@ describe('class Config', function () {
         it('should fail, if the dir parameter is not provided', function () {
 
             expect(function () {
-                return new lib.Config();
+                return new Config();
             }).to.throw(Error);
 
         });
 
         it('should load the config files from the provided dir', function () {
 
-            var config = new lib.Config(dir);
+            var config = new Config(dir);
 
             expect(config.get('title')).to.equal('development');
             expect(config.get('phone')).to.equal(1234);
@@ -40,7 +40,7 @@ describe('class Config', function () {
 
         it('should set and get a keyed value', function () {
 
-            var config = new lib.Config(dir);
+            var config = new Config(dir);
 
             config.set('url', 'google.com');
             expect(config.get('url')).equal('google.com');
@@ -49,7 +49,7 @@ describe('class Config', function () {
 
         it('should set \'env\' to `process.env.NODE_ENV`', function () {
 
-            var config = new lib.Config(dir);
+            var config = new Config(dir);
 
             expect(config.get('env')).equal(process.env.NODE_ENV);
 
@@ -57,7 +57,7 @@ describe('class Config', function () {
 
         it('should set `process.env.NODE_ENV` to `true`', function () {
 
-            var config = new lib.Config(dir);
+            var config = new Config(dir);
 
             expect(config.get(process.env.NODE_ENV)).equal(true);
 
@@ -69,8 +69,8 @@ describe('class Config', function () {
 
         it('should work', function () {
 
-            var config1 = new lib.Config(dir),
-                config2 = new lib.Config(dir);
+            var config1 = new Config(dir),
+                config2 = new Config(dir);
 
             config1.set('hello', 'config1');
             config2.set('hello', 'config2');

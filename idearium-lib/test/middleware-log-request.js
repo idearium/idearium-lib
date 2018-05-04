@@ -8,7 +8,7 @@ var fs = require('fs'),
     request = require('supertest'),
     expect = require('chai').expect,
     mitm = require('mitm'),
-    lib = require('../'),
+    logRequest = require('../middleware/log-request'),
     dir = path.resolve(__dirname, '..', 'logs'),
     rimraf = require('rimraf');
 
@@ -29,7 +29,7 @@ function createAgent (app) {
     return request.agent(app);
 }
 
-describe('middleware.logRequest', function () {
+describe('logRequest', function () {
 
     // Sometimes there is a bit of lag when writing to the socket and file system.
     // Allow two retries on these tests.
@@ -61,7 +61,7 @@ describe('middleware.logRequest', function () {
 
     it('is an Express middleware function', function () {
 
-        expect(lib.middleware.logRequest).to.be.a('function');
+        expect(logRequest).to.be.a('function');
 
     });
 
@@ -70,7 +70,7 @@ describe('middleware.logRequest', function () {
         let app = createApp();
 
         // Mount the middleware to log the request
-        app.use(lib.middleware.logRequest);
+        app.use(logRequest);
 
         // Mount some middleware that will just continue.
         app.get('/', function (req, res, next) {
@@ -124,7 +124,7 @@ describe('middleware.logRequest', function () {
             count = 0;
 
         // Mount the middleware to log the request
-        app.use(lib.middleware.logRequest);
+        app.use(logRequest);
 
         // Mount some middleware that will just continue.
         app.get('/', function (req, res, next) {
@@ -201,7 +201,7 @@ describe('middleware.logRequest', function () {
         let app = createApp();
 
         // Mount the middleware to log the reuqest
-        app.use(lib.middleware.logRequest);
+        app.use(logRequest);
 
         // Mount some middleware that will just continue.
         app.get('/user', function (req, res, next) {
@@ -296,7 +296,7 @@ describe('middleware.logRequest', function () {
         });
 
         // Mount the middleware to log the reuqest
-        app.use(lib.middleware.logRequest);
+        app.use(logRequest);
 
         // Mount some middleware that will just continue.
         app.get('/log-request-stream', function (req, res, next) {

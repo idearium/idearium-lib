@@ -3,7 +3,7 @@
 /* eslint-env node, mocha */
 
 var expect = require('chai').expect,
-    lib = require('../');
+    utils = require('../lib/utils');
 
 describe('utils', function () {
 
@@ -12,15 +12,15 @@ describe('utils', function () {
         it('should error if default value is not provided', function () {
 
             expect(function () {
-                lib.utils.parseConfigAsBoolean();
+                utils.parseConfigAsBoolean();
             }).to.throw(Error);
 
         });
 
         it('should return default value if provided value is undefined', function () {
 
-            var result1 = lib.utils.parseConfigAsBoolean(undefined, true),
-                result2 = lib.utils.parseConfigAsBoolean(undefined, false);
+            var result1 = utils.parseConfigAsBoolean(undefined, true),
+                result2 = utils.parseConfigAsBoolean(undefined, false);
 
             expect(result1).to.be.true;
             expect(result2).to.be.false;
@@ -29,7 +29,7 @@ describe('utils', function () {
 
         it('should return true if provided value is a String of "true"', function () {
 
-            var result1 = lib.utils.parseConfigAsBoolean('true', true);
+            var result1 = utils.parseConfigAsBoolean('true', true);
 
             expect(result1).to.be.true;
 
@@ -38,7 +38,7 @@ describe('utils', function () {
 
         it('should return true if provided value is a String of "false"', function () {
 
-            var result1 = lib.utils.parseConfigAsBoolean('false', true);
+            var result1 = utils.parseConfigAsBoolean('false', true);
 
             expect(result1).to.be.false;
 

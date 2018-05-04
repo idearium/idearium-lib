@@ -9,7 +9,7 @@ module.exports = function (err, req, res, next) {
 
     // Load the configuration, and an instance of Logger.
     const config = require('../common/config'),
-        Logger = require('../').logs.Logger;
+        Logger = require('../lib/logs/logger');
 
     // Create an instance of the logger.
     const log = new Logger({

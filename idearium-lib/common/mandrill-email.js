@@ -1,10 +1,11 @@
 'use strict';
 
 const config = require('./config');
-const lib = require('../');
+const Email = require('../lib/email');
+const emailServices = require('../lib/email-services');
 const log = require('./log')('idearium-lib:common/mandrill-email');
 
-class MandrillEmail extends lib.Email {
+class MandrillEmail extends Email {
 
     constructor () {
 
@@ -12,7 +13,7 @@ class MandrillEmail extends lib.Email {
             throw new Error('"mandrillAPIKey" config is not defined.');
         }
 
-        super(config.get('mandrillAPIKey'), lib.emailServices.Mandrill);
+        super(config.get('mandrillAPIKey'), emailServices.Mandrill);
 
     }
 
