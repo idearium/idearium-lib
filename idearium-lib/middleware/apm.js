@@ -1,9 +1,8 @@
 'use strict';
 
-const apm = require('../common/apm');
-
 module.exports = (req, res, next) => {
 
+    const apm = require('../common/apm');
     const { user } = req;
 
     // No user to set context for. (Not a linz route).
