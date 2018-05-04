@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.29 (4 May 2018)
+
+- Fix apm.setUserContext is not a function error.
+
 ## v1.0.0-alpha.28 (4 May 2018)
 
 - Replaced Opbeat with Elastic APM.
