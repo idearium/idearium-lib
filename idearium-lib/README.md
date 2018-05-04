@@ -371,38 +371,3 @@ let classes loader.load('path/to/classes');
 ## Tests
 
 To run tests `npm test`. The first time might take a little while as it will download a Docker image to run RabbitMQ.
-
-## APM
-
-In order to setup apm you will need to add the following to your project:
-
-```javascript
-// @ app/lib/apm.js
-
-'use strict';
-
-module.exports = require('@idearium/idearium-lib/common/apm');
-
-// @ server.js
-'use strict';
-
-require('./lib/apm');
-
-...
-
-// @ app.js
-'use strict';
-
-const apmLib = require('./lib/apm');
-const { apm } = require('../lib/middleware');
-
-// Before other middleware
-linz.app.use(apm);
-
-...
-
-// Before other error middleware
-linz.app.use(apmLib.middleware.connect());
-
-...
-```
