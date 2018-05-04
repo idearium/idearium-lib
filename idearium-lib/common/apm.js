@@ -2,7 +2,12 @@
 
 const apm = require('elastic-apm-node');
 
-apm.start();
+apm.start({
+    ignoreUrls: [
+        '/ping',
+        '/version.json',
+    ],
+});
 
 process.on('unhandledRejection', err => apm.captureError(err));
 
