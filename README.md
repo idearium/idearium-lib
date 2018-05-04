@@ -97,3 +97,18 @@ linz.app.use(apmLib.middleware.connect());
 
 ...
 ```
+
+At a minimum, you must add the following environment variables:
+
+```shell
+# Your Elastic APM service name.
+ELASTIC_APM_SERVICE_NAME
+
+# The secret token optionally expected by the APM Server.
+ELASTIC_APM_SECRET_TOKEN
+
+# The URL to where the APM Server is deployed.
+ELASTIC_APM_SERVER_URL
+```
+
+More settings can be found in the APM docs: [Agent API](https://www.elastic.co/guide/en/apm/agent/nodejs/current/agent-api.html)
