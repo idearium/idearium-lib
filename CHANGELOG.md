@@ -2,7 +2,7 @@
 
 This file is a history of the changes made to idearium-lib.
 
-## Unreleased
+## v1.0.0-alpha.28 (4 May 2018)
 
 - Replaced Opbeat with Elastic APM.
 - Added an Elastic APM usage guide.
