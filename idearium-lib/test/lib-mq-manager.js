@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const dir = path.resolve(__dirname, '..', 'lib-mq-manager');
 
-const { mq } = require('..');
+const mq = require('../lib/mq');
 const { expect } = require('chai');
 
 describe('class mq.Manager', function () {

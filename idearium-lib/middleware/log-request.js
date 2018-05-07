@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
 
     // Load the configuration, and an instance of Logger.
     const config = require('../common/config'),
-        Logger = require('../').logs.Logger,
+        Logger = require('../lib/logs/logger'),
         exclude = config.get('logRequestExclude') || ['admin\/public', 'ping'],
         regex = new RegExp('^\/' + exclude.join('|') + '\/?.*$'),
         start = Date.now();

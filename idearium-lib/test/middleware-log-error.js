@@ -8,7 +8,7 @@ var fs = require('fs'),
     request = require('supertest'),
     expect = require('chai').expect,
     mitm = require('mitm'),
-    lib = require('../'),
+    logError = require('../middleware/log-error'),
     dir = path.resolve(__dirname, '..', 'logs'),
     rimraf = require('rimraf');
 
@@ -29,7 +29,7 @@ function createAgent (app) {
     return request.agent(app);
 }
 
-describe('middleware.logError', function () {
+describe('logError', function () {
 
     // Sometimes there is a bit of lag when writing to the socket and file system.
     // Allow two retries on these tests.
@@ -71,7 +71,7 @@ describe('middleware.logError', function () {
 
     it('is an Express middleware function', function () {
 
-        let middlewareFn = lib.middleware.logError;
+        let middlewareFn = logError;
 
         expect(middlewareFn).to.be.a('function');
 
@@ -87,7 +87,7 @@ describe('middleware.logError', function () {
         });
 
         // Mount the middleware to log the error
-        app.use(lib.middleware.logError);
+        app.use(logError);
 
         // Mount some middleware to handle the error
         // eslint-disable-next-line no-unused-vars
@@ -145,7 +145,7 @@ describe('middleware.logError', function () {
         });
 
         // Mount the middleware to log the error
-        app.use(lib.middleware.logError);
+        app.use(logError);
 
         // Mount some middleware to handle the error
         // eslint-disable-next-line no-unused-vars
@@ -232,7 +232,7 @@ describe('middleware.logError', function () {
         });
 
         // Mount the middleware to log the error
-        app.use(lib.middleware.logError);
+        app.use(logError);
 
         // Mount some middleware to handle the error
         // eslint-disable-next-line no-unused-vars

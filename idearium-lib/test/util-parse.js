@@ -4,7 +4,7 @@
 
 const expect = require('chai').expect;
 const fs = require('fs');
-const lib = require('../');
+const util = require('../lib/util');
 const path = require('path');
 
 describe('util-parse', function () {
@@ -14,15 +14,15 @@ describe('util-parse', function () {
         it('should error if default value is not provided', function () {
 
             expect(function () {
-                lib.util.parseConfigAsBoolean();
+                util.parseConfigAsBoolean();
             }).to.throw(Error);
 
         });
 
         it('should return default value if provided value is undefined', function () {
 
-            var result1 = lib.util.parseConfigAsBoolean(undefined, true),
-                result2 = lib.util.parseConfigAsBoolean(undefined, false);
+            var result1 = util.parseConfigAsBoolean(undefined, true),
+                result2 = util.parseConfigAsBoolean(undefined, false);
 
             expect(result1).to.be.true;
             expect(result2).to.be.false;
@@ -31,7 +31,7 @@ describe('util-parse', function () {
 
         it('should return true if provided value is a String of "true"', function () {
 
-            var result1 = lib.util.parseConfigAsBoolean('true', true);
+            var result1 = util.parseConfigAsBoolean('true', true);
 
             expect(result1).to.be.true;
 
@@ -40,7 +40,7 @@ describe('util-parse', function () {
 
         it('should return true if provided value is a String of "false"', function () {
 
-            var result1 = lib.util.parseConfigAsBoolean('false', true);
+            var result1 = util.parseConfigAsBoolean('false', true);
 
             expect(result1).to.be.false;
 
@@ -54,7 +54,7 @@ describe('util-parse', function () {
 
             const stream = fs.createReadStream(path.resolve(__dirname, 'data', 'test.csv'));
 
-            lib.util.parseCsv(stream)
+            util.parseCsv(stream)
                 .then((data) => {
 
                     expect(data)
@@ -81,7 +81,7 @@ describe('util-parse', function () {
             const csv = 'col1,col2,col3,col4,col5\nTest1.1,Test1.2,Test1.3,Test1.4,\nTest2.1,Test2.2,Test2.3,Test2.4,""\nTest3.1,Test3.2,Test3.3,Test3.4,😊\nTest4.1,Test4.2,Test4.3,Test4.4,Test4.5\nTest5.1,Test5.2,Test5.3,Test5.4,Test5.5';
             const buffer = Buffer.from(csv);
 
-            lib.util.parseCsv(buffer)
+            util.parseCsv(buffer)
                 .then((data) => {
 
                     expect(data)
@@ -109,7 +109,7 @@ describe('util-parse', function () {
 
             const transform = (row, callback) => callback(null, row.map(cell => cell.toUpperCase()));
 
-            lib.util.parseCsv(stream, { transform })
+            util.parseCsv(stream, { transform })
                 .then((data) => {
 
                     expect(data)
@@ -136,7 +136,7 @@ describe('util-parse', function () {
             const csv = 'col1,col2,col3,col4,col5\nTest1.1,Test1.2,Test1.3,Test1.4,\nTest2.1,Test2.2,Test2.3,Test2.4,""\nTest3.1,Test3.2,Test3.3,Test3.4,😊\nTest4.1,Test4.2,Test4.3,Test4.4,Test4.5\nTest5.1,Test5.2,Test5.3,Test5.4';
             const buffer = Buffer.from(csv);
 
-            return lib.util.parseCsv(buffer)
+            return util.parseCsv(buffer)
                 .should
                 .be
                 .rejected;

@@ -9,7 +9,7 @@ const path = require('path'),
     stderr = require('test-console').stderr,
     chai = require('chai'),
     expect = chai.expect,
-    logs = require('../').logs,
+    logs = require('../lib/logs'),
     dir = path.resolve(__dirname, '..', 'logs'),
     rimraf = require('rimraf');
 

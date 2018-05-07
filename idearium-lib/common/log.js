@@ -2,7 +2,7 @@
 
 const bunyan = require('bunyan');
 const config = require('../common/config');
-const { Logger } = require('../').logs;
+const { Logger } = require('../lib/logs');
 
 const logEntriesToken = config.get('logEntriesToken');
 const logLevel = config.get('logLevel');
