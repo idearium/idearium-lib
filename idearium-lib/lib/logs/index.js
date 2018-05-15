@@ -1,11 +1,9 @@
 'use strict';
 
-var Loader = require('../loader'),
-    loader;
+const Logger = require('./logger');
+const streams = require('./streams');
 
-// Create an instance of Loader, and configure it with ClassCase.
-loader = new Loader();
-loader.classCase = true;
-loader.sync = true;
-
-module.exports = loader.load(__dirname);
+module.exports = {
+    Logger,
+    streams,
+};
