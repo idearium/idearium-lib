@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.31 (16 May 2018)
+
+- Removed the use of Loader when generated `module.exports` objects in `lib`.
+
 ## v1.0.0-alpha.30 (14 May 2018)
 
 - Fixed errors not being logged to console.
