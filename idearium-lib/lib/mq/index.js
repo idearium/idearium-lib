@@ -1,6 +1,14 @@
 
-module.exports.Client = require('./client');
-module.exports.Manager = require('./manager');
-module.exports.Connection = require('./connection');
-module.exports.RpcServer = require('./rpc-server');
-module.exports.RpcClient = require('./rpc-client');
+const Client = require('./client');
+const Connection = require('./connection');
+const Manager = require('./manager');
+const RpcClient = require('./rpc-client');
+const RpcServer = require('./rpc-server');
+
+module.exports = {
+    Client,
+    Connection,
+    Manager,
+    RpcClient,
+    RpcServer,
+};
