@@ -10,7 +10,7 @@ const logLevel = config.get('elasticApmLogLevel') || 'debug';
 // Set some defaults.
 if (!ignoreUrls.length) {
 
-    ignoreUrls.push('/ping');
+    ignoreUrls.push('/_status/ping');
     ignoreUrls.push('/version.json');
 
 }
@@ -20,7 +20,7 @@ apm.start({
     logLevel,
 });
 
-process.on('unhandledRejection', err => apm.captureError(err, exception));
+process.on('unhandledRejection', err => apm.captureError(err, () => exception(err)));
 
 apm.handleUncaughtExceptions(exception);
 
