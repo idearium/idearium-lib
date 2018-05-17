@@ -6,6 +6,7 @@ const exception = require('./exception');
 
 const ignoreUrls = (config.get('elasticApmIgnoreUrls') || '').split(',');
 const logLevel = config.get('elasticApmLogLevel') || 'debug';
+const serverUrl = config.get('elasticApmServerUrl') || 'apm.idearium.io';
 
 // Set some defaults.
 if (!ignoreUrls.length) {
@@ -18,6 +19,7 @@ if (!ignoreUrls.length) {
 apm.start({
     ignoreUrls,
     logLevel,
+    serverUrl,
 });
 
 process.on('unhandledRejection', err => apm.captureError(err, () => exception(err)));
