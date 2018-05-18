@@ -2,6 +2,10 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.33 (18 May 2018)
+
+- Updated apm to use environment variables only.
+
 ## v1.0.0-alpha.32 (17 May 2018)
 
 - Added a default APM server route.
