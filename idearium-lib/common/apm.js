@@ -1,16 +1,18 @@
 'use strict';
 
 const apm = require('elastic-apm-node');
-const config = require('./config');
 const exception = require('./exception');
 
-const ignoreUrls = (config.get('elasticApmIgnoreUrls') || '').split(',');
-const logLevel = config.get('elasticApmLogLevel') || 'debug';
+/* eslint-disable no-process-env */
+const ignoreUrls = (process.env.ELASTIC_APM_IGNORE_URLS || '').split(',');
+const logLevel = process.env.ELASTIC_APM_LOG_LEVEL || 'debug';
+const serverUrl = process.env.ELASTIC_APM_SERVER_URL || 'https://apm.idearium.io:8200';
+/* eslint-enable no-process-env */
 
 // Set some defaults.
 if (!ignoreUrls.length) {
 
-    ignoreUrls.push('/ping');
+    ignoreUrls.push('/_status/ping');
     ignoreUrls.push('/version.json');
 
 }
@@ -18,9 +20,10 @@ if (!ignoreUrls.length) {
 apm.start({
     ignoreUrls,
     logLevel,
+    serverUrl,
 });
 
-process.on('unhandledRejection', err => apm.captureError(err, exception));
+process.on('unhandledRejection', err => apm.captureError(err, () => exception(err)));
 
 apm.handleUncaughtExceptions(exception);
 

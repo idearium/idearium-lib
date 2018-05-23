@@ -2,6 +2,15 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.33 (18 May 2018)
+
+- Updated apm to use environment variables only.
+
+## v1.0.0-alpha.32 (17 May 2018)
+
+- Added a default APM server route.
+- Updated the default ping url to be `/_status/ping`.
+
 ## v1.0.0-alpha.31 (16 May 2018)
 
 - Removed the use of Loader when generated `module.exports` objects in `lib`.
