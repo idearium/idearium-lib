@@ -1,66 +1,69 @@
 'use strict';
 
-/* eslint-env node, mocha */
-
-var expect = require('chai').expect;
+const { expect } = require('chai');
+const {
+    cleanUp,
+    logPath,
+    makeConfigs,
+} = require('./util');
+const fs = require('fs');
+const path = require('path');
 
 describe('common/exception', function () {
 
-    const debug = require('debug');
+    const pe = process.exit;
+    let exception;
 
-    // eslint-disable-next-line no-console
-    let ce = console.error;
-    let pe = process.exit;
-    let dl = debug.log;
+    before(() => makeConfigs()
+        .then(() => {
 
-    beforeEach(function () {
+            exception = require('../common/exception');
 
-        // eslint-disable-next-line no-console
-        console.error = () => {};
-        process.exit = () => {};
-        debug.log = () => {};
+            return Promise.resolve();
 
-    });
+        }));
 
-    afterEach(function () {
+    beforeEach(() => makeConfigs()
+        .then(() => {
 
-        // eslint-disable-next-line no-console
-        console.error = ce;
-        process.exit = pe;
-        debug.log = dl;
+            process.exit = () => { };
 
-    });
+            return Promise.resolve();
+
+        }));
 
     it('is a function', function () {
-        expect(require('../common/exception')).to.be.a('function');
+        expect(exception).to.be.a('function');
     });
 
-    it('will log to console.error', function (done) {
+    it('will log to log.error', function (done) {
 
-        // eslint-disable-next-line no-console
-        console.error = function (err) {
+        exception(new Error('An exception'));
 
-            expect(err.message).to.match(/A console error exception/);
-            done();
+        // Verify the log exists.
+        fs.readFile(path.join(logPath, 'application.log'), 'utf8', function (err, content) {
 
-        }
+            // Handle any errors
+            if (err) {
+                return done(err);
+            }
 
-        require('../common/exception')(new Error('A console error exception'));
+            // Check out results.
+            expect(content).to.match(/An exception/);
 
-    });
+            return done();
 
-    it('will log via debug', function (done) {
-
-        // No-op function (disable output).
-        debug.log = function (msg) {
-
-            expect(msg).to.match(/Exception logged/);
-            done();
-
-        };
-
-        require('../common/exception')(new Error('A debug error exception'));
+        });
 
     });
+
+    afterEach(() => cleanUp()
+        .then(() => {
+
+            process.exit = pe;
+
+            return Promise.resolve();
+
+        }));
 
 });

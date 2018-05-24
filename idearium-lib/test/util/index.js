@@ -10,6 +10,8 @@ const path = require('path');
 
 const configPath = path.join(process.cwd(), 'config');
 const logPath = path.join(process.cwd(), 'logs');
+const mongoCertsPath = path.join(process.cwd(), 'mongo-certs');
+const mqCertsPath = path.join(process.cwd(), 'mq-certs');
 
 /**
  * Make a path if it doesn't already exist.
@@ -72,6 +74,8 @@ const makeFile = (dir, options) => new Promise((resolve) => {
 
 const removePath = dir => Promise.resolve(rm('-rf', dir));
 
+module.exports.makePath = makePath;
+
 module.exports.makeConfigs = (content, options) => makePath(configPath, options.path)
     .then(() => makeFile(`${configPath}/config.js`, options.file));
 
@@ -80,4 +84,8 @@ module.exports.makeLogs = options => makePath(logPath, options.path);
 module.exports.cleanUp = Promise.all([
     removePath(configPath),
     removePath(logPath),
+    removePath(mongoCertsPath),
+    removePath(mqCertsPath),
 ]);
+
+module.exports.logPath = logPath;
