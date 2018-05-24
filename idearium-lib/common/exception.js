@@ -1,17 +1,13 @@
 'use strict';
 
-const debug = require('debug')('idearium-lib:common:exception');
-const exitErrCode = 1;
+const log = require('./log')('idearium-lib:common/exception');
 
-module.exports = function (err) {
+module.exports = (err) => {
 
-    debug('Exception logged. Quitting Node.js process.');
-
-    // Log the error to console.
-    // eslint-disable-next-line no-console
-    console.error(err);
+    log.error({ err }, err.message);
 
     // Quit the process entirely.
-    process.exit(exitErrCode);
+    // eslint-disable-next-line no-process-exit
+    process.exit(1);
 
 };

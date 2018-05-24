@@ -1,8 +1,8 @@
 'use strict';
 
 const apm = require('elastic-apm-node');
-const exception = require('./exception');
-const log = require('./log')('idearium-lib:common/apm');
+
+apm.exception = require('./exception');
 
 /* eslint-disable no-process-env */
 const ignoreUrls = (process.env.ELASTIC_APM_IGNORE_URLS || '').split(',');
@@ -24,16 +24,8 @@ apm.start({
     serverUrl,
 });
 
-// Capture and rethrow the error so apps can handle it themselves.
-// By default the apm handler below will capture it.
-process.on('unhandledRejection', err => apm.captureError(err, () => {
+process.on('unhandledRejection', err => apm.captureError(err, apm.exception(err)));
 
-    log.error({ err }, err.message);
-
-    throw err;
-
-}));
-
-apm.handleUncaughtExceptions(exception);
+apm.handleUncaughtExceptions(apm.exception);
 
 module.exports = apm;

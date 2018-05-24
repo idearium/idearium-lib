@@ -4,7 +4,8 @@ This file is a history of the changes made to idearium-lib.
 
 ## Unreleased
 
-- Updated apm to only log `unhandledRejection` and rethrow the error without forcing a restart. By default the error will still get captured by `apm.handleUncaughtExceptions` and restart the process.
+- Updated apm to allow custom `unhandledRejection` and `apm.handleUncaughtExceptions` exception handlers. Just set `apm.exception = () => { ... }` in the app.
+- Updated the default exception handler to call `log.error` instead of just console.log.
 
 ## v1.0.0-alpha.33 (18 May 2018)
 
