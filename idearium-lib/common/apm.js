@@ -24,7 +24,7 @@ apm.start({
     serverUrl,
 });
 
-process.on('unhandledRejection', err => apm.captureError(err, apm.exception(err)));
+process.on('unhandledRejection', err => apm.captureError(err, () => apm.exception(err)));
 
 apm.handleUncaughtExceptions(apm.exception);
 
