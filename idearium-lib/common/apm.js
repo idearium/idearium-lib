@@ -24,8 +24,15 @@ apm.start({
     serverUrl,
 });
 
-// Just capture and log the error.
-process.on('unhandledRejection', err => apm.captureError(err, () => log.error({ err }, err.message)));
+// Capture and rethrow the error so apps can handle it themselves.
+// By default the apm handler below will capture it.
+process.on('unhandledRejection', err => apm.captureError(err, () => {
+
+    log.error({ err }, err.message);
+
+    throw err;
+
+}));
 
 apm.handleUncaughtExceptions(exception);
 
