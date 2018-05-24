@@ -33,6 +33,7 @@
     "moment": "2.21.0",
     "mongoose": "4.10.4",
     "nconf": "0.8.4",
+    "shelljs": "0.8.2",
     "stream-to-promise": "2.2.0",
     "stream-transform": "0.1.2",
     "uuid": "3.0.1",
