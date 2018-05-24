@@ -24,13 +24,8 @@ apm.start({
     serverUrl,
 });
 
-process.on('unhandledRejection', err => apm.captureError(err, () => {
-
-    log.error({ err }, err.message);
-
-    throw err;
-
-}));
+// Just capture and log the error.
+process.on('unhandledRejection', err => apm.captureError(err, () => log.error({ err }, err.message)));
 
 apm.handleUncaughtExceptions(exception);
 
