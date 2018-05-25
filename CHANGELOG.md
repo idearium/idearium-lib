@@ -2,6 +2,11 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.34 (25 May 2018)
+
+- Updated apm to allow custom `unhandledRejection` and `apm.handleUncaughtExceptions` exception handlers. Just set `apm.exception = () => { ... }` in the app.
+- Updated the default exception handler to call `log.error` instead of just console.log.
+
 ## v1.0.0-alpha.33 (18 May 2018)
 
 - Updated apm to use environment variables only.

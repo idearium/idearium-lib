@@ -1,7 +1,8 @@
 'use strict';
 
 const apm = require('elastic-apm-node');
-const exception = require('./exception');
+
+apm.exception = require('./exception');
 
 /* eslint-disable no-process-env */
 const ignoreUrls = (process.env.ELASTIC_APM_IGNORE_URLS || '').split(',');
@@ -23,8 +24,8 @@ apm.start({
     serverUrl,
 });
 
-process.on('unhandledRejection', err => apm.captureError(err, () => exception(err)));
+process.on('unhandledRejection', err => apm.captureError(err, () => apm.exception(err)));
 
-apm.handleUncaughtExceptions(exception);
+apm.handleUncaughtExceptions(apm.exception);
 
 module.exports = apm;
