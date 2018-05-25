@@ -14,26 +14,19 @@ describe('common/exception', function () {
     const pe = process.exit;
     let exception;
 
-    before(function (done) {
+    before(() => makeConfigs()
+        .then(() => {
 
-        makeConfigs()
-            .then(() => {
+            process.exit = () => { };
 
-                process.exit = () => { };
+            const config = require('../common/config');
 
-                const config = require('../common/config');
+            config.set('logLocation', 'local');
+            config.set('logLevel', 'debug');
+            config.set('logToStdout', true);
+            exception = require('../common/exception');
 
-                config.set('logLocation', 'local');
-                config.set('logLevel', 'debug');
-                config.set('logToStdout', true);
-                exception = require('../common/exception');
-
-                return done();
-
-            })
-            .catch(done);
-
-    });
+        }));
 
     it('is a function', function () {
         expect(exception).to.be.a('function');

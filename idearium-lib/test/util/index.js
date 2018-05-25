@@ -20,6 +20,8 @@ const removePath = dir => Promise.resolve(rm('-rf', dir));
  */
 const makePath = (dir) => {
 
+    console.log(`Making path ${dir}`);
+
     // Create the directory if it doesn't already exist.
     mkdir('-p', dir);
 
