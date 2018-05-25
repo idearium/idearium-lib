@@ -5,6 +5,7 @@ const {
     cleanUp,
     logPath,
     makeConfigs,
+    makeLogs,
 } = require('./util');
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +15,10 @@ describe('common/exception', function () {
     const pe = process.exit;
     let exception;
 
-    before(() => makeConfigs()
+    before(() => Promise.all([
+        makeConfigs(),
+        makeLogs(),
+    ])
         .then(() => {
 
             process.exit = () => { };

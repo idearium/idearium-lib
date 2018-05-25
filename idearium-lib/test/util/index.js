@@ -20,8 +20,6 @@ const removePath = dir => Promise.resolve(rm('-rf', dir));
  */
 const makePath = (dir) => {
 
-    console.log(`Making path ${dir}`);
-
     // Create the directory if it doesn't already exist.
     mkdir('-p', dir);
 
@@ -66,7 +64,7 @@ module.exports = {
     makeConfigs: (content, options) => makePath(configPath)
         .then(() => makeFile(`${configPath}/config.js`, Object.assign({}, options, { content }))),
     makeFile,
-    makeLogs: options => makePath(logPath, options.path),
+    makeLogs: () => makePath(logPath),
     makePath,
     removePath,
 };
