@@ -11,13 +11,13 @@ const path = require('path');
 
 describe('common/exception', function () {
 
-    this.timeout(3000);
-
     const pe = process.exit;
     let exception;
 
     before(() => makeConfigs()
         .then(() => {
+
+            process.exit = () => { };
 
             const config = require('../common/config');
 
@@ -25,7 +25,6 @@ describe('common/exception', function () {
             config.set('logLevel', 'debug');
             config.set('logToStdout', true);
             exception = require('../common/exception');
-            process.exit = () => { };
 
         }));
 
@@ -37,25 +36,20 @@ describe('common/exception', function () {
 
         exception(new Error('An exception'));
 
-        // Allow time for the file to be created.
-        setTimeout(() => {
+        // Verify the log exists.
+        fs.readFile(path.join(logPath, 'application.log'), 'utf8', function (err, content) {
 
-            // Verify the log exists.
-            fs.readFile(path.join(logPath, 'application.log'), 'utf8', function (err, content) {
+            // Handle any errors
+            if (err) {
+                return done(err);
+            }
 
-                // Handle any errors
-                if (err) {
-                    return done(err);
-                }
+            // Check out results.
+            expect(content).to.match(/An exception/);
 
-                // Check out results.
-                expect(content).to.match(/An exception/);
+            return done();
 
-                return done();
-
-            });
-
-        }, 1000);
+        });
 
     });
 
