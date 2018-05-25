@@ -3,89 +3,68 @@
 const {
     mkdir,
     rm,
-    touch,
+    ShellString,
 } = require('shelljs');
-const rimraf = require('rimraf');
 const path = require('path');
 
-const configPath = path.join(process.cwd(), 'config');
-const logPath = path.join(process.cwd(), 'logs');
-const mongoCertsPath = path.join(process.cwd(), 'mongo-certs');
-const mqCertsPath = path.join(process.cwd(), 'mq-certs');
+const baseDir = process.cwd();
+const configPath = path.join(baseDir, 'config');
+const logPath = path.join(baseDir, 'logs');
+
+const removePath = dir => Promise.resolve(rm('-rf', dir));
 
 /**
  * Make a path if it doesn't already exist.
  * @param {String} dir The path.
- * @param {Object} options The options.
- * @param {Boolean} [options.clean=true] Optionally wipe the directory.
  * @return {Promise} Makes the path.
  */
-const makePath = (dir, options) => new Promise((resolve, reject) => {
-
-    const settings = Object.assign({}, { clean: true }, options);
+const makePath = (dir) => {
 
     // Create the directory if it doesn't already exist.
     mkdir('-p', dir);
 
-    if (!settings.clean) {
-        return resolve();
-    }
+    return Promise.resolve();
 
-    // Wipe all the files in the directory.
-    rimraf(dir, () => (err) => {
-
-        if (err) {
-            return reject(err);
-        }
-
-        return resolve();
-
-    });
-
-});
+};
 
 /**
  * Make a file.
  * @param {String} dir The file path.
  * @param {Object} options The options.
- * @param {Boolean} [options.clean=true] Optionally wipe the file.
+ * @param {Boolean} [options.clean=false] Optionally wipe the file.
  * @param {Boolean} [options.content='module.exports = {}'] Optionally provide file contents.
  * @return {Promise} Makes the file.
  */
-const makeFile = (dir, options) => new Promise((resolve) => {
+const makeFile = (dir, options) => {
 
     const settings = Object.assign({}, {
-        clean: true,
+        clean: false,
         content: 'module.exports = {}',
     }, options);
 
-    if (settings.clean) {
-        rm(dir);
-    }
+    // eslint-disable-next-line new-cap
+    ShellString(settings.content).to(dir);
 
-    touch(dir);
-    // Add the content to the file.
-    settings.content.to(dir);
+    return Promise.resolve();
 
-    return resolve();
+};
 
-});
-
-
-const removePath = dir => Promise.resolve(rm('-rf', dir));
-
-module.exports.makePath = makePath;
-
-module.exports.makeConfigs = (content, options) => makePath(configPath, options.path)
-    .then(() => makeFile(`${configPath}/config.js`, options.file));
-
-module.exports.makeLogs = options => makePath(logPath, options.path);
-
-module.exports.cleanUp = Promise.all([
+/**
+ * Clean up the data after using it.
+ * @returns {Promise} Removes the test paths.
+ */
+const cleanUp = () => Promise.all([
     removePath(configPath),
     removePath(logPath),
-    removePath(mongoCertsPath),
-    removePath(mqCertsPath),
 ]);
 
-module.exports.logPath = logPath;
+module.exports = {
+    cleanUp,
+    logPath,
+    makeConfigs: (content, options) => makePath(configPath)
+        .then(() => makeFile(`${configPath}/config.js`, Object.assign({}, options, { content }))),
+    makeFile,
+    makeLogs: options => makePath(logPath, options.path),
+    makePath,
+    removePath,
+};

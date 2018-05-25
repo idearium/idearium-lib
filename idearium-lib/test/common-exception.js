@@ -17,18 +17,13 @@ describe('common/exception', function () {
     before(() => makeConfigs()
         .then(() => {
 
+            const config = require('../common/config');
+
+            config.set('logLocation', 'local');
+            config.set('logLevel', 'debug');
+            config.set('logToStdout', true);
             exception = require('../common/exception');
-
-            return Promise.resolve();
-
-        }));
-
-    beforeEach(() => makeConfigs()
-        .then(() => {
-
             process.exit = () => { };
-
-            return Promise.resolve();
 
         }));
 
@@ -57,7 +52,7 @@ describe('common/exception', function () {
 
     });
 
-    afterEach(() => cleanUp()
+    after(() => cleanUp()
         .then(() => {
 
             process.exit = pe;
