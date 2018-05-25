@@ -11,9 +11,7 @@ const path = require('path');
 
 describe('common/exception', function () {
 
-    // Sometimes there is a bit of lag when writing to the socket and file system.
-    // Allow two retries on these tests.
-    this.retries(2);
+    this.timeout(3000);
 
     const pe = process.exit;
     let exception;
@@ -39,20 +37,25 @@ describe('common/exception', function () {
 
         exception(new Error('An exception'));
 
-        // Verify the log exists.
-        fs.readFile(path.join(logPath, 'application.log'), 'utf8', function (err, content) {
+        // Allow time for the file to be created.
+        setTimeout(() => {
 
-            // Handle any errors
-            if (err) {
-                return done(err);
-            }
+            // Verify the log exists.
+            fs.readFile(path.join(logPath, 'application.log'), 'utf8', function (err, content) {
 
-            // Check out results.
-            expect(content).to.match(/An exception/);
+                // Handle any errors
+                if (err) {
+                    return done(err);
+                }
 
-            return done();
+                // Check out results.
+                expect(content).to.match(/An exception/);
 
-        });
+                return done();
+
+            });
+
+        }, 1000);
 
     });
 
