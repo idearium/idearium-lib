@@ -11,6 +11,10 @@ const path = require('path');
 
 describe('common/exception', function () {
 
+    // Sometimes there is a bit of lag when writing to the socket and file system.
+    // Allow two retries on these tests.
+    this.retries(2);
+
     const pe = process.exit;
     let exception;
 
