@@ -5,7 +5,7 @@
 var express = require('express'),
     request = require('supertest'),
     expect = require('chai').expect,
-    lib = require('../');
+    configSettings = require('../middleware/config-settings');
 
 /**
  * Helper function to create an instance of an Express app.
@@ -24,7 +24,7 @@ function createAgent (app) {
     return request.agent(app);
 }
 
-describe('middleware.configSettings', function () {
+describe('configSettings', function () {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     before(function(done) {
@@ -40,7 +40,7 @@ describe('middleware.configSettings', function () {
 
     it('is an Express middleware function', function () {
 
-        let middlewareFn = lib.middleware.configSettings;
+        let middlewareFn = configSettings;
 
         expect(middlewareFn).to.be.a('function');
 
@@ -50,7 +50,7 @@ describe('middleware.configSettings', function () {
 
         let app = createApp();
 
-        app.get('/config', lib.middleware.configSettings);
+        app.get('/config', configSettings);
 
         createAgent(app)
             .get('/config')
@@ -63,7 +63,7 @@ describe('middleware.configSettings', function () {
         let app = createApp();
 
         // Mount the middleware so that we can test it.
-        app.get('/config', lib.middleware.configSettings);
+        app.get('/config', configSettings);
 
         // Check the body is as it should be.
         function bodyMatches (res) {

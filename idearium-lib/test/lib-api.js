@@ -1,7 +1,7 @@
 'use strict';
 
 const { expect } = require('chai');
-const { Api } = require('../');
+const Api = require('../lib/api');
 
 describe('class Api', function () {
 

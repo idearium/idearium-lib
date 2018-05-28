@@ -1,11 +1,9 @@
 'use strict';
 
-var Loader = require('../../loader'),
-    loader;
+const LogEntries = require('./log-entries');
+const StdErr = require('./std-err');
 
-// Create an instance of Loader, and configure it with ClassCase.
-loader = new Loader();
-loader.classCase = true;
-loader.sync = true;
-
-module.exports = loader.load(__dirname);
+module.exports = {
+    LogEntries,
+    StdErr,
+};

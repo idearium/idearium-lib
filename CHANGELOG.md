@@ -2,6 +2,38 @@
 
 This file is a history of the changes made to idearium-lib.
 
+## v1.0.0-alpha.34 (25 May 2018)
+
+- Updated apm to allow custom `unhandledRejection` and `apm.handleUncaughtExceptions` exception handlers. Just set `apm.exception = () => { ... }` in the app.
+- Updated the default exception handler to call `log.error` instead of just console.log.
+
+## v1.0.0-alpha.33 (18 May 2018)
+
+- Updated apm to use environment variables only.
+
+## v1.0.0-alpha.32 (17 May 2018)
+
+- Added a default APM server route.
+- Updated the default ping url to be `/_status/ping`.
+
+## v1.0.0-alpha.31 (16 May 2018)
+
+- Removed the use of Loader when generated `module.exports` objects in `lib`.
+
+## v1.0.0-alpha.30 (14 May 2018)
+
+- Fixed errors not being logged to console.
+- Fixed unhandled promises not stopping the node process.
+
+## v1.0.0-alpha.29 (4 May 2018)
+
+- Fix apm.setUserContext is not a function error.
+
+## v1.0.0-alpha.28 (4 May 2018)
+
+- Replaced Opbeat with Elastic APM.
+- Added an Elastic APM usage guide.
+
 ## 1.0.0-alpha.27
 
 - Updated `lib.emailServices.Mandrill` to support the `sendAt` property.

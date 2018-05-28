@@ -3,7 +3,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    lib = require('../');
+    Hash = require('../lib/hash');
 
 describe('class Hash', function () {
 
@@ -14,14 +14,14 @@ describe('class Hash', function () {
         it('should fail, if the identifier parameter is not provided', function () {
 
             expect(function () {
-                return new lib.Hash();
+                return new Hash();
             }).to.throw(Error, /identifier/);
 
         });
 
         it('should instantiate, if the identifier parameter is provided', function () {
 
-            const hash = new lib.Hash(identifier);
+            const hash = new Hash(identifier);
 
             expect(hash).to.exist;
             expect(hash.identifier).to.exist;
@@ -32,7 +32,7 @@ describe('class Hash', function () {
 
         it('should hash the identifier', function (done) {
 
-            const hash = new lib.Hash(identifier);
+            const hash = new Hash(identifier);
 
             hash.hash(function (err, hashed) {
 
@@ -51,7 +51,7 @@ describe('class Hash', function () {
 
         it('successfully compare a hash', function (done) {
 
-            const hash = new lib.Hash(identifier);
+            const hash = new Hash(identifier);
 
             hash.hash(function (err, hashed) {
 
@@ -81,7 +81,7 @@ describe('class Hash', function () {
 
         it('successfully fail a hash compare', function (done) {
 
-            const hash = new lib.Hash(identifier);
+            const hash = new Hash(identifier);
 
             hash.hash(function (err, hashed) {
 
@@ -111,7 +111,7 @@ describe('class Hash', function () {
 
         it('successfully compare a hash, without prior hashing', function (done) {
 
-            const hash = new lib.Hash(identifier);
+            const hash = new Hash(identifier);
 
             hash.compare('$2a$10$H0S.zE4oymFcfWzcqa9OFuxCQwixGw7WolM.OjWD2hDz0/BbpsCT6', function (compareErr, comparison) {
 
