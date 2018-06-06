@@ -22,6 +22,13 @@ const isBeta = str => str.toLowerCase() === 'beta';
 const isDevelopment = str => str.toLowerCase() === 'development';
 
 /**
+ * Determine if the environment is local.
+ * @param {String} str String to compare.
+ * @return {Boolean} True if the environment is local.
+ */
+const isLocal = str => str.toLowerCase() === 'local';
+
+/**
  * Check if 2 values are equal.
  * @param {Any} value1 First value.
  * @param {Any} value2 Second value.
@@ -62,6 +69,7 @@ module.exports = {
     isBeta,
     isDevelopment,
     isEqual,
+    isLocal,
     isObject,
     isProduction,
     isStaging,

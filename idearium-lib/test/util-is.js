@@ -6,6 +6,7 @@ const {
     isBeta,
     isDevelopment,
     isEqual,
+    isLocal,
     isObject,
     isProduction,
     isStaging,
@@ -24,6 +25,10 @@ describe('util-is', function () {
 
     it('is beta environment', function () {
         expect(isBeta('BeTa')).to.equal(true);
+    });
+
+    it('is local environment', function () {
+        expect(isLocal('LoCaL')).to.equal(true);
     });
 
     it('is staging environment', function () {
