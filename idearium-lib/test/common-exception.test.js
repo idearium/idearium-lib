@@ -1,6 +1,5 @@
 'use strict';
 
-const { expect } = require('chai');
 const {
     cleanUp,
     logPath,
@@ -10,12 +9,12 @@ const {
 const fs = require('fs');
 const path = require('path');
 
-describe('common/exception', function () {
+describe('common/exception', () => {
 
     const pe = process.exit;
     let exception;
 
-    before(() => Promise.all([
+    beforeAll(() => Promise.all([
         makeConfigs(),
         makeLogs(),
     ])
@@ -32,11 +31,11 @@ describe('common/exception', function () {
 
         }));
 
-    it('is a function', function () {
-        expect(exception).to.be.a('function');
+    it('is a function', () => {
+        expect(typeof exception).toBe('function');
     });
 
-    it('will log to log.error', function (done) {
+    it('will log to log.error', (done) => {
 
         exception(new Error('An exception'));
 
@@ -49,7 +48,7 @@ describe('common/exception', function () {
             }
 
             // Check out results.
-            expect(content).to.match(/An exception/);
+            expect(content).toMatch(/An exception/);
 
             return done();
 
@@ -57,7 +56,7 @@ describe('common/exception', function () {
 
     });
 
-    after(() => cleanUp()
+    afterAll(() => cleanUp()
         .then(() => {
 
             process.exit = pe;
