@@ -3,23 +3,22 @@
 'use strict';
 
 let path = require('path'),
-    expect = require('chai').expect,
     copy = require('copy-dir'),
     rimraf = require('rimraf'),
     dir = path.resolve(__dirname);
 
-describe('common/mongo/certs', function () {
+describe('common/mongo/certs', () => {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function(done) {
+    beforeAll((done) => {
 
         // Move the test files into place
         copy(path.resolve(dir, 'data', 'mongo-certs'), path.join(dir, '..', 'mongo-certs', process.env.NODE_ENV), done);
 
     });
 
-    it('will load the certificates, specific to environment', function (done) {
+    it('will load the certificates, specific to environment', (done) => {
 
         require('../common/mongo/certs')
             .then((certs) => {
@@ -34,7 +33,7 @@ describe('common/mongo/certs', function () {
 
     });
 
-    after(function (done) {
+    afterAll((done) => {
 
         rimraf(path.join(dir, '..', 'mongo-certs'), done);
 
