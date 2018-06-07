@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-/app/node_modules/.bin/jest
+/app/node_modules/.bin/jest --forceExit

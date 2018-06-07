@@ -2,9 +2,14 @@
 
 const path = require('path');
 const fs = require('fs');
-const { expect } = require('chai');
 const dir = path.resolve(__dirname, '..', 'messages');
-const conf = require('./conf');
+
+jest.mock('/app/config/config.js', () => ({
+    logLevel: 'debug',
+    logLocation: 'local',
+    logToStdout: true,
+    mqUrl: require('./conf').rabbitUrl,
+}));
 
 describe('common/mq/publisher', function () {
 
@@ -12,15 +17,7 @@ describe('common/mq/publisher', function () {
 
     // This is run after common-mq-client and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function (done) {
-
-        // eslint-disable-next-line global-require
-        const config = require('../common/config');
-
-        config.set('mqUrl', conf.rabbitUrl);
-        config.set('logLocation', 'local');
-        config.set('logLevel', 'debug');
-        config.set('logToStdout', true);
+    beforeAll((done) => {
 
         // Add some fake messages to load.
         fs.mkdir(dir, function (err) {
@@ -32,7 +29,7 @@ describe('common/mq/publisher', function () {
             }
             /* eslint-enable padded-blocks */
 
-            fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
+            fs.writeFile(path.join(dir, 'mq-publisher-test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
 
                 /* eslint-disable padded-blocks */
                 if (writeErr) {
@@ -41,7 +38,7 @@ describe('common/mq/publisher', function () {
                 /* eslint-enable padded-blocks */
 
                 // eslint-disable-next-line global-require
-                message = require('../messages/test.js');
+                message = require('../messages/mq-publisher-test.js');
 
                 return done();
 
@@ -51,7 +48,7 @@ describe('common/mq/publisher', function () {
 
     });
 
-    it('will return a promise', function (done) {
+    it('will return a promise', (done) => {
 
         // This runs after test/common-mq-client.
         // That means some things have been cached.
@@ -60,7 +57,7 @@ describe('common/mq/publisher', function () {
         // Create the publish function.
         message.publish = function publishTest (data) {
 
-            expect(data).to.eql({ name: 'message-test' });
+            expect(data).toEqual({ name: 'message-test' });
 
             return Promise.resolve();
 
@@ -72,7 +69,7 @@ describe('common/mq/publisher', function () {
         // Publish the message.
         const result = publish('test', { name: 'message-test' });
 
-        expect(result).to.be.instanceof(Promise);
+        expect(result instanceof Promise).toBe(true);
 
         result
             .then(() => done())
@@ -80,9 +77,9 @@ describe('common/mq/publisher', function () {
 
     });
 
-    after(function (done) {
+    afterAll((done) => {
 
-        fs.unlink(path.join(dir, 'test.js'), function () {
+        fs.unlink(path.join(dir, 'mq-publisher-test.js'), function () {
 
             fs.rmdir(dir, done);
 

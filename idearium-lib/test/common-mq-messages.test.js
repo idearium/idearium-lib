@@ -9,7 +9,7 @@ const path = require('path'),
     dir = path.resolve(__dirname, '..', 'messages'),
     conf = require('./conf');
 
-describe('common/mq/messages', function () {
+describe('common/mq/messages', () => {
 
     let message;
 
@@ -27,13 +27,13 @@ describe('common/mq/messages', function () {
                 return done(err);
             }
 
-            fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
+            fs.writeFile(path.join(dir, 'mq-messages-test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
 
                 if (writeErr) {
                     return done(writeErr);
                 }
 
-                message = require('../messages/test.js');
+                message = require('../messages/mq-messages-test.js');
 
                 return done();
 
@@ -126,10 +126,10 @@ describe('common/mq/messages', function () {
             mqMessages.addListener('load', () => {
 
                 // Wait until everything is connected again.
-                mqClient.addListener('connect', function () {
+                mqClient.addListener('connect', () => {
 
                     // Publish a test message.
-                    require('../messages/test.js').publish({'common-mq-messages-test': true});
+                    require('../messages/mq-messages-test.js').publish({'common-mq-messages-test': true});
 
                 });
 
@@ -149,7 +149,7 @@ describe('common/mq/messages', function () {
     }, 4000);
 
     afterAll((done) => {
-        fs.unlink(path.join(dir, 'test.js'), function () {
+        fs.unlink(path.join(dir, 'mq-messages-test.js'), () => {
             fs.rmdir(dir, done);
         });
     });

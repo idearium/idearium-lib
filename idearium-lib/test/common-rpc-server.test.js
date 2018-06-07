@@ -2,18 +2,19 @@
 
 'use strict';
 
+jest.mock('/app/config/config.js', () => ({ env: 'test' }));
+
 let path = require('path'),
-    expect = require('chai').expect,
     copy = require('copy-dir'),
     rimraf = require('rimraf'),
     dir = path.resolve(__dirname),
     conf = require('./conf');
 
-describe('common/mq/rpc-server', function () {
+describe('common/mq/rpc-server', () => {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/rpc-server uses it.
-    before(function(done) {
+    beforeAll((done) => {
 
         require('../common/config').set('mqUrl', conf.rabbitUrl);
 
@@ -23,8 +24,6 @@ describe('common/mq/rpc-server', function () {
     });
 
     it('will connect to rabbit mq', function (done) {
-
-        this.timeout(10000);
 
         // Catch and proxy any errors to `done`.
         try {
@@ -37,14 +36,11 @@ describe('common/mq/rpc-server', function () {
             // When the `connect` event is fired, we're done.
             // Only listen once, because `../common/mq/rpc-server` is used in later tests.
             // It will be cached, and so we don't want to execute this instance of `done` again.
-            mqRpcServer.once('connect', function () {
+            mqRpcServer.once('connect', () => {
 
                 // Ensure it successfully loaded all certs.
-                expect(mqRpcServer.options).to.have.property('key');
-                expect(mqRpcServer.options).to.have.property('cert');
-                expect(mqRpcServer.options).to.have.property('ca');
-                expect(mqRpcServer.options).to.have.property('servername');
-                expect(mqRpcServer.options.ca).to.be.a('array');
+                expect(Object.keys(mqRpcServer.options).sort()).toEqual(['ca', 'cert', 'key', 'servername']);
+                expect(Array.isArray(mqRpcServer.options.ca)).toBe(true);
 
                 return done();
 
@@ -57,9 +53,9 @@ describe('common/mq/rpc-server', function () {
             return done(e);
         }
 
-    });
+    }, 10000);
 
-    after(function (done) {
+    afterAll(function (done) {
 
         rimraf(path.join(dir, '..', 'mq-certs'), done);
 
