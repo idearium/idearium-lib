@@ -1,11 +1,12 @@
 'use strict';
 
-const {
-    cleanUp,
-    logPath,
-    makeConfigs,
-    makeLogs,
-} = require('./util');
+jest.mock('/app/config/config.js', () => ({
+    logLevel: 'debug',
+    logLocation: 'local',
+    logToStdout: true,
+}));
+
+const { logPath } = require('./util');
 const fs = require('fs');
 const path = require('path');
 
@@ -14,22 +15,13 @@ describe('common/exception', () => {
     const pe = process.exit;
     let exception;
 
-    beforeAll(() => Promise.all([
-        makeConfigs(),
-        makeLogs(),
-    ])
-        .then(() => {
+    beforeAll(() => {
 
-            process.exit = () => { };
+        process.exit = () => { };
 
-            const config = require('../common/config');
+        exception = require('../common/exception');
 
-            config.set('logLocation', 'local');
-            config.set('logLevel', 'debug');
-            config.set('logToStdout', true);
-            exception = require('../common/exception');
-
-        }));
+    });
 
     it('is a function', () => {
         expect(typeof exception).toBe('function');
@@ -56,13 +48,10 @@ describe('common/exception', () => {
 
     });
 
-    afterAll(() => cleanUp()
-        .then(() => {
+    afterAll(() => {
 
-            process.exit = pe;
+        process.exit = pe;
 
-            return Promise.resolve();
-
-        }));
+    });
 
 });

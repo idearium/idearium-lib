@@ -2,9 +2,10 @@
 
 'use strict';
 
+jest.mock('/app/config/config.js', () => ({ env: 'test' }));
+
 const path = require('path'),
     fs = require('fs'),
-    expect = require('chai').expect,
     dir = path.resolve(__dirname, '..', 'messages'),
     conf = require('./conf');
 
@@ -14,7 +15,7 @@ describe('common/mq/messages', function () {
 
     // This is run after common-mq-client and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function(done) {
+    beforeAll((done) => {
 
         require('../common/config').set('mqUrl', conf.rabbitUrl);
 
@@ -42,9 +43,7 @@ describe('common/mq/messages', function () {
 
     });
 
-    it('will faciliate producing and consuming messages', function (done) {
-
-        this.timeout(4000);
+    it('will faciliate producing and consuming messages', (done) => {
 
         var exchange = 'common-mq-messages',
             queueName = 'common-mq-messages-queue',
@@ -75,7 +74,7 @@ describe('common/mq/messages', function () {
                             return done(new Error('There was no data'));
                         }
 
-                        expect(data).to.eql({'common-mq-messages-test': true});
+                        expect(data).toEqual({'common-mq-messages-test': true});
 
                         return done();
 
@@ -147,9 +146,9 @@ describe('common/mq/messages', function () {
             return done(e);
         }
 
-    });
+    }, 4000);
 
-    after(function (done) {
+    afterAll((done) => {
         fs.unlink(path.join(dir, 'test.js'), function () {
             fs.rmdir(dir, done);
         });

@@ -1,19 +1,13 @@
-/* eslint-env node, mocha */
-
 'use strict';
 
-const { makeConfigs } = require('./util');
+jest.mock('/app/config/config.js', () => ({
+    phone: 1234,
+    title: 'development',
+}));
 
-var path = require('path'),
-    fs = require('fs'),
-    dir = path.resolve(__dirname, '..', 'config');
+const config = require('../common/config');
 
 describe('common/config', () => {
-
-    let config;
-
-    beforeAll(() => makeConfigs('module.exports = { "title": "development", "phone": 1234 };')
-        .then(() => (config = require('../common/config'))));
 
     it('will load the config', () => {
 
@@ -23,15 +17,6 @@ describe('common/config', () => {
         config.set('url', 'google.com');
         expect(config.get('url')).toBe('google.com');
 
-    });
-
-    afterAll((done) => {
-        fs.unlink(dir + '/config.js', function (err) {
-            if (err) {
-                return done(err);
-            }
-            fs.rmdir(dir, done);
-        });
     });
 
 });

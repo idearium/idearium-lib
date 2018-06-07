@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { makeConfigs } = require('./util');
+jest.mock('/app/config/config.js', () => ({ env: 'test' }));
 
 let path = require('path'),
     copy = require('copy-dir'),
@@ -13,17 +13,16 @@ describe('common/mq/certs', function () {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    beforeAll(done => makeConfigs()
-        .then(() => {
+    beforeAll((done) => {
 
-            // Move the test files into place
-            copy(path.resolve(dir, 'data', 'mq-certs'), path.join(dir, '..', 'mq-certs', process.env.NODE_ENV), done);
+        // Move the test files into place
+        copy(path.resolve(dir, 'data', 'mq-certs'), path.join(dir, '..', 'mq-certs', process.env.NODE_ENV), done);
 
-        }));
+    });
 
     it('will load the certificates, specific to environment', (done) => {
 
-        require('../common/mq/certs')
+        jest.mock('../common/mq/certs')
             .then((optsCerts) => {
 
                 expect(Object.keys(optsCerts).sort()).toEqual(['ca', 'cert', 'key']);
