@@ -2,8 +2,9 @@
 
 'use strict';
 
+const { makeConfigs } = require('./util');
+
 let path = require('path'),
-    expect = require('chai').expect,
     copy = require('copy-dir'),
     rimraf = require('rimraf'),
     dir = path.resolve(__dirname),
@@ -13,18 +14,17 @@ describe('common/mq/client', function () {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function(done) {
+    beforeAll(done => makeConfigs()
+        .then(() => {
 
-        require('../common/config').set('mqUrl', conf.rabbitUrl);
+            require('../common/config').set('mqUrl', conf.rabbitUrl);
 
-        // Move the test files into place
-        copy(path.resolve(dir, 'data', 'mq-certs'), path.join(dir, '..', 'mq-certs', process.env.NODE_ENV), done);
+            // Move the test files into place
+            copy(path.resolve(dir, 'data', 'mq-certs'), path.join(dir, '..', 'mq-certs', process.env.NODE_ENV), done);
 
-    });
+        }));
 
-    it('will connect to rabbit mq', function (done) {
-
-        this.timeout(10000);
+    it('will connect to rabbit mq', (done) => {
 
         // Catch and proxy any errors to `done`.
         try {
@@ -38,11 +38,8 @@ describe('common/mq/client', function () {
             mqClient.once('connect', function () {
 
                 // Ensure it successfully loaded all certs.
-                expect(mqClient.options).to.have.property('key');
-                expect(mqClient.options).to.have.property('cert');
-                expect(mqClient.options).to.have.property('ca');
-                expect(mqClient.options).to.have.property('servername');
-                expect(mqClient.options.ca).to.be.a('array');
+                expect(Object.keys(mqClient.options).sort()).toEqual(['ca', 'cert', 'key', 'servername']);
+                expect(Array.isArray(mqClient.options.ca)).toBe(true);
 
                 return done();
 
@@ -55,9 +52,9 @@ describe('common/mq/client', function () {
             return done(e);
         }
 
-    });
+    }, 10000);
 
-    after(function (done) {
+    afterAll((done) => {
 
         rimraf(path.join(dir, '..', 'mq-certs'), done);
 
