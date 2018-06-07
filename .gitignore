@@ -88,3 +88,8 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Testing
+jest_*
+config/
+.vagrant
