@@ -23,7 +23,7 @@ describe('common/mq/rpc-server', () => {
 
     });
 
-    it('will connect to rabbit mq', function (done) {
+    it('will connect to rabbit mq', (done) => {
 
         // Catch and proxy any errors to `done`.
         try {
@@ -55,7 +55,7 @@ describe('common/mq/rpc-server', () => {
 
     }, 10000);
 
-    afterAll(function (done) {
+    afterAll((done) => {
 
         rimraf(path.join(dir, '..', 'mq-certs'), done);
 

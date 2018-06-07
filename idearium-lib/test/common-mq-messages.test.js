@@ -3,6 +3,7 @@
 'use strict';
 
 jest.mock('/app/config/config.js', () => ({ env: 'test' }));
+jest.mock('../messages/index.js', () => ({ consume: () => Promise.resolve(), publish: () => Promise.resolve() }));
 
 const path = require('path'),
     fs = require('fs'),
@@ -15,31 +16,13 @@ describe('common/mq/messages', () => {
 
     // This is run after common-mq-client and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    beforeAll((done) => {
+    beforeAll(() => {
 
         require('../common/config').set('mqUrl', conf.rabbitUrl);
 
         // Add some fake messages to load.
-        fs.mkdir(dir, function (err) {
-
-            // If it already exists, that's fine, let's just create the file itself.
-            if (err) {
-                return done(err);
-            }
-
-            fs.writeFile(path.join(dir, 'mq-messages-test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
-
-                if (writeErr) {
-                    return done(writeErr);
-                }
-
-                message = require('../messages/mq-messages-test.js');
-
-                return done();
-
-            });
-
-        });
+        // eslint-disable-next-line global-require
+        message = require('../messages');
 
     });
 
@@ -129,7 +112,7 @@ describe('common/mq/messages', () => {
                 mqClient.addListener('connect', () => {
 
                     // Publish a test message.
-                    require('../messages/mq-messages-test.js').publish({'common-mq-messages-test': true});
+                    require('../messages').publish({'common-mq-messages-test': true});
 
                 });
 
@@ -146,12 +129,6 @@ describe('common/mq/messages', () => {
             return done(e);
         }
 
-    }, 4000);
-
-    afterAll((done) => {
-        fs.unlink(path.join(dir, 'mq-messages-test.js'), () => {
-            fs.rmdir(dir, done);
-        });
-    });
+    }, 10000);
 
 });
