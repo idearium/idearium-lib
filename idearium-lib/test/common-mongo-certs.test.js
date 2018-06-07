@@ -2,6 +2,8 @@
 
 'use strict';
 
+const { makeConfigs } = require('./util');
+
 let path = require('path'),
     copy = require('copy-dir'),
     rimraf = require('rimraf'),
@@ -11,20 +13,21 @@ describe('common/mongo/certs', () => {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    beforeAll((done) => {
+    beforeAll(done => makeConfigs()
+        .then(() => {
 
-        // Move the test files into place
-        copy(path.resolve(dir, 'data', 'mongo-certs'), path.join(dir, '..', 'mongo-certs', process.env.NODE_ENV), done);
+            // Move the test files into place
+            copy(path.resolve(dir, 'data', 'mongo-certs'), path.join(dir, '..', 'mongo-certs', process.env.NODE_ENV), done);
 
-    });
+        }));
 
     it('will load the certificates, specific to environment', (done) => {
 
         require('../common/mongo/certs')
             .then((certs) => {
 
-                expect(certs).to.be.an.instanceof(Array);
-                expect(certs).to.have.lengthOf(2);
+                expect(Array.isArray(certs)).toBe(true);
+                expect(certs).toHaveLength(2);
 
                 return done();
 
