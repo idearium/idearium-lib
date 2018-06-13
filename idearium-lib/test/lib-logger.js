@@ -1,21 +1,16 @@
 'use strict';
 
-/* eslint-env node, mocha */
-/* eslint no-unused-vars:0 */
+const path = require('path');
+const fs = require('fs');
+const mitm = require('mitm');
+const { stderr } = require('test-console');
+const logs = require('../lib/logs');
+const dir = path.resolve(__dirname, '..', 'logs');
+const rimraf = require('rimraf');
 
-const path = require('path'),
-    fs = require('fs'),
-    mitm = require('mitm'),
-    stderr = require('test-console').stderr,
-    chai = require('chai'),
-    expect = chai.expect,
-    logs = require('../lib/logs'),
-    dir = path.resolve(__dirname, '..', 'logs'),
-    rimraf = require('rimraf');
+describe('class logs.Logger', () => {
 
-describe('class logs.Logger', function () {
-
-    before(function (done) {
+    beforeAll((done) => {
 
         // Create the directory for the logger
         rimraf('../logs', () => {
@@ -30,57 +25,80 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('instantiation', function () {
+    describe('instantiation', () => {
 
-        it('can be instantiated', function () {
+        it('can be instantiated', () => {
 
-            expect(function () {
-                let log = new logs.Logger('name', 'token');
-            }).to.not.throw;
+            expect(new logs.Logger({
+                context: 'context',
+                name: 'name',
+            })).not.toThrow();
 
         });
 
-        describe('will throw if', function () {
+        describe('will throw if', () => {
 
-            it('name parameter is not provided', function () {
+            it('name parameter is not provided', () => {
 
-                expect(function () {
-                    let log = new logs.Logger();
-                }).to.throw(Error, /name/);
+                try {
 
-            });
+                    new logs.Logger();
 
-            it('context parameter is not provided', function () {
+                } catch (err) {
 
-                expect(function () {
-                    let log = new logs.Logger({
-                        name: 'test'
-                    });
-                }).to.throw(Error, /context/);
+                    expect(err.message).toMatch(/name/);
+
+                }
 
             });
 
-            it('level is wrong', function () {
+            it('context parameter is not provided', () => {
 
-                expect(function () {
-                    let log = new logs.Logger({
-                        name: 'name',
+                try {
+
+                    new logs.Logger({ name: 'test' });
+
+                } catch (err) {
+
+                    expect(err.message).toMatch(/context/);
+
+                }
+
+            });
+
+            it('level is wrong', () => {
+
+                try {
+
+                    new logs.Logger({
                         context: 'context',
-                        level: 'warning'
+                        level: 'warning',
+                        name: 'name',
                     });
-                }).to.throw(Error, /level/);
+
+                } catch (err) {
+
+                    expect(err.message).toMatch(/level/);
+
+                }
 
             });
 
-            it('remote specified, without token parameter', function () {
+            it('remote specified, without token parameter', () => {
 
-                expect(function () {
-                    let log = new logs.Logger({
-                        name: 'name',
+                try {
+
+                    new logs.Logger({
                         context: 'context',
-                        remote: true
+                        name: 'name',
+                        remote: true,
                     });
-                }).to.throw(Error, /token/);
+
+                } catch (err) {
+
+                    expect(err.message).toMatch(/token/);
+
+                }
 
             });
 
@@ -88,21 +106,17 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('file stream', function () {
-
-        // Sometimes there is a bit of lag when writing to the file system.
-        // Allow two retries on these tests.
-        this.retries(2);
+    describe('file stream', () => {
 
         // Empty the file after each test.
-        afterEach(function (done) {
+        afterEach((done) => {
             fs.truncate(path.join(dir, 'application.log'), done);
         });
 
-        it('will write to file', function (done) {
+        it('will write to file', (done) => {
 
             // Create the logger.
-            let logger = new logs.Logger({
+            const logger = new logs.Logger({
                 name: 'application',
                 context: 'write-to-file-test'
             });
@@ -119,8 +133,8 @@ describe('class logs.Logger', function () {
                 }
 
                 // Check out results.
-                expect(content).to.match(/Testing write to file/);
-                expect(content).to.match(/write-to-file/);
+                expect(content).toMatch(/Testing write to file/);
+                expect(content).toMatch(/write-to-file/);
 
                 return done();
 
@@ -128,11 +142,11 @@ describe('class logs.Logger', function () {
 
         });
 
-        describe('at levels', function () {
+        describe('at levels', () => {
 
             let logger;
 
-            before(function () {
+            beforeAll(() => {
 
                 // Init the logger.
                 logger = new logs.Logger({
@@ -143,7 +157,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('trace', function (done) {
+            it('trace', (done) => {
 
                 logger.trace('Logging at trace level');
 
@@ -156,9 +170,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at trace level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":10/);
+                    expect(content).toMatch(/Logging at trace level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":10/);
 
                     return done();
 
@@ -166,7 +180,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('debug', function (done) {
+            it('debug', (done) => {
 
                 logger.debug('Logging at debug level');
 
@@ -179,9 +193,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at debug level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":20/);
+                    expect(content).toMatch(/Logging at debug level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":20/);
 
                     return done();
 
@@ -189,7 +203,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('info', function (done) {
+            it('info', (done) => {
 
                 logger.info('Logging at info level');
 
@@ -202,9 +216,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at info level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":30/);
+                    expect(content).toMatch(/Logging at info level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":30/);
 
                     return done();
 
@@ -212,7 +226,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('warn', function (done) {
+            it('warn', (done) => {
 
                 logger.warn('Logging at warn level');
 
@@ -225,9 +239,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at warn level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":40/);
+                    expect(content).toMatch(/Logging at warn level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":40/);
 
                     return done();
 
@@ -235,7 +249,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('error', function (done) {
+            it('error', (done) => {
 
                 logger.error('Logging at error level');
 
@@ -248,9 +262,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at error level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":50/);
+                    expect(content).toMatch(/Logging at error level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":50/);
 
                     return done();
 
@@ -258,7 +272,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('fatal', function (done) {
+            it('fatal', (done) => {
 
                 logger.fatal('Logging at fatal level');
 
@@ -271,9 +285,9 @@ describe('class logs.Logger', function () {
                     }
 
                     // Check out results.
-                    expect(content).to.match(/Logging at fatal level/);
-                    expect(content).to.match(/at-levels-test/);
-                    expect(content).to.match(/"level":60/);
+                    expect(content).toMatch(/Logging at fatal level/);
+                    expect(content).toMatch(/at-levels-test/);
+                    expect(content).toMatch(/"level":60/);
 
                     return done();
 
@@ -285,12 +299,12 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('stderr stream', function () {
+    describe('stderr stream', () => {
 
-        it('will write to stderr', function (done) {
+        it('will write to stderr', (done) => {
 
             // Create the logger.
-            let logger = new logs.Logger({
+            const logger = new logs.Logger({
                 name: 'application',
                 context: 'lib:logger:write-to-stderr-test',
                 local: false,
@@ -298,25 +312,25 @@ describe('class logs.Logger', function () {
             });
 
             // Write content to the log.
-            let output = stderr.inspectSync(function () {
+            const output = stderr.inspectSync(() => {
                 logger.error('Testing write to stderr');
             });
 
-            expect(Array.isArray(output)).to.be.true;
-            expect(output).to.have.length(1);
-            expect(output[0]).to.match(/lib:logger:write-to-stderr-test/);
-            expect(output[0]).to.match(/"name":"application"/);
-            expect(output[0]).to.match(/Testing write to stderr/);
+            expect(Array.isArray(output)).toBe(true);
+            expect(output).toHaveLength(1);
+            expect(output[0]).toMatch(/lib:logger:write-to-stderr-test/);
+            expect(output[0]).toMatch(/"name":"application"/);
+            expect(output[0]).toMatch(/Testing write to stderr/);
 
             return done();
 
         });
 
-        describe('at levels', function () {
+        describe('at levels', () => {
 
             let logger;
 
-            before(function () {
+            beforeAll(() => {
 
                 // Init the logger.
                 logger = new logs.Logger({
@@ -329,109 +343,109 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('trace', function (done) {
+            it('trace', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.trace('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":10/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":10/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
             });
 
-            it('debug', function (done) {
+            it('debug', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.debug('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":20/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":20/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
             });
 
-            it('info', function (done) {
+            it('info', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.info('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":30/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":30/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
             });
 
-            it('warn', function (done) {
+            it('warn', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.warn('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":40/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":40/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
             });
 
-            it('error', function (done) {
+            it('error', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.error('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":50/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":50/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
             });
 
-            it('fatal', function (done) {
+            it('fatal', (done) => {
 
                 // Write content to the log.
-                let output = stderr.inspectSync(function () {
+                const output = stderr.inspectSync(() => {
                     logger.fatal('Testing write to stderr');
                 });
 
-                expect(Array.isArray(output)).to.be.true;
-                expect(output).to.have.length(1);
-                expect(output[0]).to.match(/lib:logger:stderr-at-levels-test/);
-                expect(output[0]).to.match(/"name":"application"/);
-                expect(output[0]).to.match(/"level":60/);
-                expect(output[0]).to.match(/Testing write to stderr/);
+                expect(Array.isArray(output)).toBe(true);
+                expect(output).toHaveLength(1);
+                expect(output[0]).toMatch(/lib:logger:stderr-at-levels-test/);
+                expect(output[0]).toMatch(/"name":"application"/);
+                expect(output[0]).toMatch(/"level":60/);
+                expect(output[0]).toMatch(/Testing write to stderr/);
 
                 return done();
 
@@ -441,22 +455,22 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('remote stream', function () {
+    describe('remote stream', () => {
 
         let mock;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mock = mitm();
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mock.disable();
         });
 
-        it('will write to log entries', function (done) {
+        it('will write to log entries', (done) => {
 
             // Create the logger.
-            let logger = new logs.Logger({
+            const logger = new logs.Logger({
                     name: 'application',
                     context: 'lib:logger:write-to-remote-test',
                     local: false,
@@ -471,9 +485,9 @@ describe('class logs.Logger', function () {
                     var msg = buffer.toString();
 
                     // Check out results.
-                    expect(msg).to.match(/Testing write to remote/);
-                    expect(msg).to.match(/lib:logger:write-to-remote-test/);
-                    expect(msg).to.match(/"level":50/);
+                    expect(msg).toMatch(/Testing write to remote/);
+                    expect(msg).toMatch(/lib:logger:write-to-remote-test/);
+                    expect(msg).toMatch(/"level":50/);
 
                     return done();
 
@@ -485,11 +499,11 @@ describe('class logs.Logger', function () {
 
         });
 
-        describe('at levels', function () {
+        describe('at levels', () => {
 
             let logger;
 
-            beforeEach(function () {
+            beforeEach(() => {
 
                 // Create the logger.
                 logger = new logs.Logger({
@@ -504,7 +518,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('trace', function (done) {
+            it('trace', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -512,9 +526,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":10/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":10/);
 
                         return done();
 
@@ -526,7 +540,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('debug', function (done) {
+            it('debug', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -534,9 +548,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":20/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":20/);
 
                         return done();
 
@@ -548,7 +562,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('info', function (done) {
+            it('info', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -556,9 +570,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":30/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":30/);
 
                         return done();
 
@@ -570,7 +584,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('warn', function (done) {
+            it('warn', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -578,9 +592,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":40/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":40/);
 
                         return done();
 
@@ -592,7 +606,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('error', function (done) {
+            it('error', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -600,9 +614,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":50/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":50/);
 
                         return done();
 
@@ -614,7 +628,7 @@ describe('class logs.Logger', function () {
 
             });
 
-            it('fatal', function (done) {
+            it('fatal', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -622,9 +636,9 @@ describe('class logs.Logger', function () {
                         var msg = buffer.toString();
 
                         // Check out results.
-                        expect(msg).to.match(/Testing write to remote at levels/);
-                        expect(msg).to.match(/lib:logger:write-to-remote-at-levels-test/);
-                        expect(msg).to.match(/"level":60/);
+                        expect(msg).toMatch(/Testing write to remote at levels/);
+                        expect(msg).toMatch(/lib:logger:write-to-remote-at-levels-test/);
+                        expect(msg).toMatch(/"level":60/);
 
                         return done();
 
@@ -640,9 +654,9 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('custom stream', function () {
+    describe('custom stream', () => {
 
-        it('will write to a custom stream', function (done) {
+        it('will write to a custom stream', (done) => {
 
             // Basic es6 class to act as a Bunyan stream.
             const CustomStream = class {
@@ -660,9 +674,9 @@ describe('class logs.Logger', function () {
 
                 write (rec) {
 
-                    expect(rec.name).to.equal('application');
-                    expect(rec.context).to.equal('lib:logger:custom-stream');
-                    expect(rec.msg).to.equal('Testing custom stream');
+                    expect(rec.name).toBe('application');
+                    expect(rec.context).toBe('lib:logger:custom-stream');
+                    expect(rec.msg).toBe('Testing custom stream');
 
                     return done();
 
@@ -670,7 +684,7 @@ describe('class logs.Logger', function () {
 
             };
 
-            let logger = new logs.Logger({
+            const logger = new logs.Logger({
                 name: 'application',
                 context: 'lib:logger:custom-stream',
                 level: 'trace',
@@ -686,16 +700,16 @@ describe('class logs.Logger', function () {
 
     });
 
-    describe('file, stderr, remote and custom stream', function () {
+    describe('file, stderr, remote and custom stream', () => {
 
-        let CustomStream,
-            logger,
-            output,
-            mock,
-            msg,
-            rec;
+        let CustomStream;
+        let logger;
+        let output;
+        let mock;
+        let msg;
+        let rec;
 
-        before(function () {
+        beforeAll(() => {
 
             // Init the stream class.
             // Basic es6 class to act as a Bunyan stream.
@@ -741,13 +755,13 @@ describe('class logs.Logger', function () {
             });
 
             // Write content to the log.
-            output = stderr.inspectSync(function () {
+            output = stderr.inspectSync(() => {
                 logger.info('This is a combined output test');
             });
 
         });
 
-        it('will output to file stream', function (done) {
+        it('will output to file stream', (done) => {
 
             // Verify the log exists.
             fs.readFile(path.join(dir, 'application.log'), 'utf8', function (err, content) {
@@ -758,9 +772,9 @@ describe('class logs.Logger', function () {
                 }
 
                 // Check out results.
-                expect(content).to.match(/This is a combined output test/);
-                expect(content).to.match(/lib:logger:file-and-stderr-and-remote-test/);
-                expect(content).to.match(/"level":30/);
+                expect(content).toMatch(/This is a combined output test/);
+                expect(content).toMatch(/lib:logger:file-and-stderr-and-remote-test/);
+                expect(content).toMatch(/"level":30/);
 
                 return done();
 
@@ -768,31 +782,31 @@ describe('class logs.Logger', function () {
 
         });
 
-        it('will output to stderr stream', function () {
+        it('will output to stderr stream', () => {
 
-            expect(Array.isArray(output)).to.be.true;
-            expect(output).to.have.length(1);
-            expect(output[0]).to.match(/lib:logger:file-and-stderr-and-remote-test/);
-            expect(output[0]).to.match(/"name":"application"/);
-            expect(output[0]).to.match(/"level":30/);
-            expect(output[0]).to.match(/This is a combined output test/);
+            expect(Array.isArray(output)).toBe(true);
+            expect(output).toHaveLength(1);
+            expect(output[0]).toMatch(/lib:logger:file-and-stderr-and-remote-test/);
+            expect(output[0]).toMatch(/"name":"application"/);
+            expect(output[0]).toMatch(/"level":30/);
+            expect(output[0]).toMatch(/This is a combined output test/);
 
         });
 
-        it('will send to remote logging platform', function (done) {
+        it('will send to remote logging platform', (done) => {
 
             var _done = false;
 
-            setInterval(function () {
+            setInterval(() => {
 
                 // Wait until msg has been defined.
                 if (msg && !_done) {
 
                     // Check out results.
-                    expect(msg).to.match(/This is a combined output test/);
-                    expect(msg).to.match(/lib:logger:file-and-stderr-and-remote-test/);
-                    expect(msg).to.match(/"name":"application"/);
-                    expect(msg).to.match(/"level":30/);
+                    expect(msg).toMatch(/This is a combined output test/);
+                    expect(msg).toMatch(/lib:logger:file-and-stderr-and-remote-test/);
+                    expect(msg).toMatch(/"name":"application"/);
+                    expect(msg).toMatch(/"level":30/);
 
                     _done = true;
 
@@ -804,20 +818,20 @@ describe('class logs.Logger', function () {
 
         });
 
-        it('will log via custom stream', function (done) {
+        it('will log via custom stream', (done) => {
 
             var _done = false;
 
-            setInterval(function () {
+            setInterval(() => {
 
                 // Wait until msg has been defined.
                 if (rec && !_done) {
 
                     // Check out results.
-                    expect(rec.msg).to.equal('This is a combined output test');
-                    expect(rec.context).to.equal('lib:logger:file-and-stderr-and-remote-test');
-                    expect(rec.name).to.equal('application');
-                    expect(rec.level).to.equal(30);
+                    expect(rec.msg).toBe('This is a combined output test');
+                    expect(rec.context).toBe('lib:logger:file-and-stderr-and-remote-test');
+                    expect(rec.name).toBe('application');
+                    expect(rec.level).toBe(30);
 
                     _done = true;
 
@@ -831,7 +845,7 @@ describe('class logs.Logger', function () {
 
     });
 
-    after(function (done) {
+    afterAll((done) => {
         rimraf('../logs', done);
     });
 

@@ -1,42 +1,40 @@
 'use strict';
 
-/* eslint-env node, mocha */
+const mq = require('../lib/mq');
+const conf = require('./conf');
 
-var expect = require('chai').expect,
-    mq = require('../lib/mq'),
-    conf = require('./conf');
+describe('class mq.Connection', () => {
 
-describe('class mq.Connection', function () {
+    describe('will throw an Error', () => {
 
-    describe('will throw an Error', function () {
+        it('if url is not provided', () => {
 
-        it('if url is not provided', function () {
+            try {
 
-            var fn = function () {
-                // eslint-disable-next-line no-unused-vars
-                var ideariumMq = new mq.Connection();
-            };
+                new mq.Connection();
 
-            expect(fn).to.throw(Error, /mqUrl parameter is required/);
+            } catch (err) {
+
+                expect(err.message).toMatch(/mqUrl parameter is required/);
+
+            }
 
         });
 
     });
 
-    describe('connects to', function () {
+    describe('connects to', () => {
 
-        it('RabbitMQ', function (done) {
-
-            this.timeout(10000);
+        it('RabbitMQ', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
 
                 // Setup an instance of the class.
-                var ideariumMq = new mq.Connection(conf.rabbitUrl);
+                const ideariumMq = new mq.Connection(conf.rabbitUrl);
 
                 // Add the connect listener. When this happens, we're done.
-                ideariumMq.addListener('connect', function () {
+                ideariumMq.addListener('connect', () => {
                     return done();
                 });
 
@@ -49,16 +47,18 @@ describe('class mq.Connection', function () {
                 ideariumMq.connect();
 
             } catch (e) {
+
                 return done(e);
+
             }
 
-        });
+        }, 10000);
 
     });
 
-    describe('gracefully disconnects', function () {
+    describe('gracefully disconnects', () => {
 
-        it('when not connected', function (done) {
+        it('when not connected', (done) => {
 
             // Setup an instance of the class.
             const ideariumMq = new mq.Connection(conf.rabbitUrl);
@@ -69,9 +69,7 @@ describe('class mq.Connection', function () {
 
         });
 
-        it('from RabbitMQ', function (done) {
-
-            this.timeout(10000);
+        it('from RabbitMQ', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
@@ -80,7 +78,7 @@ describe('class mq.Connection', function () {
                 var ideariumMq = new mq.Connection(conf.rabbitUrl);
 
                 // Add the connect listener. When this happens, we're done.
-                ideariumMq.addListener('connect', function () {
+                ideariumMq.addListener('connect', () => {
 
                     ideariumMq.disconnect()
                         .then(() => done())
@@ -100,7 +98,7 @@ describe('class mq.Connection', function () {
                 return done(e);
             }
 
-        });
+        }, 10000);
 
     });
 

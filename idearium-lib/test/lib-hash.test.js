@@ -1,32 +1,29 @@
-/* eslint-env node, mocha */
-
 'use strict';
 
-var expect = require('chai').expect,
-    Hash = require('../lib/hash');
+const Hash = require('../lib/hash');
 
-describe('class Hash', function () {
+describe('class Hash', () => {
 
     const identifier = 'string.to.hash';
 
-    describe('create an instance', function () {
+    describe('create an instance', () => {
 
-        it('should fail, if the identifier parameter is not provided', function () {
+        it('should fail, if the identifier parameter is not provided', () => {
 
-            expect(function () {
+            expect(() => {
                 return new Hash();
-            }).to.throw(Error, /identifier/);
+            }).toThrow(/identifier/);
 
         });
 
-        it('should instantiate, if the identifier parameter is provided', function () {
+        it('should instantiate, if the identifier parameter is provided', () => {
 
             const hash = new Hash(identifier);
 
-            expect(hash).to.exist;
-            expect(hash.identifier).to.exist;
-            expect(hash.identifier).to.equal(identifier);
-            expect(hash.hashed).to.not.exist;
+            expect(hash).toBeTruthy();
+            expect(hash.identifier).toBeTruthy();
+            expect(hash.identifier).toBe(identifier);
+            expect(hash.hashed).toBeFalsy();
 
         });
 
@@ -40,8 +37,8 @@ describe('class Hash', function () {
                     return err;
                 }
 
-                expect(hash.hashed).to.exist;
-                expect(hashed).to.exist;
+                expect(hash.hashed).toBeTruthy();
+                expect(hashed).toBeTruthy();
 
                 return done();
 
@@ -59,8 +56,8 @@ describe('class Hash', function () {
                     return err;
                 }
 
-                expect(hash.hashed).to.exist;
-                expect(hashed).to.exist;
+                expect(hash.hashed).toBeTruthy();
+                expect(hashed).toBeTruthy();
 
                 hash.compare(hashed, function (compareErr, comparison) {
 
@@ -68,8 +65,7 @@ describe('class Hash', function () {
                         return compareErr;
                     }
 
-                    expect(comparison).to.exist;
-                    expect(comparison).to.be.true;
+                    expect(comparison).toBe(true);
 
                     return done();
 
@@ -89,8 +85,8 @@ describe('class Hash', function () {
                     return err;
                 }
 
-                expect(hash.hashed).to.exist;
-                expect(hashed).to.exist;
+                expect(hash.hashed).toBeTruthy();
+                expect(hashed).toBeTruthy();
 
                 hash.compare('some.string', function (compareErr, comparison) {
 
@@ -98,8 +94,7 @@ describe('class Hash', function () {
                         return compareErr;
                     }
 
-                    expect(comparison).to.exist;
-                    expect(comparison).to.be.false;
+                    expect(comparison).toBe(false);
 
                     return done();
 
@@ -119,8 +114,8 @@ describe('class Hash', function () {
                     return compareErr;
                 }
 
-                expect(comparison).to.exist;
-                expect(comparison).to.be.true;
+                expect(comparison).toBeTruthy();
+                expect(comparison).toBe(true);
 
                 return done();
 

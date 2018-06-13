@@ -7,13 +7,12 @@ const fs = require('fs');
 const dir = path.resolve(__dirname, '..', 'lib-mq-manager');
 
 const mq = require('../lib/mq');
-const { expect } = require('chai');
 
-describe('class mq.Manager', function () {
+describe('class mq.Manager', () => {
 
-    before(function (done) {
+    beforeAll((done) => {
 
-        fs.mkdir(dir, function () {
+        fs.mkdir(dir, () => {
 
             fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": "" };', done);
 
@@ -21,62 +20,67 @@ describe('class mq.Manager', function () {
 
     });
 
-    describe('will throw an Error', function () {
+    describe('will throw an Error', () => {
 
-        it('if a path is not provided', function () {
+        it('if a path is not provided', () => {
 
-            const fn = () => {
+            try {
 
-                // eslint-disable-next-line no-unused-vars
-                const ideariumMq = new mq.Manager();
+                new mq.Manager();
 
-            };
+            } catch (err) {
 
-            expect(fn).to.throw(Error, /path parameter is required/);
+                expect(err.message).toMatch(/path parameter is required/);
+
+            }
 
         });
 
     });
 
-    describe('with the messages directory', function () {
+    describe('with the messages directory', () => {
 
-        it('will load messages and fire an event', function (done) {
+        it('will load messages and fire an event', (done) => {
 
-            var mqManager = new mq.Manager(dir);
+            const mqManager = new mq.Manager(dir);
 
-            mqManager.addListener('load', function () {
-                expect(mqManager.messages).to.have.keys('test');
+            mqManager.addListener('load', () => {
+
+                expect(Object.keys(mqManager.messages).sort()).toEqual(['test']);
+
                 return done();
+
             });
 
         });
 
-        it('will execute consumers', function (done) {
+        it('will execute consumers', (done) => {
 
-            var mqManager = new mq.Manager(dir);
+            const mqManager = new mq.Manager(dir);
 
-            require(path.join(dir, 'test.js')).consume = function () {
+            require(path.join(dir, 'test.js')).consume = () => {
                 return done();
             };
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
                 mqManager.registerConsumers();
             });
 
         });
 
-        it('will publish a message', function (done) {
+        it('will publish a message', (done) => {
 
-            var mqManager = new mq.Manager(dir);
+            const mqManager = new mq.Manager(dir);
 
             require(path.join(dir, 'test.js')).publish = function (data) {
 
-                expect(data).to.eql({'will-publish-a-message': true});
+                expect(data).toEqual({ 'will-publish-a-message': true });
+
                 return done();
 
             };
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
                 mqManager.publish('test', {'will-publish-a-message': true});
             });
 
@@ -85,20 +89,20 @@ describe('class mq.Manager', function () {
 
     });
 
-    describe('publish', function () {
+    describe('publish', () => {
 
-        it('will return a resolved promise', function (done) {
+        it('will return a resolved promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
             // eslint-disable-next-line global-require
             require(path.join(dir, 'test.js')).publish = () => Promise.resolve();
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
 
                 const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
 
-                expect(publishResult instanceof Promise).to.be.true;
+                expect(publishResult instanceof Promise).toBe(true);
 
                 publishResult
                     .then(() => done())
@@ -108,18 +112,18 @@ describe('class mq.Manager', function () {
 
         });
 
-        it('will return a rejected promise', function (done) {
+        it('will return a rejected promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
             // eslint-disable-next-line global-require
             require(path.join(dir, 'test.js')).publish = () => Promise.reject(new Error('Rejected.'));
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
 
                 const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
 
-                expect(publishResult instanceof Promise).to.be.true;
+                expect(publishResult instanceof Promise).toBe(true);
 
                 publishResult
                     .then(() => done(new Error('Should not have resolved')))
@@ -129,18 +133,18 @@ describe('class mq.Manager', function () {
 
         });
 
-        it('will create and return a resolved promise', function (done) {
+        it('will create and return a resolved promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
             // eslint-disable-next-line global-require, no-empty-function
             require(path.join(dir, 'test.js')).publish = () => {};
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
 
                 const publishResult = mqManager.publish('test', { 'will-publish-a-message': true });
 
-                expect(publishResult instanceof Promise).to.be.true;
+                expect(publishResult instanceof Promise).toBe(true);
 
                 publishResult
                     .then(() => done())
@@ -150,15 +154,15 @@ describe('class mq.Manager', function () {
 
         });
 
-        it('will reject publishing missing message types', function (done) {
+        it('will reject publishing missing message types', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
 
                 const publishResult = mqManager.publish('test-missing-message', {});
 
-                expect(publishResult instanceof Promise).to.be.true;
+                expect(publishResult instanceof Promise).toBe(true);
 
                 publishResult
                     .then(() => done(new Error('Should not have resolved.')))
@@ -168,7 +172,7 @@ describe('class mq.Manager', function () {
 
         });
 
-        it('will reject publishing messages without a publish function', function (done) {
+        it('will reject publishing messages without a publish function', (done) => {
 
             const mqManager = new mq.Manager(dir);
             // eslint-disable-next-line global-require
@@ -176,11 +180,11 @@ describe('class mq.Manager', function () {
 
             delete message.publish;
 
-            mqManager.addListener('load', function () {
+            mqManager.addListener('load', () => {
 
                 const publishResult = mqManager.publish('test', {});
 
-                expect(publishResult instanceof Promise).to.be.true;
+                expect(publishResult instanceof Promise).toBe(true);
 
                 publishResult
                     .then(() => done(new Error('Should not have resolved.')))
@@ -192,9 +196,9 @@ describe('class mq.Manager', function () {
 
     });
 
-    after(function (done) {
+    afterAll((done) => {
 
-        fs.unlink(path.join(dir, 'test.js'), function () {
+        fs.unlink(path.join(dir, 'test.js'), () => {
 
             fs.rmdir(dir, done);
 

@@ -174,7 +174,7 @@ describe('logRequest', () => {
                             }
 
                             // Make sure both middleware were executed
-                            expect(count).to.eql(2);
+                            expect(count).toBe(2);
 
                             // Check out results.
                             expect(content).toMatch(/idearium-lib:middleware:log-request/);

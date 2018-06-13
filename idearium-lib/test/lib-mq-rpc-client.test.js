@@ -1,39 +1,37 @@
 'use strict';
 
-/* eslint-env node, mocha */
+const mq = require('../lib/mq');
+const conf = require('./conf');
 
-var expect = require('chai').expect,
-    mq = require('../lib/mq'),
-    conf = require('./conf');
+describe('class mq.RpcClient', () => {
 
-describe('class mq.RpcClient', function () {
+    describe('will throw an Error', () => {
 
-    describe('will throw an Error', function () {
+        it('if url is not provided', () => {
 
-        it('if url is not provided', function () {
+            try {
 
-            var fn = function () {
-                // eslint-disable-next-line no-unused-vars
-                var ideariumMq = new mq.RpcClient();
-            };
+                new mq.RpcClient();
 
-            expect(fn).to.throw(Error, /connectionString parameter is required/);
+            } catch (err) {
+
+                expect(err.message).toMatch(/connectionString parameter is required/);
+
+            }
 
         });
 
     });
 
-    describe('connects to', function () {
+    describe('connects to', () => {
 
-        it('RabbitMQ and gracefully disconnects', function (done) {
-
-            this.timeout(6000);
+        it('RabbitMQ and gracefully disconnects', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
 
                 // Setup an instance of the class.
-                var ideariumRPC = new mq.RpcClient(conf.rabbitUrl);
+                const ideariumRPC = new mq.RpcClient(conf.rabbitUrl);
 
                 // Add the connect listener. When this happens, we're done.
                 ideariumRPC.addListener('queue', () => {
@@ -53,24 +51,24 @@ describe('class mq.RpcClient', function () {
                 ideariumRPC.connect();
 
             } catch (e) {
+
                 return done(e);
+
             }
 
-        });
+        }, 6000);
 
     });
 
-    describe('RPC calls', function () {
+    describe('RPC calls', () => {
 
-        it('will timeout', function (done) {
-
-            this.timeout(2000);
+        it('will timeout', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
 
                 // Setup an instance of the class.
-                var ideariumRPC = new mq.RpcClient(conf.rabbitUrl, {}, 1000);
+                const ideariumRPC = new mq.RpcClient(conf.rabbitUrl, {}, 1000);
 
                 // Add the connect listener. When this happens, we're done.
                 ideariumRPC.addListener('queue', () => {
@@ -79,8 +77,8 @@ describe('class mq.RpcClient', function () {
                         .then(() => done(new Error('Should not have resolved.')))
                         .catch((err) => {
 
-                            expect(err).to.be.an.instanceof(Error);
-                            expect(err.message).to.match(/RPC timed out/);
+                            expect(err instanceof Error).toBe(true);
+                            expect(err.message).toMatch(/RPC timed out/);
 
                             return done();
 
@@ -102,11 +100,9 @@ describe('class mq.RpcClient', function () {
 
         });
 
-        describe('can have', function () {
+        describe('can have', () => {
 
-            it('custom global timeout values', function (done) {
-
-                this.timeout(1000);
+            it('custom global timeout values', (done) => {
 
                 // Catch and proxy errors to `done`.
                 try {
@@ -122,7 +118,7 @@ describe('class mq.RpcClient', function () {
                             .then(() => done(new Error('Should not have been resolved.')))
                             .catch(() => {
 
-                                expect(process.hrtime(now)[1]/1000000).to.be.below(600);
+                                expect((process.hrtime(now)[1]/1000000) < 600).toBe(true);
 
                                 done();
 
@@ -144,9 +140,7 @@ describe('class mq.RpcClient', function () {
 
             });
 
-            it('timeout values specific to RPC', function (done) {
-
-                this.timeout(4000);
+            it('timeout values specific to RPC', (done) => {
 
                 // Catch and proxy errors to `done`.
                 try {
@@ -167,10 +161,10 @@ describe('class mq.RpcClient', function () {
 
                                 firstTimeout = true;
 
-                                expect(secondTimeout).to.be.true;
+                                expect(secondTimeout).toBe(true);
 
-                                expect(err).to.be.an.instanceof(Error);
-                                expect(err.message).to.match(/RPC timed out \(missing-rpc-1/);
+                                expect(err instanceof Error).toBe(true);
+                                expect(err.message).toMatch(/RPC timed out \(missing-rpc-1/);
 
                                 return done();
 
@@ -182,11 +176,11 @@ describe('class mq.RpcClient', function () {
 
                                 secondTimeout = true;
 
-                                expect(firstTimeout).to.be.false;
-                                expect(process.hrtime(now)[1]/1000000).to.be.below(600);
+                                expect(firstTimeout).toBe(false);
+                                expect((process.hrtime(now)[1] / 1000000) < 600).toBe(true);
 
-                                expect(err).to.be.an.instanceof(Error);
-                                expect(err.message).to.match(/RPC timed out \(missing-rpc-2/);
+                                expect(err instanceof Error).toBe(true);
+                                expect(err.message).toMatch(/RPC timed out \(missing-rpc-2/);
 
                                 return done();
 
@@ -206,7 +200,7 @@ describe('class mq.RpcClient', function () {
                     return done(e);
                 }
 
-            });
+            }, 4000);
 
         });
 
