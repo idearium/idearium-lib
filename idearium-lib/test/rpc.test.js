@@ -1,31 +1,24 @@
-
 'use strict';
 
-/* eslint-env node, mocha */
+jest.mock('/app/config/config.js', () => ({ mqUrl: require('./conf').rabbitUrl }));
 
-var path = require('path'),
-    expect = require('chai').expect,
-    copy = require('copy-dir'),
-    rimraf = require('rimraf'),
-    dir = path.resolve(__dirname),
-    conf = require('./conf');
+const path = require('path');
+const copy = require('copy-dir');
+const rimraf = require('rimraf');
+const dir = path.resolve(__dirname);
 
 describe('RPC', function () {
 
     // This is run after common-config and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function(done) {
-
-        require('../common/config').set('mqUrl', conf.rabbitUrl);
+    beforeAll((done) => {
 
         // Move the test files into place
         copy(path.resolve(dir, 'data', 'mq-certs'), path.join(dir, '..', 'mq-certs', process.env.NODE_ENV), done);
 
     });
 
-    it('will send and receive messages', function (done) {
-
-        this.timeout(10000);
+    it('will send and receive messages', (done) => {
 
         // Catch and proxy errors to `done`.
         try {
@@ -35,10 +28,10 @@ describe('RPC', function () {
             //
 
             const data = {
-                'boolean': true,
                 'array': [],
+                'boolean': true,
                 'object': {},
-                'random': Math.floor(Math.random() * 40000)
+                'random': Math.floor(Math.random() * 40000),
             };
 
             const rpcName = 'rpc_server_name';
@@ -50,7 +43,8 @@ describe('RPC', function () {
             const reply = (msg, callback) => {
 
                 const msgData = JSON.parse(msg.content.toString());
-                expect(msgData).to.eql(data);
+
+                expect(msgData).toEqual(data);
                 callback(msg.content);
 
             };
@@ -76,7 +70,9 @@ describe('RPC', function () {
                     .then((result) => {
 
                         const msgData = JSON.parse(result.content.toString());
-                        expect(msgData).to.eql(data);
+
+                        expect(msgData).toEqual(data);
+
                         return done();
 
                     })
@@ -91,9 +87,9 @@ describe('RPC', function () {
             return done(e);
         }
 
-    });
+    }, 10000);
 
-    after(function (done) {
+    afterAll((done) => {
 
         rimraf(path.join(dir, '..', 'mq-certs'), done);
 
