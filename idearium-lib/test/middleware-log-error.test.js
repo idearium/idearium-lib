@@ -1,50 +1,43 @@
 'use strict';
 
-/* eslint-env node, mocha */
+jest.mock('/app/config/config.js', () => ({
+    logEntriesToken: '00000000-0000-0000-0000-000000000000',
+    logLevel: 'debug',
+    logLocation: 'local',
+    logToStdout: false,
+    production: false,
+}));
 
-var fs = require('fs'),
-    path = require('path'),
-    express = require('express'),
-    request = require('supertest'),
-    expect = require('chai').expect,
-    mitm = require('mitm'),
-    logError = require('../middleware/log-error'),
-    dir = path.resolve(__dirname, '..', 'logs'),
-    rimraf = require('rimraf');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const request = require('supertest');
+const mitm = require('mitm');
+const logError = require('../middleware/log-error');
+const dir = path.resolve(__dirname, '..', 'logs');
+const rimraf = require('rimraf');
 
 /**
  * Helper function to create an instance of an Express app.
  * @return {Object} The Express app.
  */
-function createApp () {
+const createApp = () => {
     return express();
-}
+};
 
 /**
  * Helper function to create a supertest agent for testing the middleware with.
  * @param  {Object} app An Express app.
  * @return {Object}     A supertest agent which can be used to test the middelware.
  */
-function createAgent (app) {
+const createAgent = (app) => {
     return request.agent(app);
-}
+};
 
 describe('logError', function () {
 
-    // Sometimes there is a bit of lag when writing to the socket and file system.
-    // Allow two retries on these tests.
-    this.retries(2);
-
     // This is run after common-config and will have therefore cached the config from the previous test.
-    before(function(done) {
-
-        let config = require('../common/config');
-
-        config.set('logLocation', 'local');
-        config.set('logLevel', 'debug');
-        config.set('logToStdout', false);
-        config.set('logEntriesToken', '00000000-0000-0000-0000-000000000000');
-        config.set('production', false);
+    beforeAll((done) => {
 
         // Create the directory for the logger
         rimraf('../logs', () => {
@@ -60,7 +53,7 @@ describe('logError', function () {
     });
 
     // Clear the log file after each run.
-    afterEach(function (done) {
+    afterEach((done) => {
 
         const file = path.join(process.cwd(), 'logs', 'error.log');
 
@@ -71,15 +64,15 @@ describe('logError', function () {
 
     it('is an Express middleware function', function () {
 
-        let middlewareFn = logError;
+        const middlewareFn = logError;
 
-        expect(middlewareFn).to.be.a('function');
+        expect(typeof middlewareFn).toBe('function');
 
     });
 
-    it('will log locally to file', function (done) {
+    it('will log locally to file', (done) => {
 
-        let app = createApp();
+        const app = createApp();
 
         // Mount some middleware that will throw an error.
         app.get('/', function (req, res, next) {
@@ -97,47 +90,47 @@ describe('logError', function () {
 
         // Run the test
         createAgent(app)
-        .get('/')
-        .expect(500, /Error: A file error/)
-        // eslint-disable-next-line no-unused-vars
-        .end(function (err, res) {
+            .get('/')
+            .expect(500, /Error: A file error/)
+            // eslint-disable-next-line no-unused-vars
+            .end(function (err, res) {
 
-            // Was there an error.
-            if (err) {
-                return done(err);
-            }
-
-            // Now we should make sure the local file has some log data in it.
-            // Verify the log exists.
-            fs.readFile(path.join(process.cwd(), 'logs', 'error.log'), 'utf8', function (readErr, content) {
-
-                // Handle any read errors
-                if (readErr) {
-                    return done(readErr);
+                // Was there an error.
+                if (err) {
+                    return done(err);
                 }
 
-                // Check out results.
-                expect(content).to.match(/A file error/);
+                // Now we should make sure the local file has some log data in it.
+                // Verify the log exists.
+                fs.readFile(path.join(process.cwd(), 'logs', 'error.log'), 'utf8', function (readErr, content) {
 
-                // We're all done
-                return done();
+                    // Handle any read errors
+                    if (readErr) {
+                        return done(readErr);
+                    }
+
+                    // Check out results.
+                    expect(content).toMatch(/A file error/);
+
+                    // We're all done
+                    return done();
+
+                });
 
             });
 
-        });
-
     });
 
-    it('the username if it exists in req', function (done) {
+    it('the username if it exists in req', (done) => {
 
-        let app = createApp();
+        const app = createApp();
 
         // Mount some middleware that will throw an error.
         app.get('/', function (req, res, next) {
 
             req.user = {
+                _id: '000000000000',
                 username: 'foobar',
-                _id: '000000000000'
             };
 
             return next(new Error('A user error.'));
@@ -155,51 +148,53 @@ describe('logError', function () {
 
         // Run the test
         createAgent(app)
-        .get('/')
-        .expect(500, /Error: A user error/)
-        // eslint-disable-next-line no-unused-vars
-        .end(function (err, res) {
+            .get('/')
+            .expect(500, /Error: A user error/)
+            // eslint-disable-next-line no-unused-vars
+            .end(function (err, res) {
 
-            // Was there an error.
-            if (err) {
-                return done(err);
-            }
-
-            // Now we should make sure the local file has some log data in it.
-            // Verify the log exists.
-            fs.readFile(path.join(process.cwd(), 'logs', 'error.log'), 'utf8', function (readErr, content) {
-
-                // Handle any read errors
-                if (readErr) {
-                    return done(readErr);
+                // Was there an error.
+                if (err) {
+                    return done(err);
                 }
 
-                // Check out results.
-                expect(content).to.match(/A user error/);
-                expect(content).to.match(/foobar/);
+                // Now we should make sure the local file has some log data in it.
+                // Verify the log exists.
+                fs.readFile(path.join(process.cwd(), 'logs', 'error.log'), 'utf8', function (readErr, content) {
 
-                // We're all done
-                return done();
+                    // Handle any read errors
+                    if (readErr) {
+                        return done(readErr);
+                    }
+
+                    // Check out results.
+                    expect(content).toMatch(/A user error/);
+                    expect(content).toMatch(/foobar/);
+
+                    // We're all done
+                    return done();
+
+                });
 
             });
 
-        });
-
     });
 
-    it('remotely via a stream', function (done) {
+    it('remotely via a stream', (done) => {
 
-        let app = createApp(),
-            mock = mitm(),
-            config = require('../common/config');
+        const app = createApp();
+        const mock = mitm();
+        const config = require('../common/config');
 
         // Update the config to log remotely
         config.set('logLocation', 'remote');
 
         // A proxy function used to ensure mock.disable is always run whenever this test calls `done`.
-        function callDone () {
+        const callDone = () => {
+
             mock.disable();
             done.apply(null, arguments);
+
         }
 
         // Don't intercept supertest requests, only the logging requests
@@ -214,12 +209,12 @@ describe('logError', function () {
         mock.on('connection', function (socket, opts) {
             socket.on('data', function (buffer) {
 
-                var msg = buffer.toString();
+                const msg = buffer.toString();
 
                 // Check out results.
-                expect(msg).to.match(/A remote error/);
-                expect(msg).to.match(/idearium-lib:middleware:log-error/);
-                expect(msg).to.match(/"level":50/);
+                expect(msg).toMatch(/A remote error/);
+                expect(msg).toMatch(/idearium-lib:middleware:log-error/);
+                expect(msg).toMatch(/"level":50/);
 
                 return callDone();
 
@@ -242,21 +237,21 @@ describe('logError', function () {
 
         // Run the test
         createAgent(app)
-        .get('/')
-        .expect(500, /Error: A remote error/)
-        // eslint-disable-next-line no-unused-vars
-        .end(function (err, res) {
+            .get('/')
+            .expect(500, /Error: A remote error/)
+            // eslint-disable-next-line no-unused-vars
+            .end(function (err, res) {
 
-            // Was there an error.
-            if (err) {
-                return callDone(err);
-            }
+                // Was there an error.
+                if (err) {
+                    return callDone(err);
+                }
 
-        });
+            });
 
     });
 
-    after(function (done) {
+    afterAll((done) => {
         rimraf('../logs', done);
     });
 

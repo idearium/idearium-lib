@@ -1,54 +1,44 @@
 'use strict';
 
-/* eslint-env node, mocha */
+const express = require('express');
+const request = require('supertest');
+const configSettings = require('../middleware/config-settings');
 
-var express = require('express'),
-    request = require('supertest'),
-    expect = require('chai').expect,
-    configSettings = require('../middleware/config-settings');
+jest.mock('/app/config/config.js', () => ({
+    bar: 'bar',
+    foo: 'foo',
+}));
 
 /**
  * Helper function to create an instance of an Express app.
  * @return {Object} The Express app.
  */
-function createApp () {
+const createApp = () => {
     return express();
-}
+};
 
 /**
  * Helper function to create a supertest agent for testing the middleware with.
  * @param  {Object} app An Express app.
  * @return {Object}     A supertest agent which can be used to test the middelware.
  */
-function createAgent (app) {
+const createAgent = (app) => {
     return request.agent(app);
-}
+};
 
-describe('configSettings', function () {
+describe('configSettings', () => {
 
-    // This is run after common-config and will have therefore cached the config from the previous test.
-    before(function(done) {
+    it('is an Express middleware function', () => {
 
-        let config = require('../common/config');
+        const middlewareFn = configSettings;
 
-        config.set('foo', 'bar');
-        config.set('bar', 'foo');
-
-        return done();
-
-    });
-
-    it('is an Express middleware function', function () {
-
-        let middlewareFn = configSettings;
-
-        expect(middlewareFn).to.be.a('function');
+        expect(typeof middlewareFn).toBe('function');
 
     });
 
     it('will return 404 unless an authenticated request is made', function (done) {
 
-        let app = createApp();
+        const app = createApp();
 
         app.get('/config', configSettings);
 
@@ -60,13 +50,13 @@ describe('configSettings', function () {
 
     it('will return a json response with configuration data', function (done) {
 
-        let app = createApp();
+        const app = createApp();
 
         // Mount the middleware so that we can test it.
         app.get('/config', configSettings);
 
         // Check the body is as it should be.
-        function bodyMatches (res) {
+        const bodyMatches = (res) => {
 
             if (!('foo' in res.body)) {
                 throw new Error('Missing foo');
@@ -76,7 +66,7 @@ describe('configSettings', function () {
                 throw new Error('Missing bar');
             }
 
-        }
+        };
 
         // Run the test.
         createAgent(app)
