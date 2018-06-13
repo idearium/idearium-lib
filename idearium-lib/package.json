@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@idearium/eslint-config": "2.1.2",
+    "babel-preset-env": "1.7.0",
     "copy-dir": "0.3.0",
     "express": "4.14.0",
     "gulp": "3.9.1",
