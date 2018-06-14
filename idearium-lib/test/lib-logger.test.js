@@ -29,7 +29,7 @@ describe('class logs.Logger', () => {
 
         it('can be instantiated', () => {
 
-            expect(new logs.Logger({
+            expect(() => new logs.Logger({
                 context: 'context',
                 name: 'name',
             })).not.toThrow();
