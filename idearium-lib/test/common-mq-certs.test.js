@@ -22,7 +22,7 @@ describe('common/mq/certs', function () {
 
     it('will load the certificates, specific to environment', (done) => {
 
-        jest.mock('../common/mq/certs')
+        require('../common/mq/certs')
             .then((optsCerts) => {
 
                 expect(Object.keys(optsCerts).sort()).toEqual(['ca', 'cert', 'key']);

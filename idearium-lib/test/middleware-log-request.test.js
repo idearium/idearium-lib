@@ -264,14 +264,6 @@ describe('logRequest', () => {
         // Update the config to log remotely
         config.set('logLocation', 'remote');
 
-        // A proxy function used to ensure mock.disable is always run whenever this test calls `done`.
-        const callDone = () => {
-
-            mock.disable();
-            done.apply(null, arguments);
-
-        };
-
         // Don't intercept supertest requests, only the logging requests
         mock.on('connect', function (socket, opts) {
             if (opts.host === '127.0.0.1') {
@@ -291,7 +283,9 @@ describe('logRequest', () => {
                 expect(msg).toMatch(/"method":"GET"/);
                 expect(msg).toMatch(/"url":"\/log-request-stream"/);
 
-                return callDone();
+                mock.disable();
+
+                return done();
 
             });
         });
@@ -318,7 +312,11 @@ describe('logRequest', () => {
 
                 // Was there an error.
                 if (err) {
-                    return callDone(err);
+
+                    mock.disable();
+
+                    return done(err);
+
                 }
 
             });
