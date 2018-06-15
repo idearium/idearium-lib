@@ -10,7 +10,7 @@ const {
 
 describe('util-to', () => {
 
-    it('converts to a promise', async () => {
+    test('converts to a promise', async () => {
 
         expect.assertions(1);
 
@@ -22,7 +22,7 @@ describe('util-to', () => {
 
     });
 
-    it('converts to a callback', (done) => {
+    test('converts to a callback', (done) => {
 
         const promiseFunction = data => Promise.resolve(data);
         const callbackFunction = toCallback(promiseFunction);
@@ -41,61 +41,61 @@ describe('util-to', () => {
 
     });
 
-    it('converts all keys to lowercase', () => {
+    test('converts all keys to lowercase', () => {
 
         expect(JSON.stringify(toLowercaseKeys({ A: { B: [{ C: [{ D: 1 }] }] } })))
             .toBe(JSON.stringify({ a: { b: [{ c: [{ d: 1 }] }] } }));
 
     });
 
-    it('reduces all values into an array', () => {
+    test('reduces all values into an array', () => {
 
         expect(JSON.stringify(toFlatArray({ a: [{ b: 1 }, { c: 2 }, { d: [3, 4] }] })))
             .toEqual(JSON.stringify([1, 2, 3, 4]));
 
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.0)).toBe(10);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.1)).toBe(10);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.2)).toBe(10);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.3)).toBe(10);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.4)).toBe(10);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.5)).toBe(11);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.6)).toBe(11);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.7)).toBe(11);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.8)).toBe(11);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(10.9)).toBe(11);
     });
 
-    it('rounds a floating point number', () => {
+    test('rounds a floating point number', () => {
         expect(toDecimals(1 / 3, 2)).toBe(0.33);
     });
 

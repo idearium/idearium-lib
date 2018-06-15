@@ -8,13 +8,13 @@ describe('util-parse', () => {
 
     describe('parseConfigAsBoolean()', () => {
 
-        it('should error if default value is not provided', () => {
+        test('should error if default value is not provided', () => {
 
             expect(() => util.parseConfigAsBoolean()).toThrow();
 
         });
 
-        it('should return default value if provided value is undefined', () => {
+        test('should return default value if provided value is undefined', () => {
 
             const result1 = util.parseConfigAsBoolean(undefined, true);
             const result2 = util.parseConfigAsBoolean(undefined, false);
@@ -24,7 +24,7 @@ describe('util-parse', () => {
 
         });
 
-        it('should return true if provided value is a String of "true"', () => {
+        test('should return true if provided value is a String of "true"', () => {
 
             const result1 = util.parseConfigAsBoolean('true', true);
 
@@ -33,7 +33,7 @@ describe('util-parse', () => {
         });
 
 
-        it('should return true if provided value is a String of "false"', () => {
+        test('should return true if provided value is a String of "false"', () => {
 
             const result1 = util.parseConfigAsBoolean('false', true);
 
@@ -45,7 +45,7 @@ describe('util-parse', () => {
 
     describe('parseCsv', () => {
 
-        it('should parse a csv file', async () => {
+        test('should parse a csv file', async () => {
 
             expect.assertions(1);
 
@@ -63,7 +63,7 @@ describe('util-parse', () => {
 
         });
 
-        it('should parse csv buffered data', async () => {
+        test('should parse csv buffered data', async () => {
 
             expect.assertions(1);
 
@@ -82,7 +82,7 @@ describe('util-parse', () => {
 
         });
 
-        it('should transform using the provided function', async () => {
+        test('should transform using the provided function', async () => {
 
             expect.assertions(1);
 
@@ -101,7 +101,7 @@ describe('util-parse', () => {
 
         });
 
-        it('should fail if there is an error with the csv', async () => {
+        test('should fail if there is an error with the csv', async () => {
 
             expect.assertions(1);
 

@@ -13,7 +13,7 @@ describe('class Config', () => {
 
     describe('create an instance', () => {
 
-        it('should fail, if the dir parameter is not provided', () => {
+        test('should fail, if the dir parameter is not provided', () => {
 
             expect(() => {
                 return new Config();
@@ -21,7 +21,7 @@ describe('class Config', () => {
 
         });
 
-        it('should load the config files from the provided dir', () => {
+        test('should load the config files from the provided dir', () => {
 
             const config = new Config(dir);
 
@@ -30,7 +30,7 @@ describe('class Config', () => {
 
         });
 
-        it('should set and get a keyed value', () => {
+        test('should set and get a keyed value', () => {
 
             const config = new Config(dir);
 
@@ -39,7 +39,7 @@ describe('class Config', () => {
 
         });
 
-        it('should set \'env\' to `process.env.NODE_ENV`', () => {
+        test('should set \'env\' to `process.env.NODE_ENV`', () => {
 
             const config = new Config(dir);
 
@@ -47,7 +47,7 @@ describe('class Config', () => {
 
         });
 
-        it('should set `process.env.NODE_ENV` to `true`', () => {
+        test('should set `process.env.NODE_ENV` to `true`', () => {
 
             const config = new Config(dir);
 
@@ -59,7 +59,7 @@ describe('class Config', () => {
 
     describe('create multiple instance', () => {
 
-        it('should work', () => {
+        test('should work', () => {
 
             const config1 = new Config(dir);
             const config2 = new Config(dir);

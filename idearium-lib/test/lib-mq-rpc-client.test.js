@@ -7,7 +7,7 @@ describe('class mq.RpcClient', () => {
 
     describe('will throw an Error', () => {
 
-        it('if url is not provided', () => {
+        test('if url is not provided', () => {
 
             try {
 
@@ -25,7 +25,7 @@ describe('class mq.RpcClient', () => {
 
     describe('connects to', () => {
 
-        it('RabbitMQ and gracefully disconnects', (done) => {
+        test('RabbitMQ and gracefully disconnects', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
@@ -62,7 +62,7 @@ describe('class mq.RpcClient', () => {
 
     describe('RPC calls', () => {
 
-        it('will timeout', (done) => {
+        test('will timeout', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
@@ -102,7 +102,7 @@ describe('class mq.RpcClient', () => {
 
         describe('can have', () => {
 
-            it('custom global timeout values', (done) => {
+            test('custom global timeout values', (done) => {
 
                 // Catch and proxy errors to `done`.
                 try {
@@ -140,7 +140,7 @@ describe('class mq.RpcClient', () => {
 
             });
 
-            it('timeout values specific to RPC', (done) => {
+            test('timeout values specific to RPC', (done) => {
 
                 // Catch and proxy errors to `done`.
                 try {

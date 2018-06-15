@@ -16,7 +16,7 @@ const encryption = 'xhe0s7KlBwDw7Gi8riPy5A==';
  */
 describe('common/crypto', () => {
 
-    it('will decrypt some data', () => {
+    test('will decrypt some data', () => {
 
         expect(crypto.decrypt(encryption)).toBe(data);
         expect(crypto.decrypt(encryption)).toBe(data);
@@ -24,7 +24,7 @@ describe('common/crypto', () => {
 
     });
 
-    it('will create a hmac digest', () => {
+    test('will create a hmac digest', () => {
 
         expect(crypto.digest(data)).toBe(digest);
         expect(crypto.digest(data)).toBe(digest);
@@ -32,7 +32,7 @@ describe('common/crypto', () => {
 
     });
 
-    it('will encrypt some data', () => {
+    test('will encrypt some data', () => {
 
         expect(crypto.encrypt(data)).toBe(encryption);
         expect(crypto.encrypt(data)).toBe(encryption);
@@ -40,7 +40,7 @@ describe('common/crypto', () => {
 
     });
 
-    it('will generate an iv key pair', () => {
+    test('will generate an iv key pair', () => {
 
         expect(Object.keys(crypto.generateIvKey()).sort()).toEqual(['iv', 'key']);
         expect(Object.keys(crypto.generateIvKey()).sort()).toEqual(['iv', 'key']);

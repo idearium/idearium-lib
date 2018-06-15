@@ -10,7 +10,7 @@ describe('class Email', () => {
 
     describe('create an instance', () => {
 
-        it('should fail, if the apiKey parameter is not provided', () => {
+        test('should fail, if the apiKey parameter is not provided', () => {
 
             expect(() => {
                 return new Email();
@@ -18,7 +18,7 @@ describe('class Email', () => {
 
         });
 
-        it('should fail, if the service class is not provided', () => {
+        test('should fail, if the service class is not provided', () => {
 
             expect(() => {
                 return new Email(mandrillApiKey);
@@ -30,7 +30,7 @@ describe('class Email', () => {
 
         });
 
-        it('should work, if everything has been provided correctly', () => {
+        test('should work, if everything has been provided correctly', () => {
 
             const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -40,7 +40,7 @@ describe('class Email', () => {
 
         });
 
-        it('should work, when provided an instance of the Mandrill class', () => {
+        test('should work, when provided an instance of the Mandrill class', () => {
 
             const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -56,7 +56,7 @@ describe('class Email', () => {
 
         describe('send', () => {
 
-            it('should fail, if "html" and "text" is not provided', (done) => {
+            test('should fail, if "html" and "text" is not provided', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -68,7 +68,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "fromEmail" is not provided', (done) => {
+            test('should fail, if "fromEmail" is not provided', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -80,7 +80,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" is not provided', (done) => {
+            test('should fail, if "to" is not provided', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -95,7 +95,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" is not of type String or Array', (done) => {
+            test('should fail, if "to" is not of type String or Array', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -111,7 +111,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" (String) has an invalid email', (done) => {
+            test('should fail, if "to" (String) has an invalid email', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -127,7 +127,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" is an empty Array', (done) => {
+            test('should fail, if "to" is an empty Array', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -143,7 +143,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" Array has a missing email field', (done) => {
+            test('should fail, if "to" Array has a missing email field', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -159,7 +159,7 @@ describe('class Email', () => {
 
             });
 
-            it('should fail, if "to" Array has an invalid email', (done) => {
+            test('should fail, if "to" Array has an invalid email', (done) => {
 
                 const email = new Email(mandrillApiKey, emailServices.Mandrill);
 
@@ -178,7 +178,7 @@ describe('class Email', () => {
 
             });
 
-            it('should support the sendAt property', (done) => {
+            test('should support the sendAt property', (done) => {
 
                 // eslint-disable-next-line new-cap
                 const mitm = Mitm();

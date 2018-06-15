@@ -20,7 +20,7 @@ describe('common/mongo/certs', () => {
 
     });
 
-    it('will load the certificates, specific to environment', (done) => {
+    test('will load the certificates, specific to environment', (done) => {
 
         require('../common/mongo/certs')
             .then((certs) => {

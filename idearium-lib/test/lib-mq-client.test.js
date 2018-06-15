@@ -7,7 +7,7 @@ describe('class mq.Client', () => {
 
     describe('will throw an Error', () => {
 
-        it('if url is not provided', () => {
+        test('if url is not provided', () => {
 
             try {
 
@@ -25,7 +25,7 @@ describe('class mq.Client', () => {
 
     describe('connects to', () => {
 
-        it('RabbitMQ', (done) => {
+        test('RabbitMQ', (done) => {
 
             // Catch and proxy errors to `done`.
             try {

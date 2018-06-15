@@ -8,7 +8,7 @@ describe('class Hash', () => {
 
     describe('create an instance', () => {
 
-        it('should fail, if the identifier parameter is not provided', () => {
+        test('should fail, if the identifier parameter is not provided', () => {
 
             expect(() => {
                 return new Hash();
@@ -16,7 +16,7 @@ describe('class Hash', () => {
 
         });
 
-        it('should instantiate, if the identifier parameter is provided', () => {
+        test('should instantiate, if the identifier parameter is provided', () => {
 
             const hash = new Hash(identifier);
 
@@ -27,7 +27,7 @@ describe('class Hash', () => {
 
         });
 
-        it('should hash the identifier', function (done) {
+        test('should hash the identifier', function (done) {
 
             const hash = new Hash(identifier);
 
@@ -46,7 +46,7 @@ describe('class Hash', () => {
 
         });
 
-        it('successfully compare a hash', function (done) {
+        test('successfully compare a hash', function (done) {
 
             const hash = new Hash(identifier);
 
@@ -75,7 +75,7 @@ describe('class Hash', () => {
 
         });
 
-        it('successfully fail a hash compare', function (done) {
+        test('successfully fail a hash compare', function (done) {
 
             const hash = new Hash(identifier);
 
@@ -104,7 +104,7 @@ describe('class Hash', () => {
 
         });
 
-        it('successfully compare a hash, without prior hashing', function (done) {
+        test('successfully compare a hash, without prior hashing', function (done) {
 
             const hash = new Hash(identifier);
 

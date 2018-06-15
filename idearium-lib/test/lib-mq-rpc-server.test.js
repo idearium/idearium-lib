@@ -7,7 +7,7 @@ describe('class mq.RpcServer', () => {
 
     describe('will throw an Error', () => {
 
-        it('if url is not provided', () => {
+        test('if url is not provided', () => {
 
             try {
 
@@ -21,7 +21,7 @@ describe('class mq.RpcServer', () => {
 
         });
 
-        it('if name is not provided', () => {
+        test('if name is not provided', () => {
 
             try {
 
@@ -35,7 +35,7 @@ describe('class mq.RpcServer', () => {
 
         });
 
-        it('if callback is not provided', () => {
+        test('if callback is not provided', () => {
 
             try {
 
@@ -53,7 +53,7 @@ describe('class mq.RpcServer', () => {
 
     describe('connects to', () => {
 
-        it('RabbitMQ and gracefully disconnects', (done) => {
+        test('RabbitMQ and gracefully disconnects', (done) => {
 
             const name = 'test_server_queue';
             const callback = () => {};

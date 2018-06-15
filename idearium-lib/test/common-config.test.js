@@ -9,7 +9,7 @@ const config = require('../common/config');
 
 describe('common/config', () => {
 
-    it('will load the config', () => {
+    test('will load the config', () => {
 
         expect(config.get('title')).toBe('development');
         expect(config.get('phone')).toBe(1234);

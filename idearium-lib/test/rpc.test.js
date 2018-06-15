@@ -18,7 +18,7 @@ describe('RPC', function () {
 
     });
 
-    it('will send and receive messages', (done) => {
+    test('will send and receive messages', (done) => {
 
         // Catch and proxy errors to `done`.
         try {

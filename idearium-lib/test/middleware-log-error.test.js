@@ -62,7 +62,7 @@ describe('logError', function () {
 
     });
 
-    it('is an Express middleware function', function () {
+    test('is an Express middleware function', function () {
 
         const middlewareFn = logError;
 
@@ -70,7 +70,7 @@ describe('logError', function () {
 
     });
 
-    it('will log locally to file', (done) => {
+    test('will log locally to file', (done) => {
 
         const app = createApp();
 
@@ -121,7 +121,7 @@ describe('logError', function () {
 
     });
 
-    it('the username if it exists in req', (done) => {
+    test('the username if it exists in req', (done) => {
 
         const app = createApp();
 
@@ -180,7 +180,7 @@ describe('logError', function () {
 
     });
 
-    it('remotely via a stream', (done) => {
+    test('remotely via a stream', (done) => {
 
         const app = createApp();
         const mock = mitm();

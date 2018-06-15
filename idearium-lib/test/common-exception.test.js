@@ -23,11 +23,11 @@ describe('common/exception', () => {
 
     });
 
-    it('is a function', () => {
+    test('is a function', () => {
         expect(typeof exception).toBe('function');
     });
 
-    it('will log to log.error', (done) => {
+    test('will log to log.error', (done) => {
 
         exception(new Error('An exception'));
 

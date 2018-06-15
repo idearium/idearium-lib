@@ -4,7 +4,7 @@ const Api = require('../lib/api');
 
 describe('class Api', () => {
 
-    it('should fail if the baseUrl parameter is not provided', () => {
+    test('should fail if the baseUrl parameter is not provided', () => {
 
         expect(() => {
 
@@ -14,7 +14,7 @@ describe('class Api', () => {
 
     });
 
-    it('should use the defaults', () => {
+    test('should use the defaults', () => {
 
         const api = new Api('https://test.com', { test: 'test' });
 
@@ -22,7 +22,7 @@ describe('class Api', () => {
 
     });
 
-    it('should provide a requestApi function', () => {
+    test('should provide a requestApi function', () => {
 
         const api = new Api('https://test.com');
 
@@ -30,7 +30,7 @@ describe('class Api', () => {
 
     });
 
-    it('should add an endpoint', () => {
+    test('should add an endpoint', () => {
 
         const api = new Api('https://test.com');
 

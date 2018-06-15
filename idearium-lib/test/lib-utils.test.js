@@ -6,7 +6,7 @@ describe('utils', () => {
 
     describe('parseConfigAsBoolean()', () => {
 
-        it('should error if default value is not provided', () => {
+        test('should error if default value is not provided', () => {
 
             expect(() => {
                 utils.parseConfigAsBoolean();
@@ -14,7 +14,7 @@ describe('utils', () => {
 
         });
 
-        it('should return default value if provided value is undefined', () => {
+        test('should return default value if provided value is undefined', () => {
 
             const result1 = utils.parseConfigAsBoolean(undefined, true);
             const result2 = utils.parseConfigAsBoolean(undefined, false);
@@ -24,7 +24,7 @@ describe('utils', () => {
 
         });
 
-        it('should return true if provided value is a String of "true"', () => {
+        test('should return true if provided value is a String of "true"', () => {
 
             const result1 = utils.parseConfigAsBoolean('true', true);
 
@@ -33,7 +33,7 @@ describe('utils', () => {
         });
 
 
-        it('should return true if provided value is a String of "false"', () => {
+        test('should return true if provided value is a String of "false"', () => {
 
             const result1 = utils.parseConfigAsBoolean('false', true);
 

@@ -26,7 +26,7 @@ describe('common/mq/messages', () => {
 
     });
 
-    it('will faciliate producing and consuming messages', (done) => {
+    test('will faciliate producing and consuming messages', (done) => {
 
         var exchange = 'common-mq-messages',
             queueName = 'common-mq-messages-queue',

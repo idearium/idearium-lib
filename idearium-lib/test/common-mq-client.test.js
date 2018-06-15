@@ -23,7 +23,7 @@ describe('common/mq/client', function () {
 
     });
 
-    it('will connect to rabbit mq', (done) => {
+    test('will connect to rabbit mq', (done) => {
 
         // Catch and proxy any errors to `done`.
         try {

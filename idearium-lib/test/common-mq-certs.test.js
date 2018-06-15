@@ -20,7 +20,7 @@ describe('common/mq/certs', function () {
 
     });
 
-    it('will load the certificates, specific to environment', (done) => {
+    test('will load the certificates, specific to environment', (done) => {
 
         require('../common/mq/certs')
             .then((optsCerts) => {

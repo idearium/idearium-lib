@@ -7,7 +7,7 @@ describe('class mq.Connection', () => {
 
     describe('will throw an Error', () => {
 
-        it('if url is not provided', () => {
+        test('if url is not provided', () => {
 
             try {
 
@@ -25,7 +25,7 @@ describe('class mq.Connection', () => {
 
     describe('connects to', () => {
 
-        it('RabbitMQ', (done) => {
+        test('RabbitMQ', (done) => {
 
             // Catch and proxy errors to `done`.
             try {
@@ -58,7 +58,7 @@ describe('class mq.Connection', () => {
 
     describe('gracefully disconnects', () => {
 
-        it('when not connected', (done) => {
+        test('when not connected', (done) => {
 
             // Setup an instance of the class.
             const ideariumMq = new mq.Connection(conf.rabbitUrl);
@@ -69,7 +69,7 @@ describe('class mq.Connection', () => {
 
         });
 
-        it('from RabbitMQ', (done) => {
+        test('from RabbitMQ', (done) => {
 
             // Catch and proxy errors to `done`.
             try {

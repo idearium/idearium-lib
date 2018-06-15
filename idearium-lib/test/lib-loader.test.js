@@ -30,7 +30,7 @@ describe('class Loader', () => {
 
     });
 
-    it('should throw, if the dir parameter is not provided', () => {
+    test('should throw, if the dir parameter is not provided', () => {
 
         try {
 
@@ -46,7 +46,7 @@ describe('class Loader', () => {
 
     describe('works asynchronously (promises)', () => {
 
-        it('should load files', (done) => {
+        test('should load files', (done) => {
 
             const loader = new Loader();
 
@@ -60,7 +60,7 @@ describe('class Loader', () => {
 
         });
 
-        it('should load files without camel case key names', (done) => {
+        test('should load files without camel case key names', (done) => {
 
             const loader = new Loader();
 
@@ -76,7 +76,7 @@ describe('class Loader', () => {
 
         });
 
-        it('should load files with class case key names', (done) => {
+        test('should load files with class case key names', (done) => {
 
             const loader = new Loader();
 
@@ -101,16 +101,16 @@ describe('class Loader', () => {
 
         loader.sync = true;
 
-        it('should load files', () => {
+        test('should load files', () => {
             expect(Object.keys(loader.load(dir)).sort()).toEqual(['logException', 'logRequest']);
         });
 
-        it('should load files without camel case key names', () => {
+        test('should load files without camel case key names', () => {
             loader.camelCase = false;
             expect(Object.keys(loader.load(dir)).sort()).toEqual(['log-exception', 'log-request']);
         });
 
-        it('should load files with class case key names', () => {
+        test('should load files with class case key names', () => {
             loader.camelCase = true;
             loader.classCase = true;
             expect(Object.keys(loader.load(dir)).sort()).toEqual(['LogException', 'LogRequest']);

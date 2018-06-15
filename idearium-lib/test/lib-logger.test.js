@@ -27,7 +27,7 @@ describe('class logs.Logger', () => {
 
     describe('instantiation', () => {
 
-        it('can be instantiated', () => {
+        test('can be instantiated', () => {
 
             expect(() => new logs.Logger({
                 context: 'context',
@@ -38,7 +38,7 @@ describe('class logs.Logger', () => {
 
         describe('will throw if', () => {
 
-            it('name parameter is not provided', () => {
+            test('name parameter is not provided', () => {
 
                 try {
 
@@ -52,7 +52,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('context parameter is not provided', () => {
+            test('context parameter is not provided', () => {
 
                 try {
 
@@ -66,7 +66,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('level is wrong', () => {
+            test('level is wrong', () => {
 
                 try {
 
@@ -84,7 +84,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('remote specified, without token parameter', () => {
+            test('remote specified, without token parameter', () => {
 
                 try {
 
@@ -113,7 +113,7 @@ describe('class logs.Logger', () => {
             fs.truncate(path.join(dir, 'application.log'), done);
         });
 
-        it('will write to file', (done) => {
+        test('will write to file', (done) => {
 
             // Create the logger.
             const logger = new logs.Logger({
@@ -157,7 +157,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('trace', (done) => {
+            test('trace', (done) => {
 
                 logger.trace('Logging at trace level');
 
@@ -180,7 +180,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('debug', (done) => {
+            test('debug', (done) => {
 
                 logger.debug('Logging at debug level');
 
@@ -203,7 +203,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('info', (done) => {
+            test('info', (done) => {
 
                 logger.info('Logging at info level');
 
@@ -226,7 +226,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('warn', (done) => {
+            test('warn', (done) => {
 
                 logger.warn('Logging at warn level');
 
@@ -249,7 +249,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('error', (done) => {
+            test('error', (done) => {
 
                 logger.error('Logging at error level');
 
@@ -272,7 +272,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('fatal', (done) => {
+            test('fatal', (done) => {
 
                 logger.fatal('Logging at fatal level');
 
@@ -301,7 +301,7 @@ describe('class logs.Logger', () => {
 
     describe('stderr stream', () => {
 
-        it('will write to stderr', (done) => {
+        test('will write to stderr', (done) => {
 
             // Create the logger.
             const logger = new logs.Logger({
@@ -343,7 +343,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('trace', (done) => {
+            test('trace', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -361,7 +361,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('debug', (done) => {
+            test('debug', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -379,7 +379,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('info', (done) => {
+            test('info', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -397,7 +397,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('warn', (done) => {
+            test('warn', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -415,7 +415,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('error', (done) => {
+            test('error', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -433,7 +433,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('fatal', (done) => {
+            test('fatal', (done) => {
 
                 // Write content to the log.
                 const output = stderr.inspectSync(() => {
@@ -467,7 +467,7 @@ describe('class logs.Logger', () => {
             mock.disable();
         });
 
-        it('will write to log entries', (done) => {
+        test('will write to log entries', (done) => {
 
             // Create the logger.
             const logger = new logs.Logger({
@@ -518,7 +518,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('trace', (done) => {
+            test('trace', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -540,7 +540,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('debug', (done) => {
+            test('debug', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -562,7 +562,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('info', (done) => {
+            test('info', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -584,7 +584,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('warn', (done) => {
+            test('warn', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -606,7 +606,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('error', (done) => {
+            test('error', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -628,7 +628,7 @@ describe('class logs.Logger', () => {
 
             });
 
-            it('fatal', (done) => {
+            test('fatal', (done) => {
 
                 mock.on('connection', function (socket, opts) {
                     socket.on('data', function (buffer) {
@@ -656,7 +656,7 @@ describe('class logs.Logger', () => {
 
     describe('custom stream', () => {
 
-        it('will write to a custom stream', (done) => {
+        test('will write to a custom stream', (done) => {
 
             // Basic es6 class to act as a Bunyan stream.
             const CustomStream = class {
@@ -761,7 +761,7 @@ describe('class logs.Logger', () => {
 
         });
 
-        it('will output to file stream', (done) => {
+        test('will output to file stream', (done) => {
 
             // Verify the log exists.
             fs.readFile(path.join(dir, 'application.log'), 'utf8', function (err, content) {
@@ -782,7 +782,7 @@ describe('class logs.Logger', () => {
 
         });
 
-        it('will output to stderr stream', () => {
+        test('will output to stderr stream', () => {
 
             expect(Array.isArray(output)).toBe(true);
             expect(output).toHaveLength(1);
@@ -793,7 +793,7 @@ describe('class logs.Logger', () => {
 
         });
 
-        it('will send to remote logging platform', (done) => {
+        test('will send to remote logging platform', (done) => {
 
             var _done = false;
 
@@ -818,7 +818,7 @@ describe('class logs.Logger', () => {
 
         });
 
-        it('will log via custom stream', (done) => {
+        test('will log via custom stream', (done) => {
 
             var _done = false;
 

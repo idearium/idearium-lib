@@ -10,7 +10,7 @@ describe('query', () => {
         username: String,
     }));
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = find(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -28,7 +28,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = find(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -45,7 +45,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = find(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -61,7 +61,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = find(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -76,7 +76,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = findOne(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -92,7 +92,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = findOne(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },
@@ -107,7 +107,7 @@ describe('query', () => {
 
     });
 
-    it('will return a query object', () => {
+    test('will return a query object', () => {
 
         const queryObject = findOne(userModel, {
             filter: { _id: '5938a0aefb6e41e0e8368d00' },

@@ -28,7 +28,7 @@ const createAgent = (app) => {
 
 describe('configSettings', () => {
 
-    it('is an Express middleware function', () => {
+    test('is an Express middleware function', () => {
 
         const middlewareFn = configSettings;
 
@@ -36,7 +36,7 @@ describe('configSettings', () => {
 
     });
 
-    it('will return 404 unless an authenticated request is made', function (done) {
+    test('will return 404 unless an authenticated request is made', function (done) {
 
         const app = createApp();
 
@@ -48,7 +48,7 @@ describe('configSettings', () => {
 
     });
 
-    it('will return a json response with configuration data', function (done) {
+    test('will return a json response with configuration data', function (done) {
 
         const app = createApp();
 

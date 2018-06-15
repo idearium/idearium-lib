@@ -22,7 +22,7 @@ describe('class mq.Manager', () => {
 
     describe('will throw an Error', () => {
 
-        it('if a path is not provided', () => {
+        test('if a path is not provided', () => {
 
             try {
 
@@ -40,7 +40,7 @@ describe('class mq.Manager', () => {
 
     describe('with the messages directory', () => {
 
-        it('will load messages and fire an event', (done) => {
+        test('will load messages and fire an event', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -54,7 +54,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will execute consumers', (done) => {
+        test('will execute consumers', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -68,7 +68,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will publish a message', (done) => {
+        test('will publish a message', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -91,7 +91,7 @@ describe('class mq.Manager', () => {
 
     describe('publish', () => {
 
-        it('will return a resolved promise', (done) => {
+        test('will return a resolved promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -112,7 +112,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will return a rejected promise', (done) => {
+        test('will return a rejected promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -133,7 +133,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will create and return a resolved promise', (done) => {
+        test('will create and return a resolved promise', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -154,7 +154,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will reject publishing missing message types', (done) => {
+        test('will reject publishing missing message types', (done) => {
 
             const mqManager = new mq.Manager(dir);
 
@@ -172,7 +172,7 @@ describe('class mq.Manager', () => {
 
         });
 
-        it('will reject publishing messages without a publish function', (done) => {
+        test('will reject publishing messages without a publish function', (done) => {
 
             const mqManager = new mq.Manager(dir);
             // eslint-disable-next-line global-require

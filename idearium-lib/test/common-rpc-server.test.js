@@ -23,7 +23,7 @@ describe('common/mq/rpc-server', () => {
 
     });
 
-    it('will connect to rabbit mq', (done) => {
+    test('will connect to rabbit mq', (done) => {
 
         // Catch and proxy any errors to `done`.
         try {

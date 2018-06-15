@@ -52,13 +52,13 @@ describe('logRequest', () => {
 
     });
 
-    it('is an Express middleware function', () => {
+    test('is an Express middleware function', () => {
 
         expect(typeof logRequest).toBe('function');
 
     });
 
-    it('will log locally to file', (done) => {
+    test('will log locally to file', (done) => {
 
         const app = createApp();
 
@@ -110,7 +110,7 @@ describe('logRequest', () => {
 
     });
 
-    it('will not log excluded routes', (done) => {
+    test('will not log excluded routes', (done) => {
 
         const app = createApp();
         const agent = createAgent(app);
@@ -195,7 +195,7 @@ describe('logRequest', () => {
 
     });
 
-    it('the username if it exists in req', (done) => {
+    test('the username if it exists in req', (done) => {
 
         const app = createApp();
 
@@ -255,7 +255,7 @@ describe('logRequest', () => {
 
     });
 
-    it('remotely via a stream', (done) => {
+    test('remotely via a stream', (done) => {
 
         const app = createApp();
         const mock = mitm();

@@ -16,7 +16,7 @@ describe('common/mq/publisher', function () {
     // eslint-disable-next-line global-require
     const message = require('../messages');
 
-    it('will return a promise', (done) => {
+    test('will return a promise', (done) => {
 
         // This runs after test/common-mq-client.
         // That means some things have been cached.
