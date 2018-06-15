@@ -1,6 +1,9 @@
 'use strict';
 
-jest.mock('/app/config/config.js', () => ({ mqUrl: require('./conf').rabbitUrl }));
+jest.mock('/app/config/config.js', () => ({
+    mqRpcClientTimeout: 10000,
+    mqUrl: require('./conf').rabbitUrl,
+}));
 
 const path = require('path');
 const copy = require('copy-dir');
