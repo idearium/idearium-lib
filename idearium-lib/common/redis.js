@@ -3,6 +3,10 @@
 const config = require('./config');
 const redis = require('redis');
 
+if (!config.get('kuePrefix')) {
+    throw new Error('You must define a configuration called \'kuePrefix\' to determine which KUE queue should be used.');
+}
+
 const client = redis.createClient({
     prefix: config.get('kuePrefix'),
     // https://github.com/NodeRedis/node_redis#rediscreateclient
