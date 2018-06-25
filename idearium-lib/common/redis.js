@@ -1,38 +1,34 @@
 'use strict';
 
 const config = require('./config');
-const redis = require('redis');
+const Redis = require('ioredis');
+const log = require('./log')('idearium-lib:common/redis');
 
-if (!config.get('kuePrefix')) {
-    throw new Error('You must define a configuration called \'kuePrefix\' to determine which KUE queue should be used.');
-}
+// 10 x 2000ms is about 2 minutes
+const retryLimit = config.get('redisRetryLimit') || 10;
+const retryDelay = config.get('redisRetryDelay') || 2000;
 
-const client = redis.createClient({
-    prefix: config.get('kuePrefix'),
-    // https://github.com/NodeRedis/node_redis#rediscreateclient
-    // eslint-disable-next-line camelcase
-    retry_strategy: (options = {}) => {
+const redis = new Redis(config.get('cacheUrl'), {
+    retryStrategy: (times) => {
 
-        if (options.error && options.error.code === 'ECONNREFUSED') {
-            // End reconnecting on a specific error and flush all commands with a individual error
-            return new Error('The server refused the connection');
+        if (times >= retryLimit) {
+
+            log.fatal('Retry limit reached, could not connect to Redis');
+
+            // eslint-disable-next-line no-process-exit
+            return process.exit(1);
+
         }
 
-        if (options.total_retry_time > 1000 * 60 * 60) {
-            // End reconnecting after a specific timeout and flush all commands with a individual error
-            return new Error('Retry time exhausted');
-        }
-
-        if (options.attempt > 10) {
-            // End reconnecting with built in error
-            return;
-        }
-
-        // Reconnect after
-        return Math.min(options.attempt * 100, 3000);
+        return times * retryDelay;
 
     },
-    url: config.get('cacheUrl'),
 });
 
-module.exports = client;
+redis.on('close', () => log.info('Redis closed'));
+redis.on('connect', () => log.info('Redis connected'));
+redis.on('end', () => log.info('Redis ended'));
+redis.on('ready', () => log.info('Redis ready'));
+redis.on('reconnecting', () => log.info('Redis reconnecting'));
+
+module.exports = redis;
