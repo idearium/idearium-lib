@@ -16,7 +16,7 @@ test('returns a redis client', () => {
 
 });
 
-test('has a retry limit', () => {
+test('has a retry strategy function', () => {
 
     expect(redis.options.retryStrategy(1)).toBe(2000);
     expect(redis.options.retryStrategy(5)).toBe(10000);
