@@ -41,4 +41,4 @@ class IORedis {
 
 }
 
-module.exports = new IORedis();
+module.exports = IORedis;
