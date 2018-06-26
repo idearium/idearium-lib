@@ -2,49 +2,31 @@
 
 'use strict';
 
+jest.mock('/app/config/config.js', () => ({ env: 'test' }));
+jest.mock('../messages/index.js', () => ({ consume: () => Promise.resolve(), publish: () => Promise.resolve() }));
+
 const path = require('path'),
     fs = require('fs'),
-    expect = require('chai').expect,
     dir = path.resolve(__dirname, '..', 'messages'),
     conf = require('./conf');
 
-describe('common/mq/messages', function () {
+describe('common/mq/messages', () => {
 
     let message;
 
     // This is run after common-mq-client and will have therefore cached the config from the previous test.
     // Set the mqUrl value as common/mq/client uses it.
-    before(function(done) {
+    beforeAll(() => {
 
         require('../common/config').set('mqUrl', conf.rabbitUrl);
 
         // Add some fake messages to load.
-        fs.mkdir(dir, function (err) {
-
-            // If it already exists, that's fine, let's just create the file itself.
-            if (err) {
-                return done(err);
-            }
-
-            fs.writeFile(path.join(dir, 'test.js'), 'module.exports = { "consume": () => Promise.resolve(), "publish": () => Promise.resolve() };', function (writeErr) {
-
-                if (writeErr) {
-                    return done(writeErr);
-                }
-
-                message = require('../messages/test.js');
-
-                return done();
-
-            });
-
-        });
+        // eslint-disable-next-line global-require
+        message = require('../messages');
 
     });
 
-    it('will faciliate producing and consuming messages', function (done) {
-
-        this.timeout(4000);
+    test('will faciliate producing and consuming messages', (done) => {
 
         var exchange = 'common-mq-messages',
             queueName = 'common-mq-messages-queue',
@@ -75,7 +57,7 @@ describe('common/mq/messages', function () {
                             return done(new Error('There was no data'));
                         }
 
-                        expect(data).to.eql({'common-mq-messages-test': true});
+                        expect(data).toEqual({'common-mq-messages-test': true});
 
                         return done();
 
@@ -127,10 +109,10 @@ describe('common/mq/messages', function () {
             mqMessages.addListener('load', () => {
 
                 // Wait until everything is connected again.
-                mqClient.addListener('connect', function () {
+                mqClient.addListener('connect', () => {
 
                     // Publish a test message.
-                    require('../messages/test.js').publish({'common-mq-messages-test': true});
+                    require('../messages').publish({'common-mq-messages-test': true});
 
                 });
 
@@ -147,12 +129,6 @@ describe('common/mq/messages', function () {
             return done(e);
         }
 
-    });
-
-    after(function (done) {
-        fs.unlink(path.join(dir, 'test.js'), function () {
-            fs.rmdir(dir, done);
-        });
-    });
+    }, 10000);
 
 });
