@@ -1,6 +1,9 @@
 # idearium-lib
 
-This file is a history of the changes made to idearium-lib.
+## v1.0.0 (26 June 2018)
+
+- Initial stable release.
+- Replaced Mocha with Jest.
 
 ## v1.0.0-alpha.34 (25 May 2018)
 
