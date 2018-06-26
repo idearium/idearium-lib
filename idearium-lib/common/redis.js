@@ -4,31 +4,41 @@ const config = require('./config');
 const Redis = require('ioredis');
 const log = require('./log')('idearium-lib:common/redis');
 
-// 10 x 2000ms is about 2 minutes
-const retryLimit = config.get('redisRetryLimit') || 10;
-const retryDelay = config.get('redisRetryDelay') || 2000;
+class IORedis {
 
-const redis = new Redis(config.get('cacheUrl'), {
-    retryStrategy: (times) => {
+    constructor () {
 
-        if (times >= retryLimit) {
+        // 10 x 2000ms is about 2 minutes
+        const retryLimit = config.get('redisRetryLimit') || 10;
+        const retryDelay = config.get('redisRetryDelay') || 2000;
 
-            log.fatal('Retry limit reached, could not connect to Redis');
+        const redis = new Redis(config.get('cacheUrl'), {
+            retryStrategy: (times) => {
 
-            // eslint-disable-next-line no-process-exit
-            return process.exit(1);
+                if (times >= retryLimit) {
 
-        }
+                    log.fatal('Retry limit reached, could not connect to Redis');
 
-        return times * retryDelay;
+                    // eslint-disable-next-line no-process-exit
+                    return process.exit(1);
 
-    },
-});
+                }
 
-redis.on('close', () => log.info('Redis closed'));
-redis.on('connect', () => log.info('Redis connected'));
-redis.on('end', () => log.info('Redis ended'));
-redis.on('ready', () => log.info('Redis ready'));
-redis.on('reconnecting', () => log.info('Redis reconnecting'));
+                return times * retryDelay;
 
-module.exports = redis;
+            },
+        });
+
+        redis.on('close', () => log.info('Redis closed'));
+        redis.on('connect', () => log.info('Redis connected'));
+        redis.on('end', () => log.info('Redis ended'));
+        redis.on('ready', () => log.info('Redis ready'));
+        redis.on('reconnecting', () => log.info('Redis reconnecting'));
+
+        return redis;
+
+    }
+
+}
+
+module.exports = new IORedis();

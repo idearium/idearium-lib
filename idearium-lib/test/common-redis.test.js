@@ -7,9 +7,11 @@ jest.mock('/app/config/config.js', () => ({
     logToStdout: true,
 }));
 
-const redis = require('../common/redis');
+const Redis = require('../common/redis');
 
 test('returns a redis client', () => {
+
+    const redis = new Redis();
 
     expect(redis).toBeTruthy();
     expect(redis.constructor.name).toBe('Redis');
@@ -18,6 +20,8 @@ test('returns a redis client', () => {
 
 test('has a retry strategy function', () => {
 
+    const redis = new Redis();
+
     expect(redis.options.retryStrategy(1)).toBe(2000);
     expect(redis.options.retryStrategy(5)).toBe(10000);
 
@@ -25,6 +29,7 @@ test('has a retry strategy function', () => {
 
 test('exits when the retry limit is reached', () => {
 
+    const redis = new Redis();
     const mockExit = jest.fn();
 
     process.exit = mockExit;

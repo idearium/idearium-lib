@@ -2,7 +2,7 @@
 
 const config = require('./config');
 const kue = require('kue');
-const client = require('./redis');
+const Redis = require('./redis');
 const log = require('./log')('idearium-lib:common/kue-queue');
 
 if (!config.get('kuePrefix')) {
@@ -11,7 +11,7 @@ if (!config.get('kuePrefix')) {
 
 const queue = kue.createQueue({
     prefix: config.get('kuePrefix'),
-    redis: { createClientFactory: () => client },
+    redis: { createClientFactory: () => new Redis() },
 });
 
 queue.exception = err => log.error({ err }, err.message);
