@@ -4,6 +4,8 @@ const config = require('./config');
 const Redis = require('ioredis');
 const log = require('./log')('idearium-lib:common/redis');
 
+Redis.Promise.onPossiblyUnhandledRejection(err => log.error({ err }, 'Unhandled Redis error'));
+
 class IORedis {
 
     constructor () {
@@ -32,6 +34,7 @@ class IORedis {
         redis.on('close', () => log.info('Redis closed'));
         redis.on('connect', () => log.info('Redis connected'));
         redis.on('end', () => log.info('Redis ended'));
+        redis.on('error', err => log.error({ err }, err.message));
         redis.on('ready', () => log.info('Redis ready'));
         redis.on('reconnecting', () => log.info('Redis reconnecting'));
 
