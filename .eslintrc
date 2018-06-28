@@ -1,4 +1,0 @@
-{
-    "root": true,
-    "extends": "@idearium/eslint-config"
-}
