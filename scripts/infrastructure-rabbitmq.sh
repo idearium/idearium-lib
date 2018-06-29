@@ -6,6 +6,6 @@ if [ ! "$(docker ps -q -f name=rabbitmq)" ]; then
         docker rm rabbitmq
     fi
 
-    docker run --name rabbitmq -d rabbitmq:3.7-alpine
+    docker run --name rabbitmq -e RABBITMQ_DEFAULT_USER=lib -e RABBITMQ_DEFAULT_PASS=lib -d rabbitmq:3.7-alpine
 
 fi

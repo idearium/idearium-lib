@@ -11,4 +11,4 @@ WORKDIR /app
 
 RUN yarn --production
 
-CMD dockerize -wait tcp://rabbitmq:5672 -timeout 20s yarn test-app
+CMD dockerize -wait tcp://mongo:27017 -wait tcp://rabbitmq:5672 -wait tcp://redis:6379 -timeout 20s yarn test-app
