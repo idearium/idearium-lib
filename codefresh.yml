@@ -16,7 +16,7 @@ steps:
     composition_candidates:
       lib:
         image: '${{BuildingDockerImage}}'
-        command: dockerize -wait tcp://rabbitmq:5672 -timeout 30s yarn app-test
+        command: dockerize -wait tcp://rabbitmq:5672 -timeout 20s yarn test-app
         environment:
           NODE_ENV: ${{NODE_ENV}}
     on_success:
