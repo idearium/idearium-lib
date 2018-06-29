@@ -11,8 +11,7 @@
     "app-test": "./scripts/test.sh",
     "build": "./scripts/build.sh",
     "clean": "./scripts/clean.sh",
-    "setup": "./scripts/setup.sh",
-    "test": "./node_modules/.bin/npm-run-all --sequential setup build app-test clean",
+    "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
     "test-app": "jest",
     "test-coverage": "./scripts/test-coverage.sh"
   },
