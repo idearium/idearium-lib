@@ -1,3 +1,3 @@
 module.exports = {
-    'rabbitUrl': 'amqp://lib:lib@rabbitmq:5672'
+    'rabbitUrl': 'amqp://guest:guest@rabbitmq:5672'
 };
