@@ -1,5 +1,9 @@
 .git
 .vagrant
-*/node_modules
-*/coverage
+docs
+node_modules
 vagrant
+
+idearium-lib/node_modules
+idearium-lib/coverage
+idearium-lib/examples
