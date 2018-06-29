@@ -2,6 +2,13 @@ version: '1.0'
 
 steps:
 
+  SetupFiles:
+    title: Setting up files
+    image_name: idearium/ideariumlib
+    working_directory: ./build/
+    commands:
+      - source ./scripts/setup.sh
+
   BuildingDockerImage:
     title: Building Docker image
     type: build
