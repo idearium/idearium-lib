@@ -80,7 +80,7 @@ class RpcServer extends mq.RpcServer {
         // Update the state
         this.state = 'connecting';
 
-        // Delay for 1 second to precent TLS errors on startup.
+        // Delay for 1 second to prevent TLS errors on startup.
         setTimeout(() => {
 
             amqp.connect(this.mqUrl, this.options)
