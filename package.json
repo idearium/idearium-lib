@@ -59,7 +59,7 @@
     "validator": "6.2.1"
   },
   "devDependencies": {
-    "@idearium/eslint-config": "2.1.2",
+    "@idearium/eslint-config": "3.0.0",
     "gulp": "3.9.1",
     "gulp-bump": "3.1.1",
     "gulp-task-listing": "1.0.1",
