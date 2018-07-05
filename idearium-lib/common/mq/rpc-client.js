@@ -1,15 +1,19 @@
 'use strict';
 
-var mq = require('../../lib/mq'),
-    config = require('../config'),
-    certs = require('./certs');
+const amqp = require('amqplib');
+const certs = require('./certs');
+const config = require('../config');
+const log = require('../log')('idearium-lib:common/mq/rpc-client');
+const mq = require('../../lib/mq');
+
+const retryLimit = config.get('rabbitmqRetryLimit') || 10;
 
 /**
  * A common implement of mq.RPC to be used across many clients.
  */
 class RpcClient extends mq.RpcClient {
 
-    constructor(url, rpcTimeout) {
+    constructor (url, rpcTimeout) {
 
         // Make sure we have a URL to connect to RabbitMQ.
         if (!url) {
@@ -23,42 +27,91 @@ class RpcClient extends mq.RpcClient {
         this.reconnectCount = 0;
 
         // Once the certs have loaded, we'll update the options and connect.
-        certs.
-            then(this.makeConnection.bind(this));
+        certs.then((optionsCerts) => {
 
+            // Update options (for RabbitMQ connection) without certs.
+            Object.assign(this.options, optionsCerts);
+
+            // Connect even if there was an ENOENT error.
+            this.connect();
+
+        });
+
+    }
+
+    static logError (err) {
+        log.error({ err }, err.message);
+    }
+
+    reconnect () {
+        super.reconnect(parseInt(Math.pow(2, this.reconnectCount += 1), 10) * 1000);
     }
 
     /**
-     * This is merge the optionsCerts argument into this.options and
-     * attempt to make a connection to Rabbit.
-     * @param  {Object} optionsCerts Any certs required for connection.
-     * @return Void
+     * Establish a connection to RabbitMQ and attempt to reconnect if it fails.
+     * @param {String} url The RabbitMQ url.
+     * @return {Void} Connects to MQ.
      */
-    makeConnection (optionsCerts) {
+    connect () {
 
-        // Update options (for RabbitMQ connection) without certs.
-        Object.assign(this.options, optionsCerts || {});
+        // We don't need to connect if we already are.
+        if (this.state === 'connected' || this.state === 'connecting') {
+            return;
+        }
 
-        // Connect even if there was an ENOENT error.
-        this.connect();
+        // Update the state
+        this.state = 'connecting';
+
+        // Delay for 1 second to prevent TLS errors on startup.
+        setTimeout(() => {
+
+            amqp.connect(this.mqUrl, this.options)
+                .then((conn) => {
+
+                    // Handle dropped connections.
+                    conn.on('close', () => {
+
+                        log.info('RabbitMQ connection dropped, retrying...');
+
+                        this.retry();
+
+                    });
+
+                    conn.on('error', (err) => {
+
+                        log.error({ err }, err.message);
+
+                        this.retry();
+
+                    });
+
+                    this.hasConnected(conn);
+
+                })
+                .catch((err) => {
+
+                    log.error({ err }, err.message);
+
+                    this.retry();
+
+                });
+
+        }, 1000);
 
     }
 
-    //
-    // Overwrite MqClient class methods.
-    //
+    retry () {
 
-    // Log using debug.
-    logError(err) {
-        // eslint-disable-next-line no-console
-        console.error(err.toString());
-    }
+        if (this.reconnectCount >= retryLimit) {
 
-    // Customise the reconnect timeout based on connection attempts.
-    reconnect() {
+            log.fatal(`Retry limit of ${retryLimit} reached, could not connect to RabbitMQ`);
 
-        // set timeout to the power of 2
-        super.reconnect(parseInt(Math.pow(2, this.reconnectCount++)) * 1000);
+            // eslint-disable-next-line no-process-exit
+            return process.exit(1);
+
+        }
+
+        this.reconnect();
 
     }
 
