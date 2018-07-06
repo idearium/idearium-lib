@@ -19,7 +19,7 @@ class IORedis {
 
                 if (times >= retryLimit) {
 
-                    log.fatal('Retry limit reached, could not connect to Redis');
+                    log.fatal(`Retry limit of ${retryLimit} reached, could not connect to Redis`);
 
                     // eslint-disable-next-line no-process-exit
                     return process.exit(1);
