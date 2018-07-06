@@ -62,7 +62,7 @@ class RpcClient extends mq.RpcClient {
         // Update the state
         this.state = 'connecting';
 
-        // Delay for 1 second to precent TLS errors on startup.
+        // Delay for 1 second to prevent TLS errors on startup.
         setTimeout(() => {
 
             amqp.connect(this.mqUrl, this.options)
@@ -104,7 +104,7 @@ class RpcClient extends mq.RpcClient {
 
         if (this.reconnectCount >= retryLimit) {
 
-            log.fatal('Retry limit reached, could not connect to RabbitMQ');
+            log.fatal(`Retry limit of ${retryLimit} reached, could not connect to RabbitMQ`);
 
             // eslint-disable-next-line no-process-exit
             return process.exit(1);
