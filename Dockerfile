@@ -9,7 +9,7 @@ RUN apk add --no-cache curl openssl && \
 # Only install packages if there is an update.
 COPY /package.json /yarn.lock /app/
 WORKDIR /app
-RUN yarn --production
+RUN yarn
 
 COPY / /app
 

@@ -30,9 +30,8 @@
   "dependencies": {
     "amqplib": "0.4.1",
     "async": "2.4.1",
-    "babel-preset-env": "1.7.0",
     "bcryptjs": "2.4.0",
-    "bunyan": "1.8.1",
+    "bunyan": "1.8.12",
     "connect-redis": "3.3.0",
     "copy-dir": "0.3.0",
     "csv-parse": "1.2.0",
@@ -41,7 +40,6 @@
     "express": "4.14.0",
     "express-session": "1.15.3",
     "ioredis": "3.2.2",
-    "jest": "23.1.0",
     "kue": "0.11.6",
     "le_node": "1.7.1",
     "mandrill-api": "1.0.45",
@@ -60,10 +58,12 @@
   },
   "devDependencies": {
     "@idearium/eslint-config": "3.0.0",
+    "babel-preset-env": "1.7.0",
     "gulp": "3.9.1",
     "gulp-bump": "3.1.1",
     "gulp-task-listing": "1.0.1",
     "istanbul": "0.4.5",
+    "jest": "23.3.0",
     "minimist": "1.2.0",
     "npm-run-all": "4.1.3"
   }
