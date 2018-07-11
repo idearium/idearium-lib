@@ -8,12 +8,12 @@
     "test": "test"
   },
   "scripts": {
-    "app-test": "./scripts/test.sh",
-    "build": "./scripts/build.sh",
-    "clean": "./scripts/clean.sh",
+    "app-test": "./devops/test.sh",
+    "build": "./devops/build.sh",
+    "clean": "./devops/clean.sh",
     "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
-    "test-app": "DEBUG=idearium-lib:*,lib:* jest --forceExit",
-    "test-coverage": "./scripts/test-coverage.sh"
+    "test-app": "DEBUG=lib:* jest --forceExit",
+    "test-coverage": "./devops/test-coverage.sh"
   },
   "author": "Scott Mebberson",
   "repository": "https://github.com/idearium/idearium-lib.git",

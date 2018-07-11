@@ -2,7 +2,7 @@
 
 # Setup the infrastructure
 for script in "infrastructure-mongo.sh" "infrastructure-rabbitmq.sh" "infrastructure-redis.sh"; do
-    source "$PWD/scripts/${script}"
+    source "$PWD/devops/${script}"
 done
 
 # Link the infrastructure and run the image.
