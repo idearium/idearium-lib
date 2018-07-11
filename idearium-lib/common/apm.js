@@ -3,13 +3,19 @@
 const apm = require('elastic-apm-node');
 const exception = require('./exception');
 
-const startApm = (options = { exceptionHandler: exception }) => {
+/**
+ * Start Apm.
+ * @param {Object} options The options object.
+ * @param {Function} options.exceptionHandler Must be provided if a custom options is passed.
+ * @returns {Object} Starts and returns Apm.
+ */
+const start = (options = { exceptionHandler: exception }) => {
 
-    const { exceptionHandler } = options;
+    apm.exceptionHandler = options.exceptionHandler;
 
-    process.on('unhandledRejection', (err) => apm.captureError(err, () => exceptionHandler(err)));
+    process.on('unhandledRejection', err => apm.captureError(err, () => apm.exceptionHandler(err)));
 
-    apm.handleUncaughtExceptions(exceptionHandler);
+    apm.handleUncaughtExceptions(apm.exceptionHandler);
 
     /* eslint-disable no-process-env */
     const ignoreUrls = (process.env.ELASTIC_APM_IGNORE_URLS || '').split(',');
@@ -25,14 +31,20 @@ const startApm = (options = { exceptionHandler: exception }) => {
 
     }
 
-    apm.start({
-        ignoreUrls,
-        logLevel,
-        serverUrl,
-    });
+    // Wrap the start function in a if to enable testing multiple times.
+    // eslint-disable-next-line no-process-env
+    if (process.env.ELASTIC_APM_ACTIVE !== 'false') {
+
+        apm.start({
+            ignoreUrls,
+            logLevel,
+            serverUrl,
+        });
+
+    }
 
     return apm;
 
 };
 
-module.exports = startApm;
+module.exports = { start };
