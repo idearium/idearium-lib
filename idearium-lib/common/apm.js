@@ -31,7 +31,7 @@ const start = (options = { exceptionHandler: exception }) => {
 
     }
 
-    // Wrap the start function in a if to enable testing multiple times.
+    // Wrap the start function in an if to enable testing multiple times.
     // eslint-disable-next-line no-process-env
     if (process.env.ELASTIC_APM_ACTIVE !== 'false') {
 
