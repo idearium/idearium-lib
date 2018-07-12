@@ -12,7 +12,7 @@
     "build": "./devops/build.sh",
     "clean": "./devops/clean.sh",
     "jest": "DEBUG=lib:* jest --forceExit",
-    "report-coverage": "codecov",
+    "report-coverage": "./devops/report-coverage.sh",
     "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
     "test-app": "./node_modules/.bin/npm-run-all -s jest report-coverage"
   },
@@ -54,7 +54,6 @@
   "devDependencies": {
     "@idearium/eslint-config": "3.0.0",
     "babel-preset-env": "1.7.0",
-    "codecov": "3.0.4",
     "copy-dir": "0.3.0",
     "gulp": "3.9.1",
     "gulp-bump": "3.1.1",
