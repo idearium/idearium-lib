@@ -18,8 +18,13 @@ steps:
         image: '${{BuildingDockerImage}}'
         command: dockerize -wait tcp://rabbitmq:5672 -timeout 20s yarn test-app && yarn report-coverage
         environment:
-          CODECOV_TOKEN: 769c1584-cd4d-40a2-b385-ff751d3eeaa0
+          CI_BUILD_ID: ${{CF_BUILD_ID}}
+          CI_BUILD_URL: ${{CF_BUILD_URL}}
+          CODECOV_TOKEN: ${{CODECOV_TOKEN}}
           NODE_ENV: ${{NODE_ENV}}
+          VCS_BRANCH_NAME: ${{CF_BRANCH}}
+          VCS_COMMIT_ID: ${{CF_REVISION}}
+          VCS_SLUG: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
     on_success:
       metadata:
         set:
