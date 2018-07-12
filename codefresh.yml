@@ -16,8 +16,10 @@ steps:
     composition_candidates:
       lib:
         image: '${{BuildingDockerImage}}'
-        command: dockerize -wait tcp://rabbitmq:5672 -timeout 20s yarn test-app
+        command: $CI_ENV dockerize -wait tcp://rabbitmq:5672 -timeout 20s yarn test-app && yarn report-coverage
         environment:
+          CI_ENV: bash <(curl -s https://codecov.io/env)
+          CODECOV_TOKEN: 769c1584-cd4d-40a2-b385-ff751d3eeaa0
           NODE_ENV: ${{NODE_ENV}}
     on_success:
       metadata:
