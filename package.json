@@ -11,9 +11,9 @@
     "app-test": "./devops/test.sh",
     "build": "./devops/build.sh",
     "clean": "./devops/clean.sh",
+    "report-coverage": "codecov",
     "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
-    "test-app": "DEBUG=lib:* jest --forceExit",
-    "test-coverage": "./devops/test-coverage.sh"
+    "test-app": "DEBUG=lib:* jest --forceExit"
   },
   "author": "Scott Mebberson",
   "repository": "https://github.com/idearium/idearium-lib.git",
@@ -53,6 +53,7 @@
   "devDependencies": {
     "@idearium/eslint-config": "3.0.0",
     "babel-preset-env": "1.7.0",
+    "codecov": "3.0.4",
     "copy-dir": "0.3.0",
     "gulp": "3.9.1",
     "gulp-bump": "3.1.1",
