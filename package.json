@@ -11,9 +11,10 @@
     "app-test": "./devops/test.sh",
     "build": "./devops/build.sh",
     "clean": "./devops/clean.sh",
+    "jest": "DEBUG=lib:* jest --forceExit",
     "report-coverage": "codecov",
     "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
-    "test-app": "DEBUG=lib:* jest --forceExit"
+    "test-app": "./node_modules/.bin/npm-run-all -s jest report-coverage"
   },
   "author": "Scott Mebberson",
   "repository": "https://github.com/idearium/idearium-lib.git",
