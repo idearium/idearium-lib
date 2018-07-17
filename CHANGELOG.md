@@ -4,6 +4,15 @@
 
 - Codecov now only runs in Codefresh.
 - You can now override the default `process.env` when using `lib.Config`.
+- `NODE_ENV` has been deprecated as an environment. It's now used specifically to alter the mode in which Node.js modules are run (it's origin intent).
+- `TARGET_ENV` has been promoted as the environment variable which defines the current environment.
+- Uses environments `local`, `beta` and `production`.
+- Sets `local`, `beta` and `production` boolean values.
+- Sets `isLocal`, `isBeta` and `isProduction` boolean values.
+- Sets `config.get('env')` to the value of `TARGET_ENV`.
+- Defaults `config.get('env')` to the value of `NODE_ENV` when `TARGET_ENV` is not available.
+- Sets `development` boolean value based on `NODE_ENV`.
+- Sets `isDevelopment` boolean value based on `NODE_ENV`.
 
 ## v2.0.0 (17 July 2018)
 
