@@ -1,5 +1,9 @@
 # idearium-lib
 
+## Unreleased
+
+- Codecov now only runs in Codefresh.
+
 ## v2.0.0 (17 July 2018)
 
 - Removed Vagrant.
