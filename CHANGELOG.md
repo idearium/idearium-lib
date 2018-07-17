@@ -1,6 +1,6 @@
 # idearium-lib
 
-## v3.0.0-beta.1 (17 July 2018)
+## v3.0.0-beta.2 (17 July 2018)
 
 - Codecov now only runs in Codefresh.
 - You can now override the default `process.env` when using `lib.Config`.
