@@ -21,16 +21,10 @@ require('./lib/apm');
 // @ app.js
 'use strict';
 
-const apmLib = require('./lib/apm');
-const { apm } = require('../lib/middleware');
-
-// Before other middleware
-linz.app.use(apm);
-
-...
+const apm = require('./lib/apm');
 
 // Before other error middleware
-linz.app.use(apmLib.middleware.connect());
+linz.app.use(apm.middleware.connect());
 
 ...
 ```
