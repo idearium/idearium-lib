@@ -43,6 +43,7 @@ describe('class Config', () => {
 
             const config = new Config(dir);
 
+            // eslint-disable-next-line no-process-env
             expect(config.get('env')).toBe(process.env.NODE_ENV);
 
         });
@@ -51,13 +52,28 @@ describe('class Config', () => {
 
             const config = new Config(dir);
 
+            // eslint-disable-next-line no-process-env
             expect(config.get(process.env.NODE_ENV)).toBe(true);
+
+        });
+
+        test('allows you to rescope the environment variables', () => {
+
+            const config = new Config(dir, {
+                foo: 'bar',
+                one: 'A',
+            });
+
+            expect(config.get('foo')).toBe('bar');
+            expect(config.get('one')).toBe('A');
+            // eslint-disable-next-line no-undefined
+            expect(config.get('env')).toBe(undefined);
 
         });
 
     });
 
-    describe('create multiple instance', () => {
+    describe('create multiple instances', () => {
 
         test('should work', () => {
 

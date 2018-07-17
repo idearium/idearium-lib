@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Codecov now only runs in Codefresh.
+- You can now override the default `process.env` when using `lib.Config`.
 
 ## v2.0.0 (17 July 2018)
 
