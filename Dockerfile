@@ -1,22 +1,17 @@
-FROM smebberson/alpine-nodejs:latest
+FROM node:6-alpine
 
 # Setup dockerize.
+# Keep bash and curl to run the codecov bash script.
 ENV DOCKERIZE_VERSION v0.6.0
-RUN apk add --no-cache curl openssl && \
+RUN apk add --no-cache bash curl openssl && \
     curl -sSL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar -C /usr/local/bin -xzvf - && \
-    apk del curl openssl
+    apk del openssl
 
-# The working directory for our library.
-RUN mkdir -p /app
+# Only install packages if there is an update.
+COPY /package.json /yarn.lock /app/
 WORKDIR /app
+RUN yarn
 
-# Install Node.js
-COPY ./idearium-lib/package.json /app/
-RUN npm install --silent
+COPY / /app
 
-# Copy across everything else (.dockerignore at play).
-COPY ./idearium-lib /app
-
-# Use dockerize to wait for RabbitMQ to be ready.
-# This will help to minimize issues on Codefresh.
-CMD ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "20s", "npm", "test"]
+CMD dockerize -wait tcp://mongo:27017 -wait tcp://rabbitmq:5672 -wait tcp://redis:6379 -timeout 20s yarn test-app

@@ -1,5 +1,16 @@
 # idearium-lib
 
+## v2.0.0 (17 July 2018)
+
+- Removed Vagrant.
+- Moved directory back in to the root.
+- Updated RabbitMQ to allow reconnects.
+- Updated Redis to allow reconnects.
+
+### Breaking change
+
+- Updated apm to have a function `start` that needs to be called. This allows the exception handler to be overridden.
+
 ## v1.0.0 (26 June 2018)
 
 - Initial stable release.
