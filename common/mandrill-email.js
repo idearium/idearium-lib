@@ -21,6 +21,7 @@ class MandrillEmail extends Email {
 
         // Set default fromEmail.
         message.fromEmail = message.fromEmail || config.get('fromEmail');
+        message.fromName = message.fromName || config.get('fromName');
 
         // Execute `send` on the super class.
         super.send(message, (err, result) => {

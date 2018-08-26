@@ -225,6 +225,53 @@ describe('class Email', () => {
 
             });
 
+            test('should support the fromName property', (done) => {
+
+                // eslint-disable-next-line new-cap
+                const mitm = Mitm();
+                const email = new Email(mandrillApiKey, emailServices.Mandrill);
+
+                email.send({
+                    fromEmail: 'from@test.com',
+                    fromName: 'From name',
+                    html: '<p>hello</p>',
+                    sendAt: '2004',
+                    subject: 'Subject',
+                    to: [
+                        {
+                            email: 'test@test.com',
+                            name: 'test',
+                        },
+                    ],
+                }, function (err) {
+
+                    return done(err);
+
+                });
+
+                mitm.on('request', function (req) {
+
+                    let body = '';
+
+                    /* eslint-disable max-nested-callbacks */
+                    req.on('data', (data) => (body += data));
+
+                    req.on('end', () => {
+
+                        expect(body).toMatch(/from_name":"From name/);
+
+                        // Disable this, so it doesn't error other issues.
+                        mitm.disable();
+
+                        return done();
+
+                    });
+                    /* eslint-enable max-nested-callbacks */
+
+                });
+
+            });
+
         });
 
     });
