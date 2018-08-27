@@ -1,5 +1,9 @@
 # idearium-lib
 
+## Unreleased
+
+- Enable the `fromName` property in Mandrill. This is automatically converted to the Mandrill required format `from_name`.
+
 ## v3.0.0 (26 July 2018)
 
 - Codecov now only runs in Codefresh.
