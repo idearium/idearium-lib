@@ -2,7 +2,7 @@
 
 ## v3.0.1 (27 August 2018)
 
-- Enable the `fromName` property in Mandrill. This is automatically converted to the Mandrill required format `from_name`.
+- Enable the `fromName` property in Mandrill. This is automatically converted to the Mandrill property `from_name`.
 
 ## v3.0.0 (26 July 2018)
 
