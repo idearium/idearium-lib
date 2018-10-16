@@ -1,7 +1,13 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const { find, findOne } = require('../lib/query');
+const {
+    find,
+    findOne,
+    queryPlugin,
+} = require('../lib/query');
+
+mongoose.plugin(queryPlugin);
 
 describe('query', () => {
 
@@ -118,6 +124,40 @@ describe('query', () => {
         expect(_conditions._id.toString()).toBe('5938a0aefb6e41e0e8368d00');
         expect(_mongooseOptions.lean).toBe(true);
         expect(Object.keys(_fields).sort()).toEqual(['_id']);
+
+    });
+
+    test('contains a plugin with the findOneDocument method', () => {
+
+        const queryObject = userModel.findOneDocument({ filter: { _id: '5938a0aefb6e41e0e8368d00' } });
+
+        const {
+            _conditions,
+            _fields,
+            _mongooseOptions
+        } = queryObject;
+
+        expect(_conditions._id.toString()).toBe('5938a0aefb6e41e0e8368d00');
+        expect(_mongooseOptions.lean).toBe(true);
+        expect(Object.keys(_fields).sort()).toEqual(['_id']);
+
+    });
+
+    test('contains a plugin with the findDocuments method', () => {
+
+        const queryObject = userModel.findDocuments({ filter: { _id: '5938a0aefb6e41e0e8368d00' } });
+
+        const {
+            _conditions,
+            _fields,
+            _mongooseOptions,
+            options
+        } = queryObject;
+
+        expect(_conditions._id.toString()).toBe('5938a0aefb6e41e0e8368d00');
+        expect(_mongooseOptions.lean).toBe(true);
+        expect(Object.keys(_fields).sort()).toEqual(['_id']);
+        expect(options.limit).toBe(10);
 
     });
 
