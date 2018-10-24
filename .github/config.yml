@@ -1,0 +1,6 @@
+updateDocsComment: >
+  Oops, did you forget to update the documentation?
+updateDocsTargetFiles:
+  - CHANGELOG
+  - README
+  - docs/
