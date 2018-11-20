@@ -1,7 +1,8 @@
 # idearium-lib
 
-[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=idearium&repoName=idearium-lib&branch=master&pipelineName=idearium-lib&accountName=smebberson&type=cf-1)]( https://g.codefresh.io/repositories/idearium/idearium-lib/builds?filter=trigger:build;branch:master;service:58d45bc80d3ba3010087a0a8~idearium-lib)
-[![codecov](https://codecov.io/gh/idearium/idearium-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/idearium/idearium-lib)
+| **Build Status** | **Code Coverage** |
+|------------------|-------------------|
+| [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=idearium&repoName=idearium-lib&branch=master&pipelineName=idearium-lib&accountName=smebberson&type=cf-1)]( https://g.codefresh.io/repositories/idearium/idearium-lib/builds?filter=trigger:build;branch:master;service:58d45bc80d3ba3010087a0a8~idearium-lib) | [![codecov](https://codecov.io/gh/idearium/idearium-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/idearium/idearium-lib) |
 
 This repository contains `idearium-lib`, which is a Node.js shared library for Idearium applications running on Node.js. Any code that is used across multiple applications (or within multiple Docker containers) should live here.
 
