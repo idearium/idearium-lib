@@ -1,5 +1,10 @@
 # idearium-lib
 
+## Unreleased
+
+- This library is now a monorepo.
+- `@idearium/log` replaces the previous logger.
+
 ## v3.0.0 (26 July 2018)
 
 - Codecov now only runs in Codefresh.
