@@ -38,10 +38,7 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
-    {page: 'help', label: 'Help'},
-    {blog: true, label: 'Blog'},
+    { doc: 'log', label: 'Packages' },
   ],
 
   // If you have users set above, you add it here:
@@ -54,8 +51,8 @@ const siteConfig = {
 
   /* Colors for website */
   colors: {
-    primaryColor: '#457238',
-    secondaryColor: '#304f27',
+    primaryColor: '#EB1484',
+    secondaryColor: '#7C1744',
   },
 
   /* Custom fonts for website */
@@ -73,7 +70,7 @@ const siteConfig = {
   */
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} Your Name or Your Company Name`,
+  copyright: `Copyright © ${new Date().getFullYear()} Idearium Pty ltd`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
