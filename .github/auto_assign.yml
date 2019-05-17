@@ -1,7 +1,0 @@
-addAssignees: true
-addReviewers: true
-numberOfReviewers: 0
-reviewers:
-  - idearium/developers
-skipKeywords:
-  - wip
