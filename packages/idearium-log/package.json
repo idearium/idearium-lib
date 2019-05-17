@@ -1,0 +1,19 @@
+{
+  "name": "idearium-log",
+  "version": "0.1.0",
+  "description": "Idearium logger",
+  "main": "index.js",
+  "repository": "https://github.com/idearium/idearium-lib",
+  "author": "Allan Chau <allan.chau@icloud.com>",
+  "license": "MIT",
+  "bin": {
+    "log-remote": "bin/remote.js"
+  },
+  "dependencies": {
+    "pino": "^5.12.5",
+    "pino-pretty": "^3.0.0",
+    "pump": "^3.0.0",
+    "r7insight_node": "^1.8.2",
+    "split2": "^3.1.1"
+  }
+}
