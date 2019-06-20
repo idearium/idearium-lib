@@ -1,9 +1,22 @@
 /* your custom css */
 
+.fixedHeaderContainer {
+    background-color: #F0F0F0;
+}
+
+.headerTitleWithLogo {
+    color: rgb(36, 41, 46);
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
 @media only screen and (min-width: 1024px) {
+
+    .navigationSlider .slidingNav ul li a {
+        color: rgba(36, 41, 46, 0.8);
+    }
+
 }
 
 @media only screen and (max-width: 1023px) {

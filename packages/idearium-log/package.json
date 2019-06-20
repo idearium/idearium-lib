@@ -1,13 +1,13 @@
 {
   "name": "idearium-log",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "Idearium logger",
   "main": "index.js",
   "repository": "https://github.com/idearium/idearium-lib",
   "author": "Allan Chau <allan.chau@icloud.com>",
   "license": "MIT",
   "bin": {
-    "log-remote": "bin/remote.js"
+    "insightops": "bin/insightops.js"
   },
   "dependencies": {
     "pino": "^5.12.6",
