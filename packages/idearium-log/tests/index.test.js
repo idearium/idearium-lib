@@ -31,7 +31,7 @@ let processEnv = process.env;
 
 beforeEach(() => {
     jest.resetModules();
-    process.env = { ...processEnv };
+    process.env = Object.assign({}, processEnv);
 });
 
 afterEach(() => {
