@@ -18,11 +18,12 @@
     ]
   },
   "devDependencies": {
+    "@idearium/eslint-config": "^3.0.1",
     "babel-eslint": "^10.0.2",
     "eslint": "^5.16.0",
-    "@idearium/eslint-config": "^3.0.1",
     "eslint-plugin-eslint-comments": "^3.1.2",
     "husky": "^2.4.1",
+    "jest": "^24.8.0",
     "lint-staged": "^8.2.1"
   }
 }
