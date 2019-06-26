@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
+/* eslint-disable no-process-env */
+if (process.env.LOG_REMOTE !== 'true') {
+    return;
+}
+/* eslint-enable no-process-env */
+
 const Logger = require('r7insight_node');
 const pump = require('pump');
 const split = require('split2');
