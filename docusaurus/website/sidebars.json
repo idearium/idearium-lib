@@ -1,9 +1,5 @@
 {
-  "docs": {
-    "Packages": [
-        "log",
-        "mongo",
-        "mq"
-    ]
-  }
+    "docs": {
+        "Packages": ["log", "mongo", "mq"]
+    }
 }

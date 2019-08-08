@@ -7,8 +7,8 @@ const users = [
         caption: 'User1',
         image: '/img/undraw_open_source.svg',
         infoLink: 'https://www.facebook.com',
-        pinned: true,
-    },
+        pinned: true
+    }
 ];
 
 const siteConfig = {
@@ -16,7 +16,7 @@ const siteConfig = {
     cleanUrl: true,
     colors: {
         primaryColor: '#EB1484',
-        secondaryColor: '#7C1744',
+        secondaryColor: '#7C1744'
     },
     copyright: `Copyright © ${new Date().getFullYear()} Idearium Pty ltd`,
     favicon: 'img/favicon.ico',
@@ -33,7 +33,7 @@ const siteConfig = {
     title: 'Idearium lib',
     twitterImage: 'img/undraw_tweetstorm.svg',
     url: 'https://idearium.github.io',
-    users,
+    users
 };
 
 module.exports = siteConfig;

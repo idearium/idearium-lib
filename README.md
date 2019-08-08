@@ -22,4 +22,5 @@ It's that easy! You can now make changes to the documentation and they will be l
 ### Libraries
 
 All the libraries are stored under `packages/*`. We currently have the following:
-- `log` - To manage our application logging and optionally log to a remote server (InsightOps).
+
+-   `log` - To manage our application logging and optionally log to a remote server (InsightOps).

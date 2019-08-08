@@ -27,7 +27,7 @@ if (!token) {
 
 const { stream } = Logger.bunyanStream({
     region,
-    token,
+    token
 });
 
 pump(process.stdin, split(), stream);
