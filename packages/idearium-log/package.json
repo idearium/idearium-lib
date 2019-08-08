@@ -1,26 +1,26 @@
 {
-  "name": "idearium-log",
-  "version": "1.0.0-alpha.1",
-  "description": "Idearium logger",
-  "main": "index.js",
-  "repository": "https://github.com/idearium/idearium-lib",
-  "author": "Allan Chau <allan.chau@icloud.com>",
-  "license": "MIT",
-  "bin": {
-    "insightops": "bin/insightops.js"
-  },
-  "scripts": {
-    "test": "jest"
-  },
-  "dependencies": {
-    "pino": "^5.12.6",
-    "pino-pretty": "^3.2.0",
-    "pump": "^3.0.0",
-    "r7insight_node": "^1.8.2",
-    "require-main-filename": "^2.0.0"
-  },
-  "devDependencies": {
-    "flush-write-stream": "^2.0.0",
-    "split2": "^3.1.1"
-  }
+    "name": "idearium-log",
+    "version": "1.0.0-alpha.1",
+    "description": "Idearium logger",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan.chau@icloud.com>",
+    "license": "MIT",
+    "bin": {
+        "insightops": "bin/insightops.js"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "pino": "5.13.2",
+        "pino-pretty": "3.2.0",
+        "pump": "3.0.0",
+        "r7insight_node": "1.8.3",
+        "require-main-filename": "2.0.0"
+    },
+    "devDependencies": {
+        "flush-write-stream": "2.0.0",
+        "split2": "3.1.1"
+    }
 }
