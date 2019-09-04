@@ -1,0 +1,16 @@
+{
+    "name": "@idearium/mq",
+    "version": "1.0.0",
+    "description": "Idearium RabbitMQ integration",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan.chau@icloud.com>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "@idearium/log": "1.0.0",
+        "amqplib": "0.5.5"
+    }
+}
