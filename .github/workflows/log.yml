@@ -1,0 +1,19 @@
+name: Test @idearium/log
+on: [push]
+#     push:
+#         paths:
+#             - 'packages/log/**'
+
+jobs:
+    build:
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
+            - name: Setup Node.js
+              uses: actions/setup-node@v1
+            - name: Setup yarn
+              run: cd packages/log && yarn install
+            - name: Test
+              run: cd packages/log && yarn test
