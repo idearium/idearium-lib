@@ -44,7 +44,7 @@ test('logs to the console', async () => {
     process.env.PINO_PRETTY_PRINT = 'false';
 
     const stream = sink();
-    const log = require('../').init({ stream });
+    const log = require('../')({ stream });
 
     log.info('test');
 
@@ -59,7 +59,7 @@ test('does not log if "LOG_ENABLED" is set to "false"', async () => {
 
     process.env.LOG_ENABLED = 'false';
 
-    const log = require('../');
+    const log = require('../')();
 
     expect(log.trace.name).toBe('noop');
     expect(log.debug.name).toBe('noop');
@@ -74,7 +74,7 @@ test('only logs at the specified "LOG_LEVEL" and above', async () => {
 
     process.env.LOG_LEVEL = 'warn';
 
-    const log = require('../');
+    const log = require('../')();
 
     expect(log.trace.name).toBe('noop');
     expect(log.debug.name).toBe('noop');
@@ -91,7 +91,7 @@ test('redacts paths specified in "PINO_REDACT_PATHS"', async () => {
     process.env.PINO_REDACT_PATHS = 'redacttest';
 
     const stream = sink();
-    const log = require('../').init({ stream });
+    const log = require('../')({ stream });
 
     log.info({ redacttest: 'this should not appear' }, 'test');
 
@@ -106,7 +106,7 @@ test('logs to a remote server if "LOG_REMOTE" is "true"', async () => {
     process.env.LOG_REMOTE = 'true';
 
     const stream = sink();
-    const log = require('../').init({ stream });
+    const log = require('../')({ stream });
 
     log.info('test');
 
