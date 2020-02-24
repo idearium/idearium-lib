@@ -1,8 +1,8 @@
-name: Test @idearium/log
+name: Test @idearium/encryption
 on:
     push:
         paths:
-            - 'packages/log/**'
+            - 'packages/encryption/**'
 
 jobs:
     build:
@@ -33,4 +33,4 @@ jobs:
             - name: Setup yarn
               run: yarn install
             - name: Test
-              run: yarn workspace @idearium/log test
+              run: yarn workspace @idearium/encryption test

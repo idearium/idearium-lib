@@ -4,7 +4,8 @@
 
 -   This library is now a monorepo.
 -   `@idearium/log` replaces the previous logger.
--   Added a workflow for testing `@idearium/log`.
+-   `@idearium/encryption` for easy encrypting/decrypting.
+-   Added GitHub workflows for all current packages.
 
 ## v3.0.0 (26 July 2018)
 
