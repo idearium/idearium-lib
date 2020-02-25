@@ -1,4 +1,4 @@
-name: Test @idearium/log
+name: '@idearium/log'
 on:
     push:
         paths:
