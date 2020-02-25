@@ -1,0 +1,12 @@
+{
+    "name": "@idearium/lists",
+    "version": "1.0.0",
+    "description": "A package to make working with our application lists easy.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@scottmebberson.com>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    }
+}
