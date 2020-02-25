@@ -7,6 +7,7 @@
 -   `@idearium/encryption` for easy encrypting/decrypting.
 -   `@idearium/lists` for easy lists use.
 -   Added GitHub workflows for all current packages.
+-   Added ability to publish @idearium/lists to NPM.
 
 ## v3.0.0 (26 July 2018)
 
