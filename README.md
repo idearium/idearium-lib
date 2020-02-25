@@ -23,4 +23,6 @@ It's that easy! You can now make changes to the documentation and they will be l
 
 All the libraries are stored under `packages/*`. We currently have the following:
 
--   `log` - To manage our application logging and optionally log to a remote server (InsightOps).
+-   `@idearium/encryption` - Making it painless to encrypt and decrypt plain text.
+-   `@idearium/lists` - Manage multiple lists of information and retrieve the data in various formats.
+-   `@idearium/log` - To manage application logging and optionally log to a remote server (InsightOps).
