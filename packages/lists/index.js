@@ -22,6 +22,21 @@ module.exports = ({ lists = [] } = {}) => ({
         return lists[group][list];
     },
 
+    // Get the key of a list, from a group.
+    getListKey({ group, list, value } = {}) {
+        if (!checkDefaults({ group, list, lists })) {
+            return null;
+        }
+
+        for (const key in lists[group][list]) {
+            if (lists[group][list][key] === value) {
+                return key;
+            }
+        }
+
+        return null;
+    },
+
     // Get the value of a list, from a group.
     getListValue({ group, list, key } = {}) {
         if (

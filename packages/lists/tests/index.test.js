@@ -14,6 +14,7 @@ test('lists will return an object with properties', () => {
     expect(typeof l).toBe('object');
     expect(l).toHaveProperty('getKeys');
     expect(l).toHaveProperty('getList');
+    expect(l).toHaveProperty('getListKey');
     expect(l).toHaveProperty('getListValue');
     expect(l).toHaveProperty('getSelectList');
     expect(l).toHaveProperty('getSelectListWithKeys');
@@ -21,6 +22,7 @@ test('lists will return an object with properties', () => {
     expect(l).toHaveProperty('getValues');
     expect(typeof l.getKeys).toBe('function');
     expect(typeof l.getList).toBe('function');
+    expect(typeof l.getListKey).toBe('function');
     expect(typeof l.getListValue).toBe('function');
     expect(typeof l.getSelectList).toBe('function');
     expect(typeof l.getSelectListWithKeys).toBe('function');
@@ -70,9 +72,74 @@ describe('lists.getList', () => {
     });
 });
 
+describe('lists.getListKey', () => {
+    test('will return null if provided nothing', () => {
+        expect(lists.getListKey()).toEqual(null);
+    });
+    test('will return null if the value does not exist', () => {
+        expect(
+            lists.getListKey({
+                group: 'documents',
+                list: 'status',
+                value: 'missing'
+            })
+        ).toEqual(null);
+    });
+    test('can return a key from different lists within a group', () => {
+        expect(
+            lists.getListKey({
+                group: 'documents',
+                list: 'status',
+                value: 'Closed'
+            })
+        ).toEqual('closed');
+        expect(
+            lists.getListKey({
+                group: 'documents',
+                list: 'actions',
+                value: 'close'
+            })
+        ).toEqual('status/close');
+    });
+    test('can return a key from different group lists', () => {
+        expect(
+            lists.getListKey({
+                group: 'user',
+                list: 'groups',
+                value: 'Admin'
+            })
+        ).toEqual('admin');
+        expect(
+            lists.getListKey({
+                group: 'common',
+                list: 'states',
+                value: 'Northern Territory'
+            })
+        ).toEqual('NT');
+    });
+    test('will return a key from a list', () => {
+        expect(
+            lists.getListKey({
+                group: 'documents',
+                list: 'actions',
+                value: 'close'
+            })
+        ).toEqual('status/close');
+    });
+});
+
 describe('lists.getListValue', () => {
     test('will return null if provided nothing', () => {
         expect(lists.getListValue()).toEqual(null);
+    });
+    test('will return null if the key does not exist', () => {
+        expect(
+            lists.getListValue({
+                group: 'documents',
+                key: 'missing',
+                list: 'status'
+            })
+        ).toEqual(null);
     });
     test('can return a value from different lists within a group', () => {
         expect(
