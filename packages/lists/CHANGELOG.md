@@ -1,6 +1,6 @@
 # @idearium/lists
 
-## Unreleased
+## v1.0.0-beta.2
 
 -   `getValues` was renamed to `getKeys`.
 -   `getLabels` was renamed to `getValues`.
