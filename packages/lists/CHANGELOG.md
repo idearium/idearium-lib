@@ -4,8 +4,8 @@
 
 -   Functionality of `getList` has been moved to `getLabels`.
 -   `getList` now returns the unmodified list.
--   Functionality of `getSelectList` has been moved to `getSelectListWithLabels`.
--   Functionality of `getSelectListWithKeys` has been moved to `getSelectList`.
+-   Functionality of `getSelectListWithKeys` has been renamed to `getSelectListWithValues`.
+-   Added `getSelectListWithLabels`.
 
 ## v1.0.0-beta.0
 
