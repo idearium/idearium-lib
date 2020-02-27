@@ -17,12 +17,14 @@ test('lists will return an object with properties', () => {
     expect(l).toHaveProperty('getListValue');
     expect(l).toHaveProperty('getSelectList');
     expect(l).toHaveProperty('getSelectListWithLabels');
+    expect(l).toHaveProperty('getSelectListWithValues');
     expect(l).toHaveProperty('getValues');
     expect(typeof l.getLabels).toBe('function');
     expect(typeof l.getList).toBe('function');
     expect(typeof l.getListValue).toBe('function');
     expect(typeof l.getSelectList).toBe('function');
     expect(typeof l.getSelectListWithLabels).toBe('function');
+    expect(typeof l.getSelectListWithValues).toBe('function');
     expect(typeof l.getValues).toBe('function');
 });
 
@@ -257,6 +259,70 @@ describe('lists.getSelectListWithLabels', () => {
             { label: 'close', value: 'close' },
             { label: 'convert', value: 'convert' },
             { label: 'open', value: 'open' }
+        ]);
+    });
+});
+
+describe('lists.getSelectListWithValues', () => {
+    test('will return an empty array if provided nothing', () => {
+        expect(lists.getSelectListWithValues()).toEqual([]);
+    });
+    test('can return label/value pairs from different lists within a group', () => {
+        expect(
+            lists.getSelectListWithValues({
+                group: 'documents',
+                list: 'status'
+            })
+        ).toEqual([
+            { label: 'closed', value: 'closed' },
+            { label: 'converted', value: 'converted' },
+            { label: 'open', value: 'open' }
+        ]);
+        expect(
+            lists.getSelectListWithValues({
+                group: 'documents',
+                list: 'actions'
+            })
+        ).toEqual([
+            { label: 'status/close', value: 'status/close' },
+            { label: 'status/convert', value: 'status/convert' },
+            { label: 'status/open', value: 'status/open' }
+        ]);
+    });
+    test('can return values from different group lists', () => {
+        expect(
+            lists.getSelectListWithValues({ group: 'user', list: 'groups' })
+        ).toEqual([
+            { label: 'admin', value: 'admin' },
+            { label: 'editor', value: 'editor' },
+            { label: 'reviewer', value: 'reviewer' }
+        ]);
+        expect(
+            lists.getSelectListWithValues({ group: 'common', list: 'states' })
+        ).toEqual([
+            {
+                label: 'ACT',
+                value: 'ACT'
+            },
+            { label: 'NSW', value: 'NSW' },
+            { label: 'NT', value: 'NT' },
+            { label: 'QLD', value: 'QLD' },
+            { label: 'SA', value: 'SA' },
+            { label: 'TAS', value: 'TAS' },
+            { label: 'VIC', value: 'VIC' },
+            { label: 'WA', value: 'WA' }
+        ]);
+    });
+    test('will return the values for a list', () => {
+        expect(
+            lists.getSelectListWithValues({
+                group: 'documents',
+                list: 'actions'
+            })
+        ).toEqual([
+            { label: 'status/close', value: 'status/close' },
+            { label: 'status/convert', value: 'status/convert' },
+            { label: 'status/open', value: 'status/open' }
         ]);
     });
 });

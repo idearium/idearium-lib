@@ -60,6 +60,18 @@ module.exports = ({ lists = [] } = {}) => ({
         }));
     },
 
+    // Get an array of values from the lib lists file, formatted for a select field.
+    getSelectListWithValues({ group, list } = {}) {
+        if (!checkDefaults({ group, list, lists })) {
+            return [];
+        }
+
+        return Object.keys(lists[group][list]).map((field) => ({
+            label: field,
+            value: field
+        }));
+    },
+
     // Get an array of keys from the lib lists file.
     getValues({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
