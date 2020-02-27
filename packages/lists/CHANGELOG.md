@@ -1,6 +1,6 @@
 # @idearium/lists
 
-## Unreleased
+## v1.0.0-beta.1
 
 -   Functionality of `getList` has been moved to `getLabels`.
 -   `getList` now returns the unmodified list.
