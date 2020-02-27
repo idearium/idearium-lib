@@ -12,90 +12,39 @@ test('lists will return an object with properties', () => {
     const l = fn();
 
     expect(typeof l).toBe('object');
-    expect(l).toHaveProperty('getKeys');
+    expect(l).toHaveProperty('getLabels');
     expect(l).toHaveProperty('getList');
     expect(l).toHaveProperty('getListValue');
     expect(l).toHaveProperty('getSelectList');
-    expect(l).toHaveProperty('getSelectListWithKeys');
-    expect(typeof l.getKeys).toBe('function');
+    expect(l).toHaveProperty('getSelectListWithLabels');
+    expect(l).toHaveProperty('getValues');
+    expect(typeof l.getLabels).toBe('function');
     expect(typeof l.getList).toBe('function');
     expect(typeof l.getListValue).toBe('function');
     expect(typeof l.getSelectList).toBe('function');
-    expect(typeof l.getSelectListWithKeys).toBe('function');
+    expect(typeof l.getSelectListWithLabels).toBe('function');
+    expect(typeof l.getValues).toBe('function');
 });
 
-describe('lists.getKeys', () => {
+describe('lists.getLabels', () => {
     test('will return an empty array if provided nothing', () => {
-        expect(lists.getKeys()).toEqual([]);
-    });
-
-    test('can return keys from different lists within a group', () => {
-        expect(lists.getKeys({ group: 'documents', list: 'status' })).toEqual([
-            'closed',
-            'converted',
-            'open'
-        ]);
-        expect(lists.getKeys({ group: 'documents', list: 'actions' })).toEqual([
-            'status/close',
-            'status/convert',
-            'status/open'
-        ]);
-    });
-
-    test('can return keys from different group lists', () => {
-        expect(lists.getKeys({ group: 'user', list: 'groups' })).toEqual([
-            'admin',
-            'editor',
-            'reviewer'
-        ]);
-        expect(lists.getKeys({ group: 'common', list: 'states' })).toEqual([
-            'ACT',
-            'NSW',
-            'NT',
-            'QLD',
-            'SA',
-            'TAS',
-            'VIC',
-            'WA'
-        ]);
-    });
-
-    test('will return the keys for a list', () => {
-        expect(lists.getKeys({ group: 'common', list: 'days' })).toEqual([
-            'friday',
-            'monday',
-            'saturday',
-            'sunday',
-            'thursday',
-            'tuesday',
-            'wednesday'
-        ]);
-    });
-});
-
-describe('lists.getList', () => {
-    test('will return an empty array if provided nothing', () => {
-        expect(lists.getList()).toEqual([]);
+        expect(lists.getLabels()).toEqual([]);
     });
     test('can return values from different lists within a group', () => {
-        expect(lists.getList({ group: 'documents', list: 'status' })).toEqual([
-            'Closed',
-            'Converted',
-            'Open'
-        ]);
-        expect(lists.getList({ group: 'documents', list: 'actions' })).toEqual([
-            'close',
-            'convert',
-            'open'
-        ]);
+        expect(lists.getLabels({ group: 'documents', list: 'status' })).toEqual(
+            ['Closed', 'Converted', 'Open']
+        );
+        expect(
+            lists.getLabels({ group: 'documents', list: 'actions' })
+        ).toEqual(['close', 'convert', 'open']);
     });
     test('can return values from different group lists', () => {
-        expect(lists.getList({ group: 'user', list: 'groups' })).toEqual([
+        expect(lists.getLabels({ group: 'user', list: 'groups' })).toEqual([
             'Admin',
             'Editor',
             'Reviewer'
         ]);
-        expect(lists.getList({ group: 'common', list: 'states' })).toEqual([
+        expect(lists.getLabels({ group: 'common', list: 'states' })).toEqual([
             'Australian Capital Territory',
             'New South Wales',
             'Northern Territory',
@@ -107,11 +56,51 @@ describe('lists.getList', () => {
         ]);
     });
     test('will return the values for a list', () => {
-        expect(lists.getList({ group: 'documents', list: 'actions' })).toEqual([
-            'close',
-            'convert',
-            'open'
-        ]);
+        expect(
+            lists.getLabels({ group: 'documents', list: 'actions' })
+        ).toEqual(['close', 'convert', 'open']);
+    });
+});
+
+describe('lists.getList', () => {
+    test('will return an empty array if provided nothing', () => {
+        expect(lists.getList()).toEqual([]);
+    });
+    test('can return values from different lists within a group', () => {
+        expect(lists.getList({ group: 'documents', list: 'status' })).toEqual({
+            closed: 'Closed',
+            converted: 'Converted',
+            open: 'Open'
+        });
+        expect(lists.getList({ group: 'documents', list: 'actions' })).toEqual({
+            'status/close': 'close',
+            'status/convert': 'convert',
+            'status/open': 'open'
+        });
+    });
+    test('can return values from different group lists', () => {
+        expect(lists.getList({ group: 'user', list: 'groups' })).toEqual({
+            admin: 'Admin',
+            editor: 'Editor',
+            reviewer: 'Reviewer'
+        });
+        expect(lists.getList({ group: 'common', list: 'states' })).toEqual({
+            ACT: 'Australian Capital Territory',
+            NSW: 'New South Wales',
+            NT: 'Northern Territory',
+            QLD: 'Queensland',
+            SA: 'South Australia',
+            TAS: 'Tasmania',
+            VIC: 'Victoria',
+            WA: 'Western Australia'
+        });
+    });
+    test('will return the values for a list', () => {
+        expect(lists.getList({ group: 'documents', list: 'actions' })).toEqual({
+            'status/close': 'close',
+            'status/convert': 'convert',
+            'status/open': 'open'
+        });
     });
 });
 
@@ -166,12 +155,68 @@ describe('lists.getSelectList', () => {
         expect(
             lists.getSelectList({ group: 'documents', list: 'status' })
         ).toEqual([
+            { label: 'Closed', value: 'closed' },
+            { label: 'Converted', value: 'converted' },
+            { label: 'Open', value: 'open' }
+        ]);
+        expect(
+            lists.getSelectList({ group: 'documents', list: 'actions' })
+        ).toEqual([
+            { label: 'close', value: 'status/close' },
+            { label: 'convert', value: 'status/convert' },
+            { label: 'open', value: 'status/open' }
+        ]);
+    });
+    test('can return values from different group lists', () => {
+        expect(lists.getSelectList({ group: 'user', list: 'groups' })).toEqual([
+            { label: 'Admin', value: 'admin' },
+            { label: 'Editor', value: 'editor' },
+            { label: 'Reviewer', value: 'reviewer' }
+        ]);
+        expect(
+            lists.getSelectList({ group: 'common', list: 'states' })
+        ).toEqual([
+            { label: 'Australian Capital Territory', value: 'ACT' },
+            { label: 'New South Wales', value: 'NSW' },
+            { label: 'Northern Territory', value: 'NT' },
+            { label: 'Queensland', value: 'QLD' },
+            { label: 'South Australia', value: 'SA' },
+            { label: 'Tasmania', value: 'TAS' },
+            { label: 'Victoria', value: 'VIC' },
+            { label: 'Western Australia', value: 'WA' }
+        ]);
+    });
+    test('will return the values for a list', () => {
+        expect(
+            lists.getSelectList({ group: 'documents', list: 'actions' })
+        ).toEqual([
+            { label: 'close', value: 'status/close' },
+            { label: 'convert', value: 'status/convert' },
+            { label: 'open', value: 'status/open' }
+        ]);
+    });
+});
+
+describe('lists.getSelectListWithLabels', () => {
+    test('will return an empty array if provided nothing', () => {
+        expect(lists.getSelectListWithLabels()).toEqual([]);
+    });
+    test('can return label/value pairs from different lists within a group', () => {
+        expect(
+            lists.getSelectListWithLabels({
+                group: 'documents',
+                list: 'status'
+            })
+        ).toEqual([
             { label: 'Closed', value: 'Closed' },
             { label: 'Converted', value: 'Converted' },
             { label: 'Open', value: 'Open' }
         ]);
         expect(
-            lists.getSelectList({ group: 'documents', list: 'actions' })
+            lists.getSelectListWithLabels({
+                group: 'documents',
+                list: 'actions'
+            })
         ).toEqual([
             { label: 'close', value: 'close' },
             { label: 'convert', value: 'convert' },
@@ -179,13 +224,15 @@ describe('lists.getSelectList', () => {
         ]);
     });
     test('can return values from different group lists', () => {
-        expect(lists.getSelectList({ group: 'user', list: 'groups' })).toEqual([
+        expect(
+            lists.getSelectListWithLabels({ group: 'user', list: 'groups' })
+        ).toEqual([
             { label: 'Admin', value: 'Admin' },
             { label: 'Editor', value: 'Editor' },
             { label: 'Reviewer', value: 'Reviewer' }
         ]);
         expect(
-            lists.getSelectList({ group: 'common', list: 'states' })
+            lists.getSelectListWithLabels({ group: 'common', list: 'states' })
         ).toEqual([
             {
                 label: 'Australian Capital Territory',
@@ -202,7 +249,10 @@ describe('lists.getSelectList', () => {
     });
     test('will return the values for a list', () => {
         expect(
-            lists.getSelectList({ group: 'documents', list: 'actions' })
+            lists.getSelectListWithLabels({
+                group: 'documents',
+                list: 'actions'
+            })
         ).toEqual([
             { label: 'close', value: 'close' },
             { label: 'convert', value: 'convert' },
@@ -211,54 +261,47 @@ describe('lists.getSelectList', () => {
     });
 });
 
-describe('lists.getSelectListWithKeys', () => {
+describe('lists.getValues', () => {
     test('will return an empty array if provided nothing', () => {
-        expect(lists.getSelectListWithKeys()).toEqual([]);
+        expect(lists.getValues()).toEqual([]);
     });
-    test('can return label/value pairs from different lists within a group', () => {
+
+    test('can return keys from different lists within a group', () => {
+        expect(lists.getValues({ group: 'documents', list: 'status' })).toEqual(
+            ['closed', 'converted', 'open']
+        );
         expect(
-            lists.getSelectListWithKeys({ group: 'documents', list: 'status' })
-        ).toEqual([
-            { label: 'Closed', value: 'closed' },
-            { label: 'Converted', value: 'converted' },
-            { label: 'Open', value: 'open' }
-        ]);
-        expect(
-            lists.getSelectListWithKeys({ group: 'documents', list: 'actions' })
-        ).toEqual([
-            { label: 'close', value: 'status/close' },
-            { label: 'convert', value: 'status/convert' },
-            { label: 'open', value: 'status/open' }
-        ]);
+            lists.getValues({ group: 'documents', list: 'actions' })
+        ).toEqual(['status/close', 'status/convert', 'status/open']);
     });
-    test('can return values from different group lists', () => {
-        expect(
-            lists.getSelectListWithKeys({ group: 'user', list: 'groups' })
-        ).toEqual([
-            { label: 'Admin', value: 'admin' },
-            { label: 'Editor', value: 'editor' },
-            { label: 'Reviewer', value: 'reviewer' }
+
+    test('can return keys from different group lists', () => {
+        expect(lists.getValues({ group: 'user', list: 'groups' })).toEqual([
+            'admin',
+            'editor',
+            'reviewer'
         ]);
-        expect(
-            lists.getSelectListWithKeys({ group: 'common', list: 'states' })
-        ).toEqual([
-            { label: 'Australian Capital Territory', value: 'ACT' },
-            { label: 'New South Wales', value: 'NSW' },
-            { label: 'Northern Territory', value: 'NT' },
-            { label: 'Queensland', value: 'QLD' },
-            { label: 'South Australia', value: 'SA' },
-            { label: 'Tasmania', value: 'TAS' },
-            { label: 'Victoria', value: 'VIC' },
-            { label: 'Western Australia', value: 'WA' }
+        expect(lists.getValues({ group: 'common', list: 'states' })).toEqual([
+            'ACT',
+            'NSW',
+            'NT',
+            'QLD',
+            'SA',
+            'TAS',
+            'VIC',
+            'WA'
         ]);
     });
-    test('will return the values for a list', () => {
-        expect(
-            lists.getSelectListWithKeys({ group: 'documents', list: 'actions' })
-        ).toEqual([
-            { label: 'close', value: 'status/close' },
-            { label: 'convert', value: 'status/convert' },
-            { label: 'open', value: 'status/open' }
+
+    test('will return the keys for a list', () => {
+        expect(lists.getValues({ group: 'common', list: 'days' })).toEqual([
+            'friday',
+            'monday',
+            'saturday',
+            'sunday',
+            'thursday',
+            'tuesday',
+            'wednesday'
         ]);
     });
 });

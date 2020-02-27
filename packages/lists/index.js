@@ -4,13 +4,15 @@ const checkDefaults = ({ group, list, lists } = {}) =>
     lists[group] && lists[group][list];
 
 module.exports = ({ lists = [] } = {}) => ({
-    // Get an array of keys from the lib lists file.
-    getKeys({ group, list } = {}) {
+    // Get an array of values from the lib lists file.
+    getLabels({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
             return [];
         }
 
-        return Object.keys(lists[group][list]);
+        return Object.keys(lists[group][list]).map(
+            (field) => lists[group][list][field]
+        );
     },
 
     // Get an array of values from the lib lists file.
@@ -19,9 +21,7 @@ module.exports = ({ lists = [] } = {}) => ({
             return [];
         }
 
-        return Object.keys(lists[group][list]).map(
-            (field) => lists[group][list][field]
-        );
+        return lists[group][list];
     },
 
     // Get the value of a list, from a group.
@@ -44,19 +44,28 @@ module.exports = ({ lists = [] } = {}) => ({
 
         return Object.keys(lists[group][list]).map((field) => ({
             label: lists[group][list][field],
-            value: lists[group][list][field]
+            value: field
         }));
     },
 
     // Get an array of values from the lib lists file, formatted for a select field.
-    getSelectListWithKeys({ group, list } = {}) {
+    getSelectListWithLabels({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
             return [];
         }
 
         return Object.keys(lists[group][list]).map((field) => ({
             label: lists[group][list][field],
-            value: field
+            value: lists[group][list][field]
         }));
+    },
+
+    // Get an array of keys from the lib lists file.
+    getValues({ group, list } = {}) {
+        if (!checkDefaults({ group, list, lists })) {
+            return [];
+        }
+
+        return Object.keys(lists[group][list]);
     }
 });
