@@ -4,15 +4,13 @@ const checkDefaults = ({ group, list, lists } = {}) =>
     lists[group] && lists[group][list];
 
 module.exports = ({ lists = [] } = {}) => ({
-    // Get an array of values from the lib lists file.
-    getLabels({ group, list } = {}) {
+    // Get an array of keys from the lib lists file.
+    getKeys({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
             return [];
         }
 
-        return Object.keys(lists[group][list]).map(
-            (field) => lists[group][list][field]
-        );
+        return Object.keys(lists[group][list]);
     },
 
     // Get an array of values from the lib lists file.
@@ -25,15 +23,15 @@ module.exports = ({ lists = [] } = {}) => ({
     },
 
     // Get the value of a list, from a group.
-    getListValue({ group, list, value } = {}) {
+    getListValue({ group, list, key } = {}) {
         if (
             !checkDefaults({ group, list, lists }) ||
-            !lists[group][list][value]
+            !lists[group][list][key]
         ) {
             return null;
         }
 
-        return lists[group][list][value];
+        return lists[group][list][key];
     },
 
     // Get an array of values from the lib lists file, formatted for a select field.
@@ -48,15 +46,15 @@ module.exports = ({ lists = [] } = {}) => ({
         }));
     },
 
-    // Get an array of values from the lib lists file, formatted for a select field.
-    getSelectListWithLabels({ group, list } = {}) {
+    // Get an array of keys from the lib lists file, formatted for a select field.
+    getSelectListWithKeys({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
             return [];
         }
 
-        return Object.keys(lists[group][list]).map((field) => ({
-            label: lists[group][list][field],
-            value: lists[group][list][field]
+        return Object.keys(lists[group][list]).map((key) => ({
+            label: key,
+            value: key
         }));
     },
 
@@ -66,18 +64,20 @@ module.exports = ({ lists = [] } = {}) => ({
             return [];
         }
 
-        return Object.keys(lists[group][list]).map((field) => ({
-            label: field,
-            value: field
+        return Object.keys(lists[group][list]).map((key) => ({
+            label: lists[group][list][key],
+            value: lists[group][list][key]
         }));
     },
 
-    // Get an array of keys from the lib lists file.
+    // Get an array of values from the lib lists file.
     getValues({ group, list } = {}) {
         if (!checkDefaults({ group, list, lists })) {
             return [];
         }
 
-        return Object.keys(lists[group][list]);
+        return Object.keys(lists[group][list]).map(
+            (field) => lists[group][list][field]
+        );
     }
 });

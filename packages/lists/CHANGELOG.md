@@ -1,5 +1,13 @@
 # @idearium/lists
 
+## Unreleased
+
+-   `getValues` was renamed to `getKeys`.
+-   `getLabels` was renamed to `getValues`.
+-   `getSelectListWithValues` was renamed to `getSelectListWithKeys`.
+-   `getSelectListWithLabels` was renamed to `getSelectListWithValues`.
+-   `getListValue.value` was renamed to `getListValue.key`.
+
 ## v1.0.0-beta.1
 
 -   Functionality of `getList` has been moved to `getLabels`.
