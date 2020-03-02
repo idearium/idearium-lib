@@ -1,5 +1,5 @@
 {
     "docs": {
-        "Packages": ["log", "mongo", "mq"]
+        "Packages": ["encryption", "lists", "log"]
     }
 }

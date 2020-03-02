@@ -22,7 +22,7 @@ const siteConfig = {
     favicon: 'img/favicon.ico',
     footerIcon: 'img/favicon.ico',
     headerIcon: 'img/favicon.ico',
-    headerLinks: [{ doc: 'log', label: 'Packages' }],
+    headerLinks: [{ doc: 'encryption', label: 'Packages' }],
     highlight: { theme: 'default' },
     ogImage: 'img/undraw_online.svg',
     onPageNav: 'separate',
