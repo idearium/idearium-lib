@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>@idearium/encryption · Idearium Lib</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="A library to make encrypting and decrypting plain text in Node.js painless."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="@idearium/encryption · Idearium Lib"/><meta property="og:type" content="website"/><meta property="og:url" content="https://idearium.github.io/idearium-lib/"/><meta property="og:description" content="A library to make encrypting and decrypting plain text in Node.js painless."/><meta property="og:image" content="https://idearium.github.io/idearium-lib/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://idearium.github.io/idearium-lib/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/idearium-lib/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/idearium-lib/js/scrollSpy.js"></script><link rel="stylesheet" href="/idearium-lib/css/main.css"/><script src="/idearium-lib/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/idearium-lib/"><img class="logo" src="/idearium-lib/img/il-icon.png" alt="Idearium Lib"/><h2 class="headerTitleWithLogo">Idearium Lib</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive siteNavItemActive"><a href="/idearium-lib/docs/encryption" target="_self">Packages</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Packages</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Packages</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/idearium-lib/docs/encryption">@idearium/encryption</a></li><li class="navListItem"><a class="navItem" href="/idearium-lib/docs/lists">@idearium/lists</a></li><li class="navListItem"><a class="navItem" href="/idearium-lib/docs/log">@idearium/log</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">@idearium/encryption</h1></header><article><div><span><p>A library to make encrypting and decrypting plain text in Node.js painless.</p>
+<h2><a class="anchor" aria-hidden="true" id="installation"></a><a href="#installation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h2>
+<pre><code class="hljs css language-shell"><span class="hljs-meta">$</span><span class="bash"> yarn add -E @idearium/encryption</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="beta-installation"></a><a href="#beta-installation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Beta installation</h3>
+<p>If you need to install a beta version, you can:</p>
+<pre><code class="hljs css language-shell"><span class="hljs-meta">$</span><span class="bash"> yarn add -E @idearium/encryption@beta</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="usage"></a><a href="#usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage</h2>
+<p>To use <code>@idearium/encryption</code>, follow these steps:</p>
+<ul>
+<li><a href="#create-a-library-file">Create a library file.</a></li>
+<li><a href="#use-the-library-file">Use the library file within your app.</a></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="create-a-library-file"></a><a href="#create-a-library-file" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Create a library file</h3>
+<p>Start by creating a library file which you'll export the functions generated by <code>atomic</code> and use these within your application.</p>
+<pre><code class="hljs css language-JavaScript"><span class="hljs-comment">// lib/encryption.js</span>
+
+<span class="hljs-keyword">import</span> { atomic } <span class="hljs-keyword">from</span> <span class="hljs-string">'@idearium/encryption'</span>;
+
+<span class="hljs-keyword">const</span> iv = <span class="hljs-string">'6iz68yjtmVj&amp;r7$H'</span>;
+<span class="hljs-keyword">const</span> key = <span class="hljs-string">'AsRdgU=cwnu8BCXNpgV2gAQk8XL;4oTW'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {decrypt, encrypt} = atomic({ iv, key });
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="use-the-library-file"></a><a href="#use-the-library-file" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use the library file</h3>
+<p>Now you can use the library file you've created to actually encrypt and decrypt information in your app.</p>
+<pre><code class="hljs css language-JavaScript">// another-file.js
+
+import assert from 'assert';
+import {decrypt, encrypt} from './lib/encryption.js';
+
+const text = 'Some text;
+const encrypted = encrypt({ text });
+const decrypted = decrypt({ text: encrypted });
+
+const matches = assert.equal(text, decrypted);
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="advanced-usage"></a><a href="#advanced-usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Advanced usage</h2>
+<p>This library also allows you to do the following:</p>
+<ul>
+<li>Change the encryption algorithm.</li>
+<li>Directly use the <code>encrypt</code> and <code>decrypt</code> functions exported by the library.</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="encryption-algorithms"></a><a href="#encryption-algorithms" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Encryption algorithms</h3>
+<p>By default, this library uses the <code>aes-256-ctr</code> algorithm. However, you can use any encryption algorithm supported by Node.js:</p>
+<pre><code class="hljs css language-JavaScript"><span class="hljs-comment">// lib/encryption.js</span>
+
+<span class="hljs-keyword">import</span> { atomic } <span class="hljs-keyword">from</span> <span class="hljs-string">'@idearium/encryption'</span>;
+
+<span class="hljs-keyword">const</span> algorithm = <span class="hljs-string">'aes-256-cbc'</span>;
+<span class="hljs-keyword">const</span> iv = <span class="hljs-string">'6iz68yjtmVj&amp;r7$H'</span>;
+<span class="hljs-keyword">const</span> key = <span class="hljs-string">'AsRdgU=cwnu8BCXNpgV2gAQk8XL;4oTW'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {decrypt, encrypt} = atomic({ algorithm, iv, key });
+
+</code></pre>
+<p>Some algorithm's such as <code>rc4</code> don't require an IV, in which case you can pass <code>null</code>:</p>
+<pre><code class="hljs css language-JavaScript">
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> atomic({
+    <span class="hljs-attr">algorithm</span>: <span class="hljs-string">'rc4'</span>,
+    <span class="hljs-attr">iv</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">key</span>: <span class="hljs-string">'Z4nDPfxKjPGGCqA2wVKjMMB{nyL^ytWNbWyzLg4xbvxX6ioxvxRw'</span>
+});
+
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="use-decrypt-and-encrypt-directly"></a><a href="#use-decrypt-and-encrypt-directly" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use <code>decrypt</code> and <code>encrypt</code> directly</h2>
+<p>The examples above show how to use the library with <code>atomic</code> which returns an object with keys <code>decrypt</code> and <code>encrypt</code>. These keys contain functions which are bound to the same <code>algorithm</code>, <code>iv</code> and <code>key</code> values provided to <code>atomic</code>. This makes it easy to encrypt and decrypt using the same settings.</p>
+<p>However, there are some instances in which you might only want to encrypt or decrypt some text (for example, encrypting a value to send to a third party). In this instance you can use the <code>decrypt</code> and <code>encrypt</code> functions exported by the library:</p>
+<pre><code class="hljs css language-JavaScript">
+<span class="hljs-keyword">import</span> { encrypt } <span class="hljs-keyword">from</span> <span class="hljs-string">`@idearium/encryption`</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ({ algorithm = <span class="hljs-string">'rc4'</span>,
+    iv = <span class="hljs-literal">null</span>,
+    key = <span class="hljs-string">'Z4nDPfxKjPGGCqA2wVKjMMB{nyL^ytWNbWyzLg4xbvxX6ioxvxRw'</span> } = {}) =&gt;
+        encrypt({ algorithm, iv, key });
+
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/idearium-lib/docs/lists"><span>@idearium/lists</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#installation">Installation</a><ul class="toc-headings"><li><a href="#beta-installation">Beta installation</a></li></ul></li><li><a href="#usage">Usage</a><ul class="toc-headings"><li><a href="#create-a-library-file">Create a library file</a></li><li><a href="#use-the-library-file">Use the library file</a></li></ul></li><li><a href="#advanced-usage">Advanced usage</a><ul class="toc-headings"><li><a href="#encryption-algorithms">Encryption algorithms</a></li></ul></li><li><a href="#use-decrypt-and-encrypt-directly">Use <code>decrypt</code> and <code>encrypt</code> directly</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/idearium-lib/" class="nav-home"><img src="/idearium-lib/img/il-icon.png" alt="Idearium Lib" width="66" height="58"/></a><div><h5>Docs</h5><a href="/idearium-lib/en/about.html">About</a></div><div></div><div><h5>More</h5><a href="https://github.com/idearium/idearium-lib" target="_blank">GitHub</a><a href="https://github.com/idearium/idearium-lib/releases" target="_blank">Releases</a></div></section><section class="copyright">Copyright © 2020 Idearium Pty ltd</section></footer></div></body></html>
