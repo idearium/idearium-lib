@@ -1,5 +1,8 @@
 # idearium-lib
 
+![@idearium/encryption](https://github.com/idearium/idearium-lib/workflows/@idearium/encryption/badge.svg)
+![@idearium/lists](https://github.com/idearium/idearium-lib/workflows/@idearium/lists/badge.svg)
+![@idearium/log](https://github.com/idearium/idearium-lib/workflows/@idearium/log/badge.svg)
 [![codecov](https://codecov.io/gh/idearium/idearium-lib/branch/master/graph/badge.svg)](https://codecov.io/gh/idearium/idearium-lib)
 
 This repository contains a collection of packages that make up the shared libraries for Idearium applications running on Node.js. Any code that is used across multiple applications (or within multiple Docker containers) should live here.
