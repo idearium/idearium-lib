@@ -1,0 +1,12 @@
+{
+    "name": "@idearium/encryption",
+    "version": "1.0.0-beta.3",
+    "description": "A package to make encrypting and decrypting plain text trivial.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@scottmebberson.com>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    }
+}
