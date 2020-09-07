@@ -1,5 +1,6 @@
 # idearium-lib
 
+![@idearium/apm](https://github.com/idearium/idearium-lib/workflows/@idearium/apm/badge.svg)
 ![@idearium/encryption](https://github.com/idearium/idearium-lib/workflows/@idearium/encryption/badge.svg)
 ![@idearium/lists](https://github.com/idearium/idearium-lib/workflows/@idearium/lists/badge.svg)
 ![@idearium/log](https://github.com/idearium/idearium-lib/workflows/@idearium/log/badge.svg)
@@ -26,6 +27,7 @@ It's that easy! You can now make changes to the documentation and they will be l
 
 All the libraries are stored under `packages/*`. We currently have the following:
 
+-   `@idearium/apm` - Defaults for our Elastic APM integration.
 -   `@idearium/encryption` - Making it painless to encrypt and decrypt plain text.
 -   `@idearium/lists` - Manage multiple lists of information and retrieve the data in various formats.
 -   `@idearium/log` - To manage application logging and optionally log to a remote server (InsightOps).
