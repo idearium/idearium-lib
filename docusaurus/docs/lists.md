@@ -1,6 +1,6 @@
 ---
 id: lists
-title: @idearium/lists
+title: '@idearium/lists'
 ---
 
 A library to make it easy to work with application lists. Application lists are used to record any fixed parts of your application, and use the following terminology:

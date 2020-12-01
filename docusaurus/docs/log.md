@@ -1,6 +1,6 @@
 ---
 id: log
-title: @idearium/log
+title: '@idearium/log'
 ---
 
 The Idearium logger.

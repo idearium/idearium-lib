@@ -1,6 +1,8 @@
 ---
 id: apm
-title: @idearium/apm
+title: '@idearium/apm'
+sidebar_label: '@idearium/apm'
+slug: /apm
 ---
 
 Defaults for our Elastic APM integration.
@@ -33,4 +35,4 @@ ELASTIC_APM_SERVICE_NAME: 'project-repo-container-environment'
 
 ## Advanced usage
 
-In addition to the required environment variables above, you can customize the apm integration using any of the  [configuration options](https://www.elastic.co/guide/en/apm/agent/nodejs/current/configuration.html).
+In addition to the required environment variables above, you can customize the apm integration using any of the [configuration options](https://www.elastic.co/guide/en/apm/agent/nodejs/current/configuration.html).

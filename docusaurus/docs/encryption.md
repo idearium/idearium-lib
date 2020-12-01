@@ -1,6 +1,6 @@
 ---
 id: encryption
-title: @idearium/encryption
+title: '@idearium/encryption'
 ---
 
 A library to make encrypting and decrypting plain text in Node.js painless.
