@@ -26,3 +26,7 @@ We use GitHub Actions and workflows to test our packages and publish them at the
 Each package has a [workflow](https://github.com/idearium/idearium-lib/tree/monorepo/.github/workflows) to handle the idiosyncrasies of each particular package.
 
 You can find all of [our releases on GitHub](https://github.com/idearium/idearium-lib/releases).
+
+## Docs
+
+The Idearium Lib docs are auto deployed whenever there is a change made and the PR is merged into the main branch (feature-monorepo).
