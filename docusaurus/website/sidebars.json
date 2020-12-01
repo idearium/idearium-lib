@@ -1,5 +1,5 @@
 {
     "docs": {
-        "Packages": ["encryption", "lists", "log"]
+        "Packages": ["apm", "encryption", "lists", "log"]
     }
 }
