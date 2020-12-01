@@ -21,6 +21,7 @@ jobs:
                   npm i
                   fi
                   npm run build
+              working-directory: docusaurus
 
     gh-release:
         if: github.ref == 'refs/heads/feature-monorepo' && github.event.pull_request.merged == true
@@ -41,6 +42,7 @@ jobs:
                   HostName github.com
                   IdentityFile ~/.ssh/id_rsa
                   EOT
+              working-directory: docusaurus
             - name: Release to GitHub Pages
               env:
                   USE_SSH: true
@@ -56,3 +58,4 @@ jobs:
                   npm i
                   fi
                   npx docusaurus deploy
+              working-directory: docusaurus
