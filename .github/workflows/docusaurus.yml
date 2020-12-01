@@ -24,7 +24,7 @@ jobs:
               working-directory: docusaurus
 
     gh-release:
-        if: github.event.pull_request.merged == true
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.base_ref, 'feature-monorepo')
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
