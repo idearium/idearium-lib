@@ -1,0 +1,12 @@
+{
+    "name": "@idearium/utils",
+    "version": "1.0.0-beta.1",
+    "description": "Idearium utility methods.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan.chau@icloud.com>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    }
+}
