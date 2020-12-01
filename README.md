@@ -17,7 +17,7 @@ You can read more about how the libraries work by reading [the documentation](ht
 We use [Docusaurus](https://docusaurus.io/en/) for our documentation. To get started
 
 ```shell
-$ cd docusaurus/website
+$ cd docusaurus
 $ yarn start
 ```
 
