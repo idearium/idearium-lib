@@ -2,6 +2,14 @@
 
 module.exports = {
     sidebar: {
-        packages: ['about', 'apm', 'encryption', 'fetch', 'lists', 'log']
+        packages: [
+            'about',
+            'apm',
+            'encryption',
+            'fetch',
+            'lists',
+            'log',
+            'utils'
+        ]
     }
 };
