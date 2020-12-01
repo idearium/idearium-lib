@@ -1,8 +1,6 @@
 ---
 id: apm
 title: '@idearium/apm'
-sidebar_label: '@idearium/apm'
-slug: /apm
 ---
 
 Defaults for our Elastic APM integration.
