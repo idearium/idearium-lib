@@ -1,7 +1,9 @@
-name: docs
+name: Deploy docs
 
 on:
-    push:
+    pull_request:
+        branches:
+            - feature-monorepo
         paths:
             - 'docusaurus/**'
 
@@ -24,7 +26,7 @@ jobs:
               working-directory: docusaurus
 
     gh-release:
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.base_ref, 'feature-monorepo')
+        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
