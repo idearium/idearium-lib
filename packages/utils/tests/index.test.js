@@ -1,16 +1,16 @@
 'use strict';
 
-const { withResult } = require('../');
+const { safePromise } = require('../');
 
-describe('withResult', () => {
+describe('safePromise', () => {
     it('is a function', () => {
-        expect(typeof withResult).toBe('function');
+        expect(typeof safePromise).toBe('function');
     });
 
     it('returns a tuple for successful promises', async () => {
         expect.assertions(1);
 
-        await expect(withResult(Promise.resolve('test'))).resolves.toEqual([
+        await expect(safePromise(Promise.resolve('test'))).resolves.toEqual([
             null,
             'test'
         ]);
@@ -21,7 +21,7 @@ describe('withResult', () => {
 
         const error = new Error('test');
 
-        await expect(withResult(Promise.reject(error))).resolves.toEqual([
+        await expect(safePromise(Promise.reject(error))).resolves.toEqual([
             error,
             null
         ]);

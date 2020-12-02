@@ -1,7 +1,7 @@
 'use strict';
 
 const fetch = require('isomorphic-fetch');
-const { withResult } = require('@idearium/utils');
+const { safePromise } = require('@idearium/utils');
 
 const parseBody = (response) => {
     if (response.headers.get('Content-Type').includes('application/json')) {
@@ -24,7 +24,7 @@ const parseResponse = async (response) => {
 };
 
 const fetchApi = async (url, { headers } = {}) => {
-    const [apiError, apiResponse] = await withResult(
+    const [apiError, apiResponse] = await safePromise(
         fetch(url, {
             headers: { 'content-type': 'application/json', ...headers }
         })
@@ -34,7 +34,7 @@ const fetchApi = async (url, { headers } = {}) => {
         return [apiError];
     }
 
-    return withResult(parseResponse(apiResponse));
+    return safePromise(parseResponse(apiResponse));
 };
 
 module.exports = fetchApi;
