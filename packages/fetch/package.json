@@ -10,6 +10,10 @@
         "test": "jest"
     },
     "dependencies": {
+        "@idearium/utils": "1.0.0-beta.1",
         "isomorphic-fetch": "3.0.0"
+    },
+    "devDependencies": {
+        "fetch-mock-jest": "^1.5.1"
     }
 }

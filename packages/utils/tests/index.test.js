@@ -7,7 +7,7 @@ describe('withResult', () => {
         expect(typeof withResult).toBe('function');
     });
 
-    it('returns a tuple for errors', async () => {
+    it('returns a tuple for successful promises', async () => {
         expect.assertions(1);
 
         await expect(withResult(Promise.resolve('test'))).resolves.toEqual([
@@ -16,8 +16,9 @@ describe('withResult', () => {
         ]);
     });
 
-    it('returns a tuple for successful promises', async () => {
+    it('returns a tuple for errors', async () => {
         expect.assertions(1);
+
         const error = new Error('test');
 
         await expect(withResult(Promise.reject(error))).resolves.toEqual([

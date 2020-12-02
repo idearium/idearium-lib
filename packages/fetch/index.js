@@ -37,4 +37,4 @@ const fetchApi = async (url, { headers } = {}) => {
     return withResult(parseResponse(apiResponse));
 };
 
-export default fetchApi;
+module.exports = fetchApi;
