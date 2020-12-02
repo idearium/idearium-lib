@@ -23,4 +23,26 @@ $ yarn add -E @idearium/utils@beta
 
 ## Usage
 
-To use `@idearium/utils`
+### withResult
+
+To use `withResult`, require it from `@idearium/utils`.
+
+```js
+const { withResult } = require('@idearium/utils');
+```
+
+This will take a promise and always use `resolve` to return a result in the format `[err, result]`.
+
+This provides the ability to use async/wait without try/catch blocks.
+
+Use it like so:
+
+```js
+const [err, result] = await withResult(someAsyncFn);
+
+if (err) {
+    return console.log(err);
+}
+
+// Do other stuff knowing an error didn't occur.
+```
