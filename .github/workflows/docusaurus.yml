@@ -1,7 +1,7 @@
 name: Deploy docs
 
 on:
-    pull_request:
+    push:
         branches:
             - feature-monorepo
         paths:
@@ -24,9 +24,7 @@ jobs:
                   fi
                   npm run build
               working-directory: docusaurus
-
     gh-release:
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
