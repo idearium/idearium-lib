@@ -22,8 +22,7 @@ describe('safePromise', () => {
         const error = new Error('test');
 
         await expect(safePromise(Promise.reject(error))).resolves.toEqual([
-            error,
-            null
+            error
         ]);
     });
 });
