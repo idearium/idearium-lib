@@ -1,6 +1,6 @@
 {
     "name": "@idearium/fetch",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.6",
     "description": "A package to make fetching trivial.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
