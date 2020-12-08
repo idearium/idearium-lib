@@ -4,7 +4,7 @@
     "description": "Idearium logger",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
-    "author": "Allan Chau <allan.chau@icloud.com>",
+    "author": "Allan Chau <allan@idearium.io>",
     "license": "MIT",
     "bin": {
         "insightops": "bin/insightops.js"

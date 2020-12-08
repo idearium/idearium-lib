@@ -4,7 +4,7 @@
     "description": "Idearium utility methods.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
-    "author": "Allan Chau <allan.chau@icloud.com>",
+    "author": "Allan Chau <allan@idearium.io>",
     "license": "MIT",
     "scripts": {
         "test": "jest"

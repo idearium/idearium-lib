@@ -4,7 +4,7 @@
     "description": "Idearium APM",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
-    "author": "Allan Chau <allan.chau@icloud.com>",
+    "author": "Allan Chau <allan@idearium.io>",
     "license": "MIT",
     "dependencies": {
         "elastic-apm-node": "3.7.0"
