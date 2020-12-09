@@ -23,12 +23,12 @@ $ yarn add -E @idearium/utils@beta
 
 ## Usage
 
-### withResult
+### safePromise
 
-To use `withResult`, require it from `@idearium/utils`.
+To use `safePromise`, require it from `@idearium/utils`.
 
 ```js
-const { withResult } = require('@idearium/utils');
+const { safePromise } = require('@idearium/utils');
 ```
 
 This will take a promise and always use `resolve` to return a result in the format `[err, result]`.
@@ -38,7 +38,7 @@ This provides the ability to use async/wait without try/catch blocks.
 Use it like so:
 
 ```js
-const [err, result] = await withResult(someAsyncFn);
+const [err, result] = await safePromise(someAsyncFn);
 
 if (err) {
     return console.log(err);

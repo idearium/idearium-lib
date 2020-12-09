@@ -1,12 +1,18 @@
 {
-    "name": "@idearium/utils",
+    "name": "@idearium/fetch",
     "version": "1.0.0",
-    "description": "Idearium utility methods.",
+    "description": "A package to make fetching trivial.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Allan Chau <allan@idearium.io>",
     "license": "MIT",
     "scripts": {
         "test": "jest"
+    },
+    "dependencies": {
+        "isomorphic-fetch": "3.0.0"
+    },
+    "devDependencies": {
+        "fetch-mock-jest": "^1.5.1"
     }
 }

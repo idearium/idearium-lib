@@ -1,5 +1,5 @@
 'use strict';
 
-const withResult = require('./with-result');
+const safePromise = require('./safe-promise');
 
-module.exports = { withResult };
+module.exports = { safePromise };
