@@ -29,5 +29,6 @@ All the libraries are stored under `packages/*`. We currently have the following
 
 -   `@idearium/apm` - Defaults for our Elastic APM integration.
 -   `@idearium/encryption` - Making it painless to encrypt and decrypt plain text.
+-   `@idearium/fetch` - Making fetch requests easy.
 -   `@idearium/lists` - Manage multiple lists of information and retrieve the data in various formats.
 -   `@idearium/log` - To manage application logging and optionally log to a remote server (InsightOps).

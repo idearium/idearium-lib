@@ -1,6 +1,6 @@
 # @idearium/fetch
 
-## Unreleased
+## v1.0.1-beta.1
 
 -   You can now provide fetch parameters to configure the fetch request.
 
