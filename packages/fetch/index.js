@@ -11,15 +11,9 @@ const parseBody = (response) => {
 };
 
 const parseResponse = async (response) => {
-    const { ok, status } = response;
+    response.result = await parseBody(response);
 
-    if (!ok) {
-        throw new Error(response.statusText);
-    }
-
-    const result = await parseBody(response);
-
-    return { ok, result, status };
+    return response;
 };
 
 const fetchApi = async (url, { headers, ...options } = {}) => {
