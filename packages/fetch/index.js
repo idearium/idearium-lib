@@ -22,11 +22,12 @@ const parseResponse = async (response) => {
     return { ok, result, status };
 };
 
-const fetchApi = async (url, { headers } = {}) =>
-    parseResponse(
-        await fetch(url, {
-            headers: { 'content-type': 'application/json', ...headers }
-        })
-    );
+const fetchApi = async (url, { headers, ...options } = {}) => {
+    const opts = { ...options };
+
+    opts.headers = { 'content-type': 'application/json', ...headers };
+
+    return parseResponse(await fetch(url, opts));
+};
 
 module.exports = fetchApi;

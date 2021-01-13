@@ -1,10 +1,13 @@
 {
     "name": "@idearium/fetch",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A package to make fetching trivial.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
-    "author": "Allan Chau <allan@idearium.io>",
+    "contributors": [
+        "Allan Chau <allan@idearium.io>",
+        "Scott Mebberson <scott@idearium.io>"
+    ],
     "license": "MIT",
     "scripts": {
         "test": "jest"
