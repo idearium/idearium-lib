@@ -23,7 +23,7 @@ $ yarn add -E @idearium/fetch@beta
 
 To use `@idearium/fetch`, simply require it at the top of your file.
 
-It is simply a fetch wrapper that automatically parses the body response into a property `result.
+It is simply a fetch wrapper that automatically parses the body response into a property `result`.
 
 ```js
 const { ...response, result } = await fetch('...', { fetchOpts });
