@@ -45,6 +45,22 @@ it('returns a tuple for error requests', async () => {
     });
 });
 
+it('result contains the main response properties', async () => {
+    expect.assertions(6);
+
+    fetchMock.get(testUrl, {});
+
+    const response = await fetchApi(testUrl);
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Response#properties
+    expect(response).toHaveProperty('headers');
+    expect(response).toHaveProperty('ok');
+    expect(response).toHaveProperty('redirected');
+    expect(response).toHaveProperty('status');
+    expect(response).toHaveProperty('statusText');
+    expect(response).toHaveProperty('url');
+});
+
 it('automatically sets the content-type header', async () => {
     expect.assertions(1);
 
