@@ -1,5 +1,11 @@
 # @idearium/fetch
 
+## v2.0.0-beta.1
+
+### Removed
+
+-   Removed the `!ok` check. It is now up to the user to handle any errors and `!ok` statuses.
+
 ## v1.0.1
 
 -   You can now provide fetch parameters to configure the fetch request.
