@@ -1,5 +1,11 @@
 # @idearium/fetch
 
+## v2.0.2
+
+### Changed
+
+-   Re-release with updated version number.
+
 ## v2.0.1
 
 ### Changed
