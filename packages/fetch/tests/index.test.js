@@ -22,7 +22,7 @@ it('returns a tuple for successful requests', async () => {
 
     fetchMock.get(testUrl, { pass: true });
 
-    await expect(fetchApi(testUrl)).resolves.toEqual({
+    await expect(fetchApi(testUrl)).resolves.toMatchObject({
         ok: true,
         result: { pass: true },
         status: 200
@@ -32,9 +32,33 @@ it('returns a tuple for successful requests', async () => {
 it('returns a tuple for error requests', async () => {
     expect.assertions(1);
 
-    fetchMock.get(testUrl, 400);
+    fetchMock.get(testUrl, {
+        body: { pass: false },
+        headers,
+        status: 400
+    });
 
-    await expect(fetchApi(testUrl)).rejects.toEqual(new Error('Bad Request'));
+    await expect(fetchApi(testUrl)).resolves.toMatchObject({
+        ok: false,
+        result: { pass: false },
+        status: 400
+    });
+});
+
+it('result contains the main response properties', async () => {
+    expect.assertions(6);
+
+    fetchMock.get(testUrl, {});
+
+    const response = await fetchApi(testUrl);
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Response#properties
+    expect(response).toHaveProperty('headers');
+    expect(response).toHaveProperty('ok');
+    expect(response).toHaveProperty('redirected');
+    expect(response).toHaveProperty('status');
+    expect(response).toHaveProperty('statusText');
+    expect(response).toHaveProperty('url');
 });
 
 it('automatically sets the content-type header', async () => {
