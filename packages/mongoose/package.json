@@ -1,7 +1,7 @@
 {
     "name": "@idearium/mongoose",
-    "version": "1.0.1-beta.1",
-    "description": "Idearium database",
+    "version": "1.0.1-beta.2",
+    "description": "Idearium mongoose package.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Allan Chau <allan@idearium.io>",
