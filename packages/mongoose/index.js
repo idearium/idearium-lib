@@ -5,6 +5,10 @@ const log = require('@idearium/log')();
 
 mongoose.Promise = global.Promise;
 
+mongoose.plugin((schema) => {
+    schema.options.usePushEach = true;
+});
+
 // Allow overriding the defaults.
 const getOptions = (opts = {}) =>
     Object.assign(
