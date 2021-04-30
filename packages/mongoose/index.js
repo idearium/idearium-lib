@@ -6,25 +6,28 @@ const log = require('@idearium/log')();
 mongoose.Promise = global.Promise;
 
 // Allow overriding the defaults.
-const getOptions = (opts = {}) => ({
-    ...{
-        reconnectInterval: 500,
-        reconnectTries: Number.MAX_VALUE,
-        sslValidate: Boolean(opts.ssl || opts.tls),
-        useMongoClient: true
-    },
-    ...opts
-});
+const getOptions = (opts = {}) =>
+    Object.assign(
+        {},
+        {
+            reconnectInterval: 500,
+            reconnectTries: Number.MAX_VALUE,
+            sslValidate: Boolean(opts.ssl || opts.tls),
+            useMongoClient: true
+        },
+        opts
+    );
 
 const getDbInfo = (connection) => {
     const connStr = `${connection.host}:${connection.port}`;
 
     return {
         db: connStr,
-        proxies: [
-            ...connection.db.s.topology.s.mongos.connectingProxies,
-            ...connection.db.s.topology.s.mongos.connectedProxies
-        ]
+        proxies: []
+            .concat(
+                connection.db.s.topology.s.mongos.connectingProxies,
+                connection.db.s.topology.s.mongos.connectedProxies
+            )
             .map(
                 ({
                     s: {
