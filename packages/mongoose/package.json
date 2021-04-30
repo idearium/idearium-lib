@@ -1,5 +1,5 @@
 {
-    "name": "@idearium/db",
+    "name": "@idearium/mongoose",
     "version": "1.0.0",
     "description": "Idearium database",
     "main": "index.js",

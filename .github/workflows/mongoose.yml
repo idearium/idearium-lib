@@ -1,8 +1,8 @@
-name: '@idearium/apm'
+name: '@idearium/mongoose'
 on:
     push:
         paths:
-            - 'packages/apm/**'
+            - 'packages/mongoose/**'
     release:
         types: [published]
 
@@ -35,7 +35,7 @@ jobs:
             - name: Setup yarn
               run: yarn install
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/apm')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/mongoose')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
@@ -67,11 +67,11 @@ jobs:
               run: yarn install
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
-              run: yarn workspace @idearium/apm publish --tag beta --access public
+              run: yarn workspace @idearium/mongoose publish --tag beta --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish
               if: "!contains(github.ref , 'beta')"
-              run: yarn workspace @idearium/apm publish --access public
+              run: yarn workspace @idearium/mongoose publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

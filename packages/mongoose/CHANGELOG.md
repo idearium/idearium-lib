@@ -1,4 +1,4 @@
-# @idearium/db
+# @idearium/mongoose
 
 ## v1.0.0-beta.1
 
