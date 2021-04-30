@@ -61,4 +61,4 @@ const createConnections = async (uris, opts = {}) => {
     return connections;
 };
 
-module.exports = { connect, createConnections };
+module.exports = { connect, createConnections, mongoose };
