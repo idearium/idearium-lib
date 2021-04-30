@@ -1,6 +1,6 @@
 {
     "name": "@idearium/mongoose",
-    "version": "1.0.1-beta.3",
+    "version": "1.0.1-beta.4",
     "description": "Idearium mongoose package.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
