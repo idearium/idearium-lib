@@ -41,7 +41,7 @@ afterEach(() => {
 test('logs to the console', async () => {
     expect.assertions(2);
 
-    process.env.PINO_PRETTY_PRINT = 'false';
+    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = require('../')({ stream });
@@ -84,11 +84,11 @@ test('only logs at the specified "LOG_LEVEL" and above', async () => {
     expect(log.fatal.name).toBe('');
 });
 
-test('redacts paths specified in "PINO_REDACT_PATHS"', async () => {
+test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
     expect.assertions(1);
 
-    process.env.PINO_PRETTY_PRINT = 'false';
-    process.env.PINO_REDACT_PATHS = 'redactTest';
+    process.env.LOG_PRETTY_PRINT = 'false';
+    process.env.LOG_REDACT_PATHS = 'redactTest';
 
     const stream = sink();
     const log = require('../')({ stream });
