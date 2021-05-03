@@ -1,0 +1,23 @@
+{
+    "name": "@idearium/log",
+    "version": "1.0.0-beta.1",
+    "description": "Idearium logger",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT",
+    "bin": {
+        "insightops": "bin/insightops.js"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "pino": "5.13.4",
+        "pino-pretty": "3.2.1",
+        "pump": "3.0.0",
+        "r7insight_node": "1.8.3",
+        "require-main-filename": "2.0.0",
+        "split2": "3.1.1"
+    }
+}

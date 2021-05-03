@@ -1,0 +1,21 @@
+{
+    "name": "@idearium/fetch",
+    "version": "2.0.2",
+    "description": "A package to make fetching trivial.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "contributors": [
+        "Allan Chau <allan@idearium.io>",
+        "Scott Mebberson <scott@idearium.io>"
+    ],
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "isomorphic-fetch": "3.0.0"
+    },
+    "devDependencies": {
+        "fetch-mock-jest": "^1.5.1"
+    }
+}
