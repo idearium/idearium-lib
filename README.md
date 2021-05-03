@@ -62,3 +62,11 @@ $ yarn start
 ```
 
 It's that easy! You can now make changes to the documentation and they will be live reloaded in the browser.
+
+## Legacy
+
+This is a newer version of idearium-lib, in monorepo format. The previous version of was monolithic and is still used in some projects.
+
+In order to be able to maintain that code and release updated versions as required, the [`legacy`](https://github.com/idearium/idearium-lib/tree/legacy) branch exists.
+
+In order to update the older code, branch from `legacy` and create PRs with `legacy` as the base branch.
