@@ -17,7 +17,7 @@ The Idearium logger InsightOps transport takes log output from [`@idearium/log`]
 
 To do so, you will need the configure some environment variables:
 
--   `INSIGHT_OPS_REGION` - The InsightOps region (`eu`).
+-   `INSIGHT_OPS_REGION` - The InsightOps region.
 -   `INSIGHT_OPS_TOKEN` - The InsightOps token.
 
 Then start your Node application and pipe the output to the `insightops` script (found at `node_modules/.bin/insightops` once this package is installed):
