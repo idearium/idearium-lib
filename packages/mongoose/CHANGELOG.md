@@ -1,5 +1,9 @@
 # @idearium/mongoose
 
+## Unreleased
+
+-   Updated @idearium/log to 1.0.0-beta.2.
+
 ## v1.0.1-beta.5
 
 -   Update to always include usePushEach.
