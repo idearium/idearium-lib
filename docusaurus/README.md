@@ -26,4 +26,4 @@ This command generates static content into the `build` directory and can be serv
 
 ## Deployment
 
-Create a new PR with the `feature-monorepo` base branch. Once it is merged in the docs will automatically deploy to GitHub pages.
+Create a new PR with `master` as the base branch. Once it is merged in the docs will automatically deploy to GitHub pages.
