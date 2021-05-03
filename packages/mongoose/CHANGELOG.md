@@ -1,6 +1,6 @@
 # @idearium/mongoose
 
-## Unreleased
+## v1.0.1-beta.6
 
 -   Updated @idearium/log to 1.0.0-beta.2.
 
