@@ -12,11 +12,10 @@ const redactPathsDefaults = [
 
 /* eslint-disable no-process-env */
 const defaults = {
+    base: null,
     enabled: process.env.LOG_ENABLED !== 'false',
     level: process.env.LOG_LEVEL || 'info',
-    prettyPrint:
-        process.env.LOG_REMOTE !== 'true' &&
-        process.env.PINO_PRETTY_PRINT !== 'false',
+    prettyPrint: process.env.PINO_PRETTY_PRINT === 'true',
     redact: process.env.PINO_REDACT_PATHS
         ? redactPathsDefaults.concat(process.env.PINO_REDACT_PATHS.split(','))
         : redactPathsDefaults,

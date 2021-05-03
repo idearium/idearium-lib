@@ -81,29 +81,27 @@ test('only logs at the specified "LOG_LEVEL" and above', async () => {
     expect(log.info.name).toBe('noop');
     expect(log.warn.name).toBe('LOG');
     expect(log.error.name).toBe('LOG');
-    expect(log.fatal.name).toBe('LOG');
+    expect(log.fatal.name).toBe('');
 });
 
 test('redacts paths specified in "PINO_REDACT_PATHS"', async () => {
     expect.assertions(1);
 
     process.env.PINO_PRETTY_PRINT = 'false';
-    process.env.PINO_REDACT_PATHS = 'redacttest';
+    process.env.PINO_REDACT_PATHS = 'redactTest';
 
     const stream = sink();
     const log = require('../')({ stream });
 
-    log.info({ redacttest: 'this should not appear' }, 'test');
+    log.info({ redactTest: 'this should not appear' }, 'test');
 
     const result = await once(stream, 'data');
 
-    expect(result.redacttest).toBe('[Redacted]');
+    expect(result.redactTest).toBe('[Redacted]');
 });
 
-test('logs to a remote server if "LOG_REMOTE" is "true"', async () => {
+test('does not include pid by default', async () => {
     expect.assertions(1);
-
-    process.env.LOG_REMOTE = 'true';
 
     const stream = sink();
     const log = require('../')({ stream });
@@ -112,6 +110,18 @@ test('logs to a remote server if "LOG_REMOTE" is "true"', async () => {
 
     const result = await once(stream, 'data');
 
-    // If this isn't working, sink would throw an error due to JSON.parse trying to parse the prettyfied log.
-    expect(result.msg).toBe('test');
+    expect(result).not.toHaveProperty('pid');
+});
+
+test('includes pid if provided', async () => {
+    expect.assertions(1);
+
+    const stream = sink();
+    const log = require('../')({ base: { pid: process.pid }, stream });
+
+    log.info('test');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('pid');
 });

@@ -1,0 +1,19 @@
+{
+    "name": "@idearium/log-insightops",
+    "version": "1.0.0-beta.1",
+    "description": "Idearium logger insightops transport",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@idearium.io>",
+    "license": "MIT",
+    "bin": {
+        "insightops": "bin/insightops.js"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "pump": "3.0.0",
+        "r7insight_node": "1.8.3",
+        "split2": "3.2.2"
+    }
+}
