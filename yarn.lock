@@ -334,6 +334,15 @@
     eslint "^5.0.1"
     eslint-plugin-eslint-comments "^3.0.0"
 
+"@idearium/log@1.0.0-beta.2":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-1.0.0-beta.2.tgz#99886552c881b84b6d41b8b711fbb29bdd5c0822"
+  integrity sha512-zxQdtAq8ysxMY+g8ui9ink15rfniuMAmV5vs+uYylh6YVi3/waLfzQIhsk/Pnxn+a39V87ep1KzFvz+FAe55KA==
+  dependencies:
+    pino "6.11.3"
+    pino-pretty "4.7.1"
+    require-main-filename "2.0.0"
+
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"

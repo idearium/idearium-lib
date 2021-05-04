@@ -1,7 +1,6 @@
 'use strict';
 
 const pino = require('pino');
-const main = require('require-main-filename')();
 
 const pinoLevelToSeverity = {
     /* eslint-disable sort-keys */
@@ -48,6 +47,6 @@ module.exports = (options = {}) => {
         Object.assign({}, defaults, options),
         options.stream || pino.destination(1)
     ).child({
-        context: main
+        context: __filename.replace(__dirname, '')
     });
 };

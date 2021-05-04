@@ -1,5 +1,10 @@
 # @idearium/log
 
+## Unreleased
+
+-   Deprecated the use of `require-main-filename`.
+-   `context` now uses `__dirname` and `__filename`.
+
 ## v1.0.0-beta.3 - 2021-05-04
 
 -   Added `severity` to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
