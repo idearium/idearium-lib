@@ -178,3 +178,23 @@ test('includes pid if provided', async () => {
 
     expect(result).toHaveProperty('pid');
 });
+
+test('includes a time formatted to RFC 3339', async () => {
+    expect.assertions(2);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    console.log(result);
+
+    expect(result).toHaveProperty('time');
+    expect(result.time).toMatch(
+        /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$/
+    );
+});

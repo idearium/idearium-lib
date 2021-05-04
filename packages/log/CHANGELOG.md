@@ -2,7 +2,8 @@
 
 ## Unreleased
 
--   Added severity to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
+-   Added `severity` to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
+-   Updated `time` to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
 
 ## v1.0.0-beta.2
 

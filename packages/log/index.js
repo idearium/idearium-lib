@@ -38,7 +38,8 @@ const defaults = {
     redact: process.env.LOG_REDACT_PATHS
         ? redactPathsDefaults.concat(process.env.LOG_REDACT_PATHS.split(','))
         : redactPathsDefaults,
-    serializers: pino.stdSerializers
+    serializers: pino.stdSerializers,
+    timestamp: pino.stdTimeFunctions.isoTime
 };
 /* eslint-enable no-process-env */
 
