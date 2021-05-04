@@ -1,6 +1,6 @@
 # @idearium/log
 
-## Unreleased
+## v1.0.0-beta.4 - 2021-05-04
 
 -   Deprecated the use of `require-main-filename`.
 -   `context` now uses `__dirname` and `__filename`.
