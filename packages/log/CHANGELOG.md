@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+-   Added severity to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
+
+## v1.0.0-beta.2
+
 -   Dependency upgrades.
 -   Deprecated `insightops` from this package (see @idearium/log-insightops).
 -   Deprecated `LOG_REMOTE`.

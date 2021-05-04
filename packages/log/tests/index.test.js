@@ -12,6 +12,24 @@ const once = (emitter, name) =>
         });
     });
 
+const collect = (emitter, name, times = 2) =>
+    new Promise((resolve, reject) => {
+        const collection = [];
+
+        if (name !== 'error') {
+            emitter.once('error', reject);
+        }
+
+        emitter.on(name, (...args) => {
+            collection.push(...args);
+
+            if (collection.length === times) {
+                emitter.removeListener('error', reject);
+                resolve(collection);
+            }
+        });
+    });
+
 const sink = () => {
     const split = require('split2');
 
@@ -82,6 +100,41 @@ test('only logs at the specified "LOG_LEVEL" and above', async () => {
     expect(log.warn.name).toBe('LOG');
     expect(log.error.name).toBe('LOG');
     expect(log.fatal.name).toBe('');
+});
+
+test('includes a severity based on log level', async () => {
+    expect.assertions(12);
+
+    process.env.LOG_LEVEL = 'trace';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.trace('trace-test');
+    log.debug('debug-test');
+    log.info('info-test');
+    log.warn('warn-test');
+    log.error('error-test');
+    log.fatal('fatal-test');
+
+    const [trace, debug, info, warn, error, fatal] = await collect(
+        stream,
+        'data',
+        6
+    );
+
+    expect(trace).toHaveProperty('severity', 'DEBUG');
+    expect(trace).toHaveProperty('level', 10);
+    expect(debug).toHaveProperty('severity', 'DEBUG');
+    expect(debug).toHaveProperty('level', 20);
+    expect(info).toHaveProperty('severity', 'INFO');
+    expect(info).toHaveProperty('level', 30);
+    expect(warn).toHaveProperty('severity', 'WARNING');
+    expect(warn).toHaveProperty('level', 40);
+    expect(error).toHaveProperty('severity', 'ERROR');
+    expect(error).toHaveProperty('level', 50);
+    expect(fatal).toHaveProperty('severity', 'CRITICAL');
+    expect(fatal).toHaveProperty('level', 60);
 });
 
 test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
