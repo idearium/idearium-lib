@@ -1,11 +1,11 @@
 # @idearium/log
 
-## Unreleased
+## v1.0.0-beta.3 - 2021-05-04
 
 -   Added `severity` to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
 -   Updated `time` to support [GCP structured logging](https://cloud.google.com/logging/docs/structured-logging).
 
-## v1.0.0-beta.2
+## v1.0.0-beta.2 - 2021-05-04
 
 -   Dependency upgrades.
 -   Deprecated `insightops` from this package (see @idearium/log-insightops).
