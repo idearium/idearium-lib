@@ -1,5 +1,11 @@
 # @idearium/mongoose
 
+## v1.0.1-beta.6
+
+### Changed
+
+-   Changed mongoose to be a required parameter.
+
 ## v1.0.1-beta.5
 
 -   Update to always include usePushEach.

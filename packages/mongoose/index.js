@@ -1,17 +1,22 @@
 'use strict';
 
-const mongoose = require('mongoose');
 const log = require('@idearium/log')();
 
-mongoose.Promise = global.Promise;
+const setupMongoose = (mongoose) => {
+    mongoose.Promise = global.Promise;
 
-mongoose.plugin((schema) => {
-    schema.options.usePushEach = true;
-});
+    mongoose.plugin((schema) => {
+        schema.options.usePushEach = true;
+    });
+};
 
 // Allow overriding the defaults.
-const getOptions = (opts = {}) =>
-    Object.assign(
+const getOptions = (opts = {}) => {
+    if (!opts.mongoose) {
+        throw new Error('You must provide a mongoose instance.');
+    }
+
+    return Object.assign(
         {},
         {
             reconnectInterval: 500,
@@ -21,6 +26,7 @@ const getOptions = (opts = {}) =>
         },
         opts
     );
+};
 
 const getDbInfo = (connection) => ({
     db: `${connection.host}:${connection.port}`
@@ -32,14 +38,17 @@ const connect = async (uri, opts = {}) => {
     }
 
     const options = getOptions(opts);
+    const { mongoose } = options;
 
-    log.info('Connecting to database...');
+    setupMongoose(mongoose);
+
+    log.info('Connecting to the database...');
 
     const connection = await mongoose.connect(uri, options);
 
     log.info(getDbInfo(connection), 'Connected to the database');
 
-    return connection;
+    return mongoose;
 };
 
 const createConnections = async (uris, opts = {}) => {
@@ -48,6 +57,9 @@ const createConnections = async (uris, opts = {}) => {
     }
 
     const options = getOptions(opts);
+    const { mongoose } = options;
+
+    setupMongoose(mongoose);
 
     log.info('Creating connections to the databases...');
 
@@ -62,7 +74,7 @@ const createConnections = async (uris, opts = {}) => {
         'Connected to the databases'
     );
 
-    return connections;
+    return mongoose;
 };
 
-module.exports = { connect, createConnections, mongoose };
+module.exports = { connect, createConnections };
