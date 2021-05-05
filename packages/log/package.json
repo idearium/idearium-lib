@@ -1,6 +1,6 @@
 {
     "name": "@idearium/log",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.6",
     "description": "Idearium logger",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",

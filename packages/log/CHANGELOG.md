@@ -1,6 +1,6 @@
 # @idearium/log
 
-## Unreleased
+## v1.0.0-beta.6 - 2021-05-05
 
 -   Refined the automatic `sourceLocation` result.
 -   Updated `msg` to be `message` to support GCP structured logging.
