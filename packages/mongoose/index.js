@@ -11,12 +11,8 @@ const setupMongoose = (mongoose) => {
 };
 
 // Allow overriding the defaults.
-const getOptions = (opts = {}) => {
-    if (!opts.mongoose) {
-        throw new Error('You must provide a mongoose instance.');
-    }
-
-    return Object.assign(
+const getOptions = (opts = {}) =>
+    Object.assign(
         {},
         {
             reconnectInterval: 500,
@@ -26,7 +22,6 @@ const getOptions = (opts = {}) => {
         },
         opts
     );
-};
 
 const getDbInfo = (connection) => ({
     db: `${connection.host}:${connection.port}/${connection.name}`
