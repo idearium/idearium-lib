@@ -69,6 +69,6 @@ test('logs to a remote server', async () => {
     const result = await once(stream, 'data');
 
     // If this isn't working, sink would throw an error due to JSON.parse trying to parse the prettyfied log.
-    expect(result.msg).toBe('test');
+    expect(result.message).toBe('test');
 });
 /* eslint-enable no-process-env,global-require */
