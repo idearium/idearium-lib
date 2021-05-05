@@ -1,6 +1,6 @@
 # @idearium/log
 
-## Unreleased
+## v1.0.0-beta.5 - 2021-05-05
 
 -   Automated the inclusion of the `sourceLocation` property.
 
