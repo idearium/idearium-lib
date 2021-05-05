@@ -35,6 +35,7 @@ const defaults = {
         level: levelFormatter
     },
     level: process.env.LOG_LEVEL || 'info',
+    messageKey: 'message',
     prettyPrint: process.env.LOG_PRETTY_PRINT === 'true',
     redact: process.env.LOG_REDACT_PATHS
         ? redactPathsDefaults.concat(process.env.LOG_REDACT_PATHS.split(','))

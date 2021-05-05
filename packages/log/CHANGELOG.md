@@ -3,10 +3,11 @@
 ## Unreleased
 
 -   Refined the automatic `sourceLocation` result.
+-   Updated `msg` to be `message` to support GCP structured logging.
 
 ## v1.0.0-beta.5 - 2021-05-05
 
--   Automated the inclusion of the `sourceLocation` property.
+-   Automated the inclusion of the `sourceLocation` property to support GCP structured logging.
 
 ## v1.0.0-beta.4 - 2021-05-04
 

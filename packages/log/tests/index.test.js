@@ -72,7 +72,7 @@ test('logs to the console', async () => {
     const result = await once(stream, 'data');
 
     expect(result.level).toBe(30);
-    expect(result.msg).toBe('test');
+    expect(result.message).toBe('test');
 });
 
 test('does not log if "LOG_ENABLED" is set to "false"', async () => {
@@ -155,8 +155,6 @@ test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
 
     expect(result.redactTest).toBe('[Redacted]');
 });
-
-const log = require('@idearium/log')('packages/log/tests/index.test.js');
 
 test('does not include pid by default', async () => {
     expect.assertions(1);
