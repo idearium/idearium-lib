@@ -1,5 +1,9 @@
 # @idearium/log
 
+## Unreleased
+
+-   Automated the inclusion of the `sourceLocation` property.
+
 ## v1.0.0-beta.4 - 2021-05-04
 
 -   Deprecated the use of `require-main-filename`.

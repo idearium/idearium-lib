@@ -45,6 +45,7 @@ const sink = () => {
     return result;
 };
 
+const sourceLocation = 'logging.googleapis.com/sourceLocation';
 let processEnv = process.env;
 
 beforeEach(() => {
@@ -153,6 +154,8 @@ test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
     expect(result.redactTest).toBe('[Redacted]');
 });
 
+const log = require('@idearium/log')('packages/log/tests/index.test.js');
+
 test('does not include pid by default', async () => {
     expect.assertions(1);
 
@@ -191,10 +194,41 @@ test('includes a time formatted to RFC 3339', async () => {
 
     const result = await once(stream, 'data');
 
-    console.log(result);
-
     expect(result).toHaveProperty('time');
     expect(result.time).toMatch(
         /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$/
     );
+});
+
+test('automatically includes a the source location', async () => {
+    expect.assertions(1);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    expect(result[sourceLocation]).toEqual({ file: '/tests/index.test.js' });
+});
+
+test('can override the source location', async () => {
+    expect.assertions(1);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({
+        sourceLocation: { file: 'test' },
+        stream
+    });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    expect(result[sourceLocation]).toEqual({ file: 'test' });
 });
