@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
         if (name !== 'error') {
@@ -212,7 +214,9 @@ test('automatically includes a the source location', async () => {
 
     const result = await once(stream, 'data');
 
-    expect(result[sourceLocation]).toEqual({ file: '/tests/index.test.js' });
+    expect(result[sourceLocation]).toEqual({
+        file: path.resolve(process.cwd(), __filename)
+    });
 });
 
 test('can override the source location', async () => {

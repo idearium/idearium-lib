@@ -59,6 +59,5 @@ module.exports = (options = {}) =>
                         !s.includes('node_modules\\pino')
                 )[0]
                 .match(/\((.*?):/)[1]
-                .replace(__dirname, '')
         }
     });
