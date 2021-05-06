@@ -9,7 +9,7 @@ Idearium Lib is group of es6 packages built by Idearium for Idearium. We use the
 
 ## Monorepo
 
-The [Idearium Lib repository](https://github.com/idearium/idearium-lib) is a monorepo. It features all of our [packages](https://github.com/idearium/idearium-lib/tree/monorepo/packages). We use Yarn's workspaces feature to make it easy to manage multiple packages in one Git repository.
+The [Idearium Lib repository](https://github.com/idearium/idearium-lib) is a monorepo. It features all of our [packages](https://github.com/idearium/idearium-lib/tree/master/packages). We use Yarn's workspaces feature to make it easy to manage multiple packages in one Git repository.
 
 ## Versioning
 
@@ -23,10 +23,10 @@ You can find all of [our releases on GitHub](https://github.com/idearium/ideariu
 
 We use GitHub Actions and workflows to test our packages and publish them at the appropriate time.
 
-Each package has a [workflow](https://github.com/idearium/idearium-lib/tree/monorepo/.github/workflows) to handle the idiosyncrasies of each particular package.
+Each package has a [workflow](https://github.com/idearium/idearium-lib/tree/master/.github/workflows) to handle the idiosyncrasies of each particular package.
 
 You can find all of [our releases on GitHub](https://github.com/idearium/idearium-lib/releases).
 
 ## Docs
 
-The Idearium Lib docs are auto deployed whenever there is a change made and the PR is merged into the main branch (feature-monorepo).
+The Idearium Lib docs are auto deployed whenever there is a change made and the PR is merged into the main branch (master).

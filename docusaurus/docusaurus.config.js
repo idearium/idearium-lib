@@ -12,7 +12,7 @@ module.exports = {
             {
                 docs: {
                     editUrl:
-                        'https://github.com/idearium/idearium-lib/tree/feature-monorepo/docusaurus/',
+                        'https://github.com/idearium/idearium-lib/tree/master/docusaurus/',
                     sidebarPath: require.resolve('./sidebars.js')
                 },
                 theme: {
