@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
         if (name !== 'error') {
@@ -9,6 +11,24 @@ const once = (emitter, name) =>
         emitter.once(name, (...args) => {
             emitter.removeListener('error', reject);
             resolve(...args);
+        });
+    });
+
+const collect = (emitter, name, times = 2) =>
+    new Promise((resolve, reject) => {
+        const collection = [];
+
+        if (name !== 'error') {
+            emitter.once('error', reject);
+        }
+
+        emitter.on(name, (...args) => {
+            collection.push(...args);
+
+            if (collection.length === times) {
+                emitter.removeListener('error', reject);
+                resolve(collection);
+            }
         });
     });
 
@@ -27,6 +47,7 @@ const sink = () => {
     return result;
 };
 
+const sourceLocation = 'logging.googleapis.com/sourceLocation';
 let processEnv = process.env;
 
 beforeEach(() => {
@@ -41,7 +62,7 @@ afterEach(() => {
 test('logs to the console', async () => {
     expect.assertions(2);
 
-    process.env.PINO_PRETTY_PRINT = 'false';
+    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = require('../')({ stream });
@@ -51,7 +72,7 @@ test('logs to the console', async () => {
     const result = await once(stream, 'data');
 
     expect(result.level).toBe(30);
-    expect(result.msg).toBe('test');
+    expect(result.message).toBe('test');
 });
 
 test('does not log if "LOG_ENABLED" is set to "false"', async () => {
@@ -81,29 +102,62 @@ test('only logs at the specified "LOG_LEVEL" and above', async () => {
     expect(log.info.name).toBe('noop');
     expect(log.warn.name).toBe('LOG');
     expect(log.error.name).toBe('LOG');
-    expect(log.fatal.name).toBe('LOG');
+    expect(log.fatal.name).toBe('');
 });
 
-test('redacts paths specified in "PINO_REDACT_PATHS"', async () => {
-    expect.assertions(1);
+test('includes a severity based on log level', async () => {
+    expect.assertions(12);
 
-    process.env.PINO_PRETTY_PRINT = 'false';
-    process.env.PINO_REDACT_PATHS = 'redacttest';
+    process.env.LOG_LEVEL = 'trace';
 
     const stream = sink();
     const log = require('../')({ stream });
 
-    log.info({ redacttest: 'this should not appear' }, 'test');
+    log.trace('trace-test');
+    log.debug('debug-test');
+    log.info('info-test');
+    log.warn('warn-test');
+    log.error('error-test');
+    log.fatal('fatal-test');
+
+    const [trace, debug, info, warn, error, fatal] = await collect(
+        stream,
+        'data',
+        6
+    );
+
+    expect(trace).toHaveProperty('severity', 'DEBUG');
+    expect(trace).toHaveProperty('level', 10);
+    expect(debug).toHaveProperty('severity', 'DEBUG');
+    expect(debug).toHaveProperty('level', 20);
+    expect(info).toHaveProperty('severity', 'INFO');
+    expect(info).toHaveProperty('level', 30);
+    expect(warn).toHaveProperty('severity', 'WARNING');
+    expect(warn).toHaveProperty('level', 40);
+    expect(error).toHaveProperty('severity', 'ERROR');
+    expect(error).toHaveProperty('level', 50);
+    expect(fatal).toHaveProperty('severity', 'CRITICAL');
+    expect(fatal).toHaveProperty('level', 60);
+});
+
+test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
+    expect.assertions(1);
+
+    process.env.LOG_PRETTY_PRINT = 'false';
+    process.env.LOG_REDACT_PATHS = 'redactTest';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.info({ redactTest: 'this should not appear' }, 'test');
 
     const result = await once(stream, 'data');
 
-    expect(result.redacttest).toBe('[Redacted]');
+    expect(result.redactTest).toBe('[Redacted]');
 });
 
-test('logs to a remote server if "LOG_REMOTE" is "true"', async () => {
+test('does not include pid by default', async () => {
     expect.assertions(1);
-
-    process.env.LOG_REMOTE = 'true';
 
     const stream = sink();
     const log = require('../')({ stream });
@@ -112,6 +166,71 @@ test('logs to a remote server if "LOG_REMOTE" is "true"', async () => {
 
     const result = await once(stream, 'data');
 
-    // If this isn't working, sink would throw an error due to JSON.parse trying to parse the prettyfied log.
-    expect(result.msg).toBe('test');
+    expect(result).not.toHaveProperty('pid');
+});
+
+test('includes pid if provided', async () => {
+    expect.assertions(1);
+
+    const stream = sink();
+    const log = require('../')({ base: { pid: process.pid }, stream });
+
+    log.info('test');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('pid');
+});
+
+test('includes a time formatted to RFC 3339', async () => {
+    expect.assertions(2);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('time');
+    expect(result.time).toMatch(
+        /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z$/
+    );
+});
+
+test('automatically includes a the source location', async () => {
+    expect.assertions(1);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({ stream });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    expect(result[sourceLocation]).toEqual({
+        file: path.resolve(process.cwd(), __filename)
+    });
+});
+
+test('can override the source location', async () => {
+    expect.assertions(1);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({
+        sourceLocation: { file: 'test' },
+        stream
+    });
+
+    log.info('info-test');
+
+    const result = await once(stream, 'data');
+
+    expect(result[sourceLocation]).toEqual({ file: 'test' });
 });
