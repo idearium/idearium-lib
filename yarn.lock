@@ -233,14 +233,6 @@
     eslint "^5.0.1"
     eslint-plugin-eslint-comments "^3.0.0"
 
-"@idearium/log@1.0.0-beta.6":
-  version "1.0.0-beta.6"
-  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-1.0.0-beta.6.tgz#d3ab2ee7dbc2563e59720afb61bfefde4e43650b"
-  integrity sha512-0ERsOl7AlwFYecbuShJnwNs1PrNu6k3nNb9loyji8WXIU4w9ArjaFCQ6SQUndweQ1NFNWsHbC5wzawc9BGsvxA==
-  dependencies:
-    pino "6.11.3"
-    pino-pretty "4.7.1"
-
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"
@@ -4493,7 +4485,7 @@ require-in-the-middle@^5.0.3:
     module-details-from-path "^1.0.3"
     resolve "^1.12.0"
 
-require-main-filename@2.0.0, require-main-filename@^2.0.0:
+require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
