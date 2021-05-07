@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## v1.0.1-beta.9
+
+### Changed
+
+-   Version bumped @idearium/log to 1.0.0.
+
+## v1.0.1-beta.8
+
+### Changed
+
+-   Version bumped @idearium/log to 1.0.0-beta.6.
+
+## v1.0.1-beta.7
+
 ### Changed
 
 -   Changed mongoose to be a required parameter.
