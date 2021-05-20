@@ -2,6 +2,12 @@
 
 ## v2.0.2
 
+### Fixed
+
+-   Fixed error when no content-type header is returned.
+
+## v2.0.2
+
 ### Changed
 
 -   Re-release with updated version number.
