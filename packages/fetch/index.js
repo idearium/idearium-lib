@@ -3,7 +3,11 @@
 const fetch = require('isomorphic-fetch');
 
 const parseBody = (response) => {
-    if (response.headers.get('Content-Type').includes('application/json')) {
+    if (
+        response.headers &&
+        response.headers.get('Content-Type') &&
+        response.headers.get('Content-Type').includes('application/json')
+    ) {
         return response.json();
     }
 

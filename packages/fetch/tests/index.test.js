@@ -128,3 +128,15 @@ it('allows multiple fetch parameters', async () => {
 
     expect(fetchMock).toHaveBeenCalledWith(testUrl, opts);
 });
+
+it('does not fail if no content header is returned', async () => {
+    expect.assertions(1);
+
+    fetchMock.get(testUrl, { status: 400 });
+
+    await expect(fetchApi(testUrl)).resolves.toMatchObject({
+        ok: false,
+        result: {},
+        status: 400
+    });
+});
