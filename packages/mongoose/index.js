@@ -1,13 +1,14 @@
 'use strict';
 
-const mongoose = require('mongoose');
 const log = require('@idearium/log')();
 
-mongoose.Promise = global.Promise;
+const setupMongoose = (mongoose) => {
+    mongoose.Promise = global.Promise;
 
-mongoose.plugin((schema) => {
-    schema.options.usePushEach = true;
-});
+    mongoose.plugin((schema) => {
+        schema.options.usePushEach = true;
+    });
+};
 
 // Allow overriding the defaults.
 const getOptions = (opts = {}) =>
@@ -23,36 +24,48 @@ const getOptions = (opts = {}) =>
     );
 
 const getDbInfo = (connection) => ({
-    db: `${connection.host}:${connection.port}`
+    db: `${connection.host}:${connection.port}/${connection.name}`
 });
 
-const connect = async (uri, opts = {}) => {
+const connect = async ({ mongoose, options = {}, uri } = {}) => {
     if (!uri) {
         throw new Error(`uri must be provided`);
     }
 
-    const options = getOptions(opts);
+    if (!mongoose) {
+        throw new Error('You must provide a mongoose instance.');
+    }
 
-    log.info('Connecting to database...');
+    const opts = getOptions(options);
 
-    const connection = await mongoose.connect(uri, options);
+    setupMongoose(mongoose);
+
+    log.info('Connecting to the database...');
+
+    const connection = await mongoose.connect(uri, opts);
 
     log.info(getDbInfo(connection), 'Connected to the database');
 
-    return connection;
+    return mongoose;
 };
 
-const createConnections = async (uris, opts = {}) => {
+const createConnections = async ({ mongoose, options = {}, uris } = {}) => {
     if (!uris) {
         throw new Error(`uris array must be provided`);
     }
 
-    const options = getOptions(opts);
+    if (!mongoose) {
+        throw new Error('You must provide a mongoose instance.');
+    }
+
+    const opts = getOptions(options);
+
+    setupMongoose(mongoose);
 
     log.info('Creating connections to the databases...');
 
     const connections = await Promise.all(
-        uris.map((uri) => mongoose.createConnection(uri, options))
+        uris.map((uri) => mongoose.createConnection(uri, opts))
     );
 
     log.info(
@@ -62,7 +75,7 @@ const createConnections = async (uris, opts = {}) => {
         'Connected to the databases'
     );
 
-    return connections;
+    return mongoose;
 };
 
-module.exports = { connect, createConnections, mongoose };
+module.exports = { connect, createConnections };
