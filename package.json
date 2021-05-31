@@ -22,7 +22,7 @@
         "eslint-config-prettier": "6.3.0",
         "eslint-plugin-eslint-comments": "3.1.2",
         "husky": "3.0.7",
-        "jest": "24.9.0",
+        "jest": "27.0.3",
         "lint-staged": "9.4.0",
         "prettier": "1.18.2",
         "pretty-quick": "1.11.1"
