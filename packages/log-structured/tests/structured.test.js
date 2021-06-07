@@ -4,7 +4,6 @@ const http = require('http');
 
 const httpLogger = require('../../log-http');
 const structured = require('../index');
-// const defaults = require('../../log/defaults');
 
 const middleware = (stream) => httpLogger({ stream });
 
