@@ -1,5 +1,11 @@
 # @idearium/log
 
+## Unreleased
+
+### Changed
+
+-   Removed support for LOG_PRETTY_PRINT.
+
 ## v1.1.0-beta.1 - 2021-06-07
 
 ### Changed

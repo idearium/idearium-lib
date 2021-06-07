@@ -34,7 +34,7 @@ module.exports = {
     },
     level: process.env.LOG_LEVEL || 'info',
     messageKey: 'message',
-    prettyPrint: process.env.LOG_PRETTY_PRINT === 'true',
+    prettyPrint: false,
     redact: process.env.LOG_REDACT_PATHS
         ? redactPathsDefaults.concat(process.env.LOG_REDACT_PATHS.split(','))
         : redactPathsDefaults,
