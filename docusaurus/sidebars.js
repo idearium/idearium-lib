@@ -11,6 +11,7 @@ module.exports = {
             'log',
             'log-http',
             'log-insightops',
+            'log-structured',
             'mongoose',
             'utils'
         ]

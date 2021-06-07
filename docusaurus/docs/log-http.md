@@ -77,3 +77,9 @@ This is the primary entry point and is intended to be used as middleware with No
 ### `@idearium/log-http/defaults`
 
 These are the defaults used by the package.
+
+## Formatters
+
+This package extends what [pino-http](https://github.com/pinojs/pino-http) provides out of the box, however, it does not reshape the logs as required by [GCP Structured Logging](https://cloud.google.com/logging/docs/structured-logging).
+
+You can use [@idearium/log-structured](log-structured) to take input from this package and reshape the log to include the `httpRequest` property.
