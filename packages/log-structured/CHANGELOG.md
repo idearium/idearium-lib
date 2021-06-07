@@ -1,5 +1,5 @@
 # @idearium/log-structured
 
-## Unreleased
+## v1.0.0-beta.1
 
 -   First version of the package.
