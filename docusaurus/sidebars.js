@@ -9,6 +9,7 @@ module.exports = {
             'fetch',
             'lists',
             'log',
+            'log-http',
             'log-insightops',
             'mongoose',
             'utils'

@@ -1,0 +1,20 @@
+{
+    "name": "@idearium/log-http",
+    "version": "1.0.0",
+    "description": "Idearium HTTP logger",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@idearium.io>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "@idearium/log": "1.0.0",
+        "pump": "3.0.0"
+    },
+    "devDependencies": {
+        "pino-http": "5.5.0",
+        "sink": "0.1.1"
+    }
+}
