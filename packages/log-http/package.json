@@ -7,7 +7,7 @@
     "author": "Scott Mebberson <scott@idearium.io>",
     "license": "MIT",
     "scripts": {
-        "test": "jest"
+        "test": "jest --forceExit"
     },
     "dependencies": {
         "@idearium/log": "1.0.0",
