@@ -1,0 +1,21 @@
+{
+    "name": "@idearium/log-structured",
+    "version": "1.0.0-beta.1",
+    "description": "Idearium logger structured logging formatter",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@idearium.io>",
+    "license": "MIT",
+    "bin": {
+        "structured": "bin/structured.js"
+    },
+    "scripts": {
+        "test": "jest --forceExit"
+    },
+    "dependencies": {
+        "pump": "3.0.0"
+    },
+    "devDependencies": {
+        "pino-http": "5.5.0",
+        "sink": "0.1.1"
+    }
+}

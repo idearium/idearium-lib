@@ -62,8 +62,6 @@ afterEach(() => {
 test('logs to the console', async () => {
     expect.assertions(2);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
     const log = require('../')({ stream });
 
@@ -143,7 +141,6 @@ test('includes a severity based on log level', async () => {
 test('redacts paths specified in "LOG_REDACT_PATHS"', async () => {
     expect.assertions(1);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
     process.env.LOG_REDACT_PATHS = 'redactTest';
 
     const stream = sink();

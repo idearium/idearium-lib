@@ -59,6 +59,18 @@ By default the logger will determine the file in which the log took place and pu
 
 Further to this, you can pass in any [options supported by Pino](https://getpino.io/#/docs/api?id=options).
 
+## Entry points
+
+There are a few entry points this package.
+
+### `@idearium/log`
+
+This is the primary entry point and is intended to be use with Node.js.
+
+### `@idearium/log/defaults`
+
+These are the defaults used by the package.
+
 ## Transports
 
 The Idearium logger does not support transports out of the box. See [@idearium/log-insightops](https://idearium.github.io/idearium-lib/docs/log) for a transport for InsightOps.
