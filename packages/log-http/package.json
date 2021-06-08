@@ -1,6 +1,6 @@
 {
     "name": "@idearium/log-http",
-    "version": "1.0.0-beta.3",
+    "version": "1.0.0",
     "description": "Idearium HTTP logger",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
