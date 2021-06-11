@@ -1,9 +1,11 @@
 'use strict';
 
+const express = require('express');
 const http = require('http');
 
-const httpLogger = require('../../log-http');
 const structured = require('../index');
+const httpLogger = require('../../log-http');
+const errorMiddleware = require('../../log-http/error-middleware');
 
 const middleware = (stream) => httpLogger({ stream });
 
@@ -54,28 +56,38 @@ const post = (server, headers = {}) => {
     });
 };
 
-const setup = (logger) =>
+const setup = (middleware) =>
     new Promise((resolve, reject) => {
-        const server = http.createServer((req, res) => {
-            logger(req, res);
+        const app = express();
+        const server = http.createServer(app);
 
-            if (req.url === '/') {
-                return res.end('hello world');
-            }
+        app.use(middleware);
 
-            if (req.url === '/json') {
-                res.setHeader('content-type', 'application/json');
-                return res.end(JSON.stringify({ test: true }));
-            }
+        app.get('/', (req, res) => res.end('hello world'));
 
-            if (req.url === '/error') {
-                res.statusCode = 500;
-                return res.end('error');
-            }
-
-            res.statusCode = 404;
-            return res.end('Not found');
+        app.get('/json', (req, res) => {
+            res.setHeader('content-type', 'application/json');
+            return res.end(JSON.stringify({ test: true }));
         });
+
+        app.get('/error', (req, res, next) =>
+            next(new Error('Testing errors...'))
+        );
+
+        app.get('/error-with-context', (req, res, next) => {
+            const err = new Error('Testing errors...');
+            err.context = {
+                code: 123
+            };
+            next(err);
+        });
+
+        app.get('/500', (req, res) => {
+            res.statusCode = 500;
+            return res.end('error');
+        });
+
+        app.use(errorMiddleware());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
