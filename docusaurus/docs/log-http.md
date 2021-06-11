@@ -74,12 +74,13 @@ It involves using the `@idearium/log-http/error-middleware` entry point (which i
 
 ```JavaScript
 const express = require('express');
-const logger = require('@idearium/log-http')();
-const errorMiddleware = require('@idearium/log-http/error-middleware')();
+const requestLogger = require('@idearium/log-http')();
+const errorLogger = require('@idearium/log-http/middleware/log-error')();
+const serverError = require('@idearium/log-http/middleware/server-error')();
 
 const app = express();
 
-app.use(logger);
+app.use(requestLogger);
 
 // Other routes here
 app.get('/', (req, res) => res.send('Hello world'));
@@ -88,7 +89,8 @@ app.get('/', (req, res) => res.send('Hello world'));
 app.get('/error', (req, res, next) => next(new Error('Testing errors...')));
 
 // Put the error middleware last
-app.use(errorMiddleware);
+app.use(errorLogger);
+app.use(serverError);
 ```
 
 The above produces the following log output when a request errors:
@@ -157,6 +159,64 @@ This will produce the following `err` on the log:
 
 ```
 
+## Middleware
+
+This package also offers some middleware.
+
+### `@idearium/log-http/middleware/log-error`
+
+This middleware is used to actually log any errors raised during the request/response lifecycle. It's use is demonstrated above.
+
+### `@idearium/log-http/middleware/server-error`
+
+This middleware will send any errors raised during the request/response lifecycle back to the client with a 500 status code.
+
+Use this just below the `log-error` middleware.
+
+```JavaScript
+const express = require('express');
+const requestLogger = require('@idearium/log-http')();
+const errorLogger = require('@idearium/log-http/middleware/log-error')();
+const serverError = require('@idearium/log-http/middleware/server-error')();
+
+const app = express();
+
+app.use(requestLogger);
+
+// Other routes here
+
+// Put the error middleware last
+app.use(errorLogger);
+app.use(serverError);
+```
+
+### `@idearium/log-http/middleware/not-found`
+
+When used last in the middleware stack, just before the error middleware, any request that wasn't handled by previous middleware will flow through and a 404 response will be sent back to the client.
+
+Use this just above the `log-error` middleware.
+
+```JavaScript
+const express = require('express');
+const requestLogger = require('@idearium/log-http')();
+const errorLogger = require('@idearium/log-http/middleware/log-error')();
+const serverError = require('@idearium/log-http/middleware/server-error')();
+const notFound = require('@idearium/log-http/middleware/not-found')();
+
+const app = express();
+
+app.use(requestLogger);
+
+// Other routes here
+
+// Handle routes that weren't matched
+app.use(notFound);
+
+// Put the error middleware last
+app.use(errorLogger);
+app.use(serverError);
+```
+
 ## Entry points
 
 There are a few entry points this package. These entry points can be used as required and are useful for using the existing defaults as a starting point and then customising further as required.
@@ -180,10 +240,6 @@ This is the `req` serializer.
 ### `@idearium/log-http/res`
 
 This is the `res` serializer.
-
-### `@idearium/log-http/error-middleware`
-
-This is the error handling middleware that you can use with Express.
 
 ## Formatters
 

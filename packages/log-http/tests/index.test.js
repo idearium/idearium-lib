@@ -2,8 +2,10 @@
 
 const http = require('http');
 const express = require('express');
-const logger = require('../');
-const errorMiddleware = require('../error-middleware');
+const requestLogger = require('../');
+const errorLogger = require('../middleware/log-error');
+const notFound = require('../middleware/not-found');
+const serverError = require('../middleware/server-error');
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -74,7 +76,9 @@ const setup = (middleware) =>
             return res.end('error');
         });
 
-        app.use(errorMiddleware());
+        app.use(notFound());
+        app.use(errorLogger());
+        app.use(serverError());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
@@ -89,7 +93,7 @@ test('logs to the console', async (done) => {
     expect.assertions(2);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -106,7 +110,7 @@ test('logs 200 status', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -124,7 +128,7 @@ test('logs 404 status', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -142,7 +146,7 @@ test('logs 500 status', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -160,7 +164,7 @@ test('logs errors', async (done) => {
     expect.assertions(10);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -187,7 +191,7 @@ test('logs error context', async (done) => {
     expect.assertions(10);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -214,7 +218,7 @@ test('logs the response content-type', async (done) => {
     expect.assertions(4);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -235,7 +239,7 @@ test('logs the response size', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -253,7 +257,7 @@ test('logs the protocol', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
@@ -271,7 +275,7 @@ test('uses x-forwarded-for if present', async (done) => {
     expect.assertions(3);
 
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {

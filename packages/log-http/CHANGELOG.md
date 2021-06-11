@@ -1,5 +1,16 @@
 # @idearium/log-http
 
+## Unreleased
+
+### Changed
+
+-   Where the middleware files are.
+
+### Added
+
+-   404 middleware.
+-   500 middleware to send the error to the client.
+
 ## v1.0.1-beta.3 - 2021-06-11
 
 ### Fixed
