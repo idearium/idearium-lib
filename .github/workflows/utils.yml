@@ -37,7 +37,7 @@ jobs:
             - name: Test
               run: yarn workspace @idearium/utils test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/utils')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/utils-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest

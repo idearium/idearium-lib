@@ -37,7 +37,7 @@ jobs:
             - name: Test
               run: yarn workspace @idearium/log test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/log')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest

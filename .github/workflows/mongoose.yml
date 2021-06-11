@@ -35,7 +35,7 @@ jobs:
             - name: Setup yarn
               run: yarn install
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/mongoose')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/mongoose-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
