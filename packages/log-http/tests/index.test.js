@@ -3,6 +3,7 @@
 const http = require('http');
 const express = require('express');
 const logger = require('../');
+const errorMiddleware = require('../error-middleware');
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -56,10 +57,16 @@ const setup = (middleware) =>
             return res.end(JSON.stringify({ test: true }));
         });
 
+        app.get('/error', (req, res, next) =>
+            next(new Error('Testing errors...'))
+        );
+
         app.get('/500', (req, res) => {
             res.statusCode = 500;
             return res.end('error');
         });
+
+        app.use(errorMiddleware());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
@@ -139,6 +146,31 @@ test('logs 500 status', async (done) => {
     });
 
     get(server, '/500');
+});
+
+test('logs errors', async (done) => {
+    expect.assertions(8);
+
+    const stream = sink();
+    const log = logger({ stream });
+    const server = await setup(log);
+
+    once(stream, 'data').then((result) => {
+        expect(result).toHaveProperty('res');
+        expect(result.res).toHaveProperty('statusCode');
+        expect(result.res.statusCode).toBe(500);
+        expect(result).toHaveProperty('err');
+        expect(result.err).toHaveProperty('message');
+        expect(result.err.message).toContain('Testing errors...');
+        expect(result.err).toHaveProperty('@type');
+        expect(result.err['@type']).toBe(
+            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+        );
+
+        return done();
+    });
+
+    get(server, '/error');
 });
 
 test('logs the response content-type', async (done) => {
