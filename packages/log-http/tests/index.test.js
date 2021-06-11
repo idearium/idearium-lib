@@ -1,6 +1,7 @@
 'use strict';
 
 const http = require('http');
+const express = require('express');
 const logger = require('../');
 
 const once = (emitter, name) =>
@@ -43,25 +44,21 @@ const get = (server, path = '/', headers = {}) =>
 
 const setup = (middleware) =>
     new Promise((resolve, reject) => {
-        const server = http.createServer((req, res) => {
-            middleware(req, res);
+        const app = express();
+        const server = http.createServer(app);
 
-            if (req.url === '/') {
-                return res.end('hello world');
-            }
+        app.use(middleware);
 
-            if (req.url === '/json') {
-                res.setHeader('content-type', 'application/json');
-                return res.end(JSON.stringify({ test: true }));
-            }
+        app.get('/', (req, res) => res.end('hello world'));
 
-            if (req.url === '/error') {
-                res.statusCode = 500;
-                return res.end('error');
-            }
+        app.get('/json', (req, res) => {
+            res.setHeader('content-type', 'application/json');
+            return res.end(JSON.stringify({ test: true }));
+        });
 
-            res.statusCode = 404;
-            return res.end('Not found');
+        app.get('/500', (req, res) => {
+            res.statusCode = 500;
+            return res.end('error');
         });
 
         server.listen(0, '127.0.0.1', (err) => {
@@ -160,7 +157,7 @@ test('logs 500 status', async (done) => {
         return done();
     });
 
-    get(server, '/error');
+    get(server, '/500');
 });
 
 test('logs the response content-type', async (done) => {
