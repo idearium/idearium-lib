@@ -95,8 +95,8 @@ The above produces the following log output when a request errors:
 
 ```JSON
 {
-  "level": 30,
-  "severity": "INFO",
+  "level": 50,
+  "severity": "ERROR",
   "time": "2021-06-11T01:57:31.740Z",
   "req": {
     "headers": { "host": "127.0.0.1:51491", "connection": "close" },

@@ -157,13 +157,14 @@ test('logs 500 status', async (done) => {
 });
 
 test('logs errors', async (done) => {
-    expect.assertions(9);
+    expect.assertions(10);
 
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
 
     once(stream, 'data').then((result) => {
+        expect(result.severity).toBe('ERROR');
         expect(result).toHaveProperty('res');
         expect(result.res).toHaveProperty('statusCode');
         expect(result.res.statusCode).toBe(500);

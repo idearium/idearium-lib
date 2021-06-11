@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## Unreleased
+
+### Fixed
+
+-   Updated the log level to ERROR when a log occurs during the request/response lifecycle.
+
 ## v1.0.1-beta.2 - 2021-06-11
 
 ### Added
