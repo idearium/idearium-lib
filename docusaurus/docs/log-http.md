@@ -128,6 +128,35 @@ The above produces the following log output when a request errors:
 }
 ```
 
+### Error context
+
+You can also provide additional context with errors which will be logged with the error itself.
+
+```JavaScript
+(req, res, next) => {
+
+    const err = new Error('Error with context');
+
+    err.context = { code: 123 };
+
+    return next(err);
+
+}
+```
+
+This will produce the following `err` on the log:
+
+```JSON
+{
+  "err": {
+    "@type": "type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent",
+    "message": "Error: Testing errors...\n    at app.get (/Developer/idearium-lib/packages/log-http/tests/index.test.js:65:25)\n    at Layer.handle [as handle_request] (/Developer/idearium-lib/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Developer/idearium-lib/node_modules/express/lib/router/route.js:137:13)\n    at Route.dispatch (/Developer/idearium-lib/node_modules/express/lib/router/route.js:112:3)\n    at Layer.handle [as handle_request] (/Developer/idearium-lib/node_modules/express/lib/router/layer.js:95:5)\n    at /idearium-lib/node_modules/express/lib/router/index.js:281:22\n    at Function.process_params (/Developer/idearium-lib/node_modules/express/lib/router/index.js:335:12)\n    at next (/Developer/idearium-lib/node_modules/express/lib/router/index.js:275:10)\n    at loggingMiddleware (/Developer/idearium-lib/node_modules/pino-http/logger.js:131:7)\n    at Layer.handle [as handle_request] (/Developer/idearium-lib/node_modules/express/lib/router/layer.js:95:5)",
+    "context": { "code": 123 }
+  }
+}
+
+```
+
 ## Entry points
 
 There are a few entry points this package. These entry points can be used as required and are useful for using the existing defaults as a starting point and then customising further as required.

@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## Unreleased
+
+### Added
+
+-   Support for supplying additional context when an error is produced.
+
 ## v1.0.1-beta.1 - 2021-06-11
 
 ### Added
