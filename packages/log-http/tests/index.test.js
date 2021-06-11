@@ -70,21 +70,8 @@ const setup = (middleware) =>
         });
     });
 
-let processEnv = process.env;
-
-beforeEach(() => {
-    jest.resetModules();
-    process.env = Object.assign({}, processEnv);
-});
-
-afterEach(() => {
-    process.env = processEnv;
-});
-
 test('logs to the console', async (done) => {
     expect.assertions(2);
-
-    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = logger({ stream });
@@ -102,8 +89,6 @@ test('logs to the console', async (done) => {
 
 test('logs 200 status', async (done) => {
     expect.assertions(3);
-
-    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = logger({ stream });
@@ -123,8 +108,6 @@ test('logs 200 status', async (done) => {
 test('logs 404 status', async (done) => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
@@ -143,8 +126,6 @@ test('logs 404 status', async (done) => {
 test('logs 500 status', async (done) => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
@@ -162,8 +143,6 @@ test('logs 500 status', async (done) => {
 
 test('logs the response content-type', async (done) => {
     expect.assertions(4);
-
-    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = logger({ stream });
@@ -186,8 +165,6 @@ test('logs the response content-type', async (done) => {
 test('logs the response size', async (done) => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
@@ -206,8 +183,6 @@ test('logs the response size', async (done) => {
 test('logs the protocol', async (done) => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
@@ -225,8 +200,6 @@ test('logs the protocol', async (done) => {
 
 test('uses x-forwarded-for if present', async (done) => {
     expect.assertions(3);
-
-    process.env.LOG_PRETTY_PRINT = 'false';
 
     const stream = sink();
     const log = logger({ stream });
