@@ -4,10 +4,12 @@ const express = require('express');
 const http = require('http');
 
 const structured = require('../index');
-const httpLogger = require('../../log-http');
-const errorMiddleware = require('../../log-http/error-middleware');
+const requestLogger = require('../../log-http');
+const errorLogger = require('../../log-http/middleware/log-error');
+const errorHandler = require('../../log-http/middleware/server-error');
+const notFound = require('../../log-http/middleware/not-found');
 
-const middleware = (stream) => httpLogger({ stream });
+const middleware = (stream) => requestLogger({ stream });
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -87,7 +89,9 @@ const setup = (middleware) =>
             return res.end('error');
         });
 
-        app.use(errorMiddleware());
+        app.use(notFound());
+        app.use(errorLogger());
+        app.use(errorHandler());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
