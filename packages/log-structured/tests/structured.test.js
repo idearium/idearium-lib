@@ -164,6 +164,45 @@ test('logs res when logging http requests', async (done) => {
     get(server);
 });
 
+test('does not include error information when an error did not occur', async (done) => {
+    expect.assertions(1);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    once(stream, 'data').then((result) => {
+        const line = JSON.parse(result.toString());
+
+        expect(line).not.toHaveProperty('@type');
+
+        return done();
+    });
+
+    get(server);
+});
+
+test('logs err when an error occurs during http request/response lifecycle', async (done) => {
+    expect.assertions(2);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    once(stream, 'data').then((result) => {
+        const line = JSON.parse(result.toString());
+
+        expect(line).toHaveProperty('@type');
+        expect(line['@type']).toEqual(
+            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+        );
+
+        return done();
+    });
+
+    get(server, '/error');
+});
+
 test('uses structured logging format when logging http requests', async (done) => {
     expect.assertions(7);
 
@@ -378,4 +417,33 @@ test('http requests includes referer', async (done) => {
     });
 
     get(server);
+});
+
+test('uses structured error logging when an error occurs during http request/response lifecycle', async (done) => {
+    expect.assertions(10);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    once(stream, 'data').then((result) => {
+        const line = JSON.parse(result.toString());
+
+        expect(line).toHaveProperty('@type');
+        expect(line['@type']).toEqual(
+            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+        );
+        expect(line).toHaveProperty('message');
+        expect(line.message).toBe('request errored');
+        expect(line).not.toHaveProperty('httpRequest');
+        expect(line).not.toHaveProperty('err');
+        expect(line).toHaveProperty('context');
+        expect(line.context).toHaveProperty('httpRequest');
+        expect(line).toHaveProperty('exception');
+        expect(line.exception).toContain('Testing errors...');
+
+        return done();
+    });
+
+    get(server, '/error');
 });

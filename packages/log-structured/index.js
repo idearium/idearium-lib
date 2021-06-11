@@ -10,26 +10,42 @@ const write = (callback, line) => {
     return callback(null, `${JSON.stringify(line)}\n`);
 };
 
+const createHttpRequest = (req, res) => ({
+    protocol: req.protocol,
+    referer: req.headers.referer || '',
+    remoteIp:
+        req.headers['x-forwarded-for'] ||
+        // This is for < v13
+        req.remoteIp ||
+        // This is for > v14
+        '',
+    requestMethod: req.method,
+    requestSize: req.headers['content-length'] || 0,
+    requestUrl: req.url,
+    responseSize: res.size || 0,
+    status: res.statusCode,
+    userAgent: req.headers['user-agent'] || ''
+});
+
+const transformErroredRequest = (log) => {
+    const { err, req, res } = log;
+
+    const updated = Object.assign({}, log, {
+        '@type': err['@type'],
+        'context': { httpRequest: createHttpRequest(req, res) },
+        'exception': err.message
+    });
+
+    delete updated.err;
+
+    return updated;
+};
+
 const transformRequest = (log) => {
     const updated = Object.assign({}, log);
     const { req, res } = updated;
 
-    updated.httpRequest = {
-        protocol: req.protocol,
-        referer: req.headers.referer || '',
-        remoteIp:
-            req.headers['x-forwarded-for'] ||
-            // This is for < v13
-            req.remoteIp ||
-            // This is for > v14
-            '',
-        requestMethod: req.method,
-        requestSize: req.headers['content-length'] || 0,
-        requestUrl: req.url,
-        responseSize: res.size || 0,
-        status: res.statusCode,
-        userAgent: req.headers['user-agent'] || ''
-    };
+    updated.httpRequest = createHttpRequest(req, res);
 
     return updated;
 };
@@ -58,6 +74,10 @@ module.exports = () => {
             // Write back the exact same line we received, not the passed version.
             if (!(line.req && line.res)) {
                 return write(callback, data);
+            }
+
+            if (line.err && line.req && line.res) {
+                return write(callback, transformErroredRequest(line));
             }
 
             return write(callback, transformRequest(line));
