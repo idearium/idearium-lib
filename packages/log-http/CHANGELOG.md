@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## v1.0.1-beta.5 - 2021-06-11
+
+### Fixed
+
+-   Fixed potential XSS issue.
+
 ## v1.0.1-beta.4 - 2021-06-11
 
 ### Changed
