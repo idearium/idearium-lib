@@ -52,12 +52,9 @@ const setup = (middleware) =>
 
         app.use(middleware);
 
-        app.get('/', (req, res) => res.end('hello world'));
+        app.get('/', (req, res) => res.send('hello world'));
 
-        app.get('/json', (req, res) => {
-            res.setHeader('content-type', 'application/json');
-            return res.end(JSON.stringify({ test: true }));
-        });
+        app.get('/json', (req, res) => res.json({ test: true }));
 
         app.get('/error', (req, res, next) =>
             next(new Error('Testing errors...'))
@@ -73,7 +70,7 @@ const setup = (middleware) =>
 
         app.get('/500', (req, res) => {
             res.statusCode = 500;
-            return res.end('error');
+            return res.send('error');
         });
 
         app.use(notFound());
