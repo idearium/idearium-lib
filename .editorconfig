@@ -9,7 +9,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.{raml,styl,yaml,yml}]
-indent_size = 2
+indent_size = 4
 
 # Because the `npm` cli resets it when you use `--save` or `--save-dev`.
 [package.json]

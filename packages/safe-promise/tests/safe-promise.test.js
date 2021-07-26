@@ -1,6 +1,6 @@
 'use strict';
 
-const { safePromise } = require('../');
+const safePromise = require('..');
 
 describe('safePromise', () => {
     it('is a function', () => {
