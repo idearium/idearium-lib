@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## Unreleased
+
+### Changed
+
+-   Updated responseTime to log in seconds rather than milliseconds.
+
 ## v1.0.1-beta.6 - 2021-07-30
 
 ### Fixed

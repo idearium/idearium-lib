@@ -250,6 +250,22 @@ test('logs the response size', async (done) => {
     get(server, '/json');
 });
 
+test('logs the response time', async (done) => {
+    expect.assertions(1);
+
+    const stream = sink();
+    const log = requestLogger({ stream });
+    const server = await setup(log);
+
+    once(stream, 'data').then((result) => {
+        console.log('result', result);
+        expect(result).toHaveProperty('responseTime');
+        return done();
+    });
+
+    get(server, '/json');
+});
+
 test('logs the protocol', async (done) => {
     expect.assertions(3);
 
