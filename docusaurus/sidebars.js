@@ -13,7 +13,7 @@ module.exports = {
             'log-insightops',
             'log-structured',
             'mongoose',
-            'utils'
+            'safe-promise'
         ]
     }
 };

@@ -1,8 +1,8 @@
-name: '@idearium/utils'
+name: '@idearium/safe-promise'
 on:
     push:
         paths:
-            - 'packages/utils/**'
+            - 'packages/safe-promise/**'
     release:
         types: [published]
 
@@ -35,9 +35,9 @@ jobs:
             - name: Setup yarn
               run: yarn install
             - name: Test
-              run: yarn workspace @idearium/utils test
+              run: yarn workspace @idearium/safe-promise test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/utils-v')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/safe-promise-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
@@ -69,11 +69,11 @@ jobs:
               run: yarn install
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
-              run: yarn workspace @idearium/utils publish --tag beta --access public
+              run: yarn workspace @idearium/safe-promise publish --tag beta --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish
               if: "!contains(github.ref , 'beta')"
-              run: yarn workspace @idearium/utils publish --access public
+              run: yarn workspace @idearium/safe-promise publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
