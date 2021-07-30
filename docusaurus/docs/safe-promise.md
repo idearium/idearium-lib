@@ -1,16 +1,14 @@
 ---
-id: utils
-title: '@idearium/utils'
-sidebar_label: '@idearium/utils'
-slug: /utils
+id: safe-promise
+title: '@idearium/safe-promise'
 ---
 
-Idearium utility methods.
+Makes working with promises safer.
 
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/utils
+$ yarn add -E @idearium/safe-promise
 ```
 
 ### Beta installation
@@ -18,17 +16,17 @@ $ yarn add -E @idearium/utils
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/utils@beta
+$ yarn add -E @idearium/safe-promise@beta
 ```
 
 ## Usage
 
 ### safePromise
 
-To use `safePromise`, require it from `@idearium/utils`.
+To use `safePromise`, require it from `@idearium/safe-promise`.
 
 ```js
-const { safePromise } = require('@idearium/utils');
+const safePromise = require('@idearium/safe-promise');
 ```
 
 This will take a promise and always use `resolve` to return a result in the format `[err, result]`.

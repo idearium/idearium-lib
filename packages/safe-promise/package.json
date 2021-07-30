@@ -1,10 +1,10 @@
 {
-    "name": "@idearium/utils",
+    "name": "@idearium/safe-promise",
     "version": "1.0.0",
-    "description": "Idearium utility methods.",
+    "description": "A packages to make promises safe.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
-    "author": "Allan Chau <allan@idearium.io>",
+    "author": "Scott Mebberson <scott@idearium.io>",
     "license": "MIT",
     "scripts": {
         "test": "jest"
