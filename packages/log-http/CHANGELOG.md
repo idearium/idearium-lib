@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## v1.0.1-beta.6 - 2021-07-30
+
+### Fixed
+
+-   Fixed server error middleware.
+
 ## v1.0.1-beta.5 - 2021-06-11
 
 ### Fixed
