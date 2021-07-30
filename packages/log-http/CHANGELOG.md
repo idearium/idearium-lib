@@ -1,6 +1,6 @@
 # @idearium/log-http
 
-## Unreleased
+## v1.0.1-beta.7 - 2021-07-31
 
 ### Changed
 
