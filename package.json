@@ -18,7 +18,7 @@
     "devDependencies": {
         "@idearium/eslint-config": "3.0.1",
         "babel-eslint": "10.0.3",
-        "eslint": "6.5.0",
+        "eslint": "7.32.0",
         "eslint-config-prettier": "6.15.0",
         "eslint-plugin-eslint-comments": "3.2.0",
         "husky": "3.0.7",
