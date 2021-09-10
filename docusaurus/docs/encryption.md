@@ -65,6 +65,7 @@ This library also allows you to do the following:
 
 -   Change the encryption algorithm.
 -   Directly use the `encrypt` and `decrypt` functions exported by the library.
+-   Change the input and output encoding types.
 
 ### Encryption algorithms
 
@@ -110,4 +111,32 @@ export default ({ algorithm = 'rc4',
     key = 'Z4nDPfxKjPGGCqA2wVKjMMB{nyL^ytWNbWyzLg4xbvxX6ioxvxRw' } = {}) =>
         encrypt({ algorithm, iv, key });
 
+```
+
+## Change the input and output encoding types
+
+The input and output encoding types can also be changed, you might need this if you want to integrate with an existing library that has it's own crypto functions.
+
+```js
+export default atomic({
+    ...
+    decryptInputEncoding: 'hex',
+    decryptOutputEncoding: 'utf8',
+    encryptInputEncoding: 'utf8',
+    encryptOutputEncoding: 'hex',
+});
+
+// or
+
+export default decrypt({
+    ...
+    inputEncoding: 'hex',
+    outputEncoding: 'utf8',
+});
+
+export default encrypt({
+    ...
+    inputEncoding: 'utf8',
+    outputEncoding: 'hex',
+});
 ```
