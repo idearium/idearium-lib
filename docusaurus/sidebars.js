@@ -5,6 +5,7 @@ module.exports = {
         packages: [
             'about',
             'apm',
+            'cookie',
             'encryption',
             'fetch',
             'lists',
