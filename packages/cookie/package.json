@@ -1,6 +1,6 @@
 {
     "name": "@idearium/cookie",
-    "version": "1.0.0",
+    "version": "1.0.0-beta.1",
     "description": "A package to make working with cookies trivial.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
