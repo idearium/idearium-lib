@@ -1,0 +1,16 @@
+{
+    "name": "@idearium/cookie",
+    "version": "1.0.0",
+    "description": "A package to make working with cookies trivial.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "@idearium/log": "2.0.0",
+        "cookie": "0.4.1"
+    }
+}
