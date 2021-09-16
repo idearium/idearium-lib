@@ -36,7 +36,6 @@
     "connect-redis": "3.3.0",
     "csv-parse": "1.2.0",
     "debug": "2.2.0",
-    "elastic-apm-node": "1.8.2",
     "express": "4.14.0",
     "express-session": "1.15.3",
     "ioredis": "3.2.2",

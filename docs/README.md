@@ -7,4 +7,3 @@ This is the source for the Idearium lib. It's a Node.js shared library for Idear
 Here is a list of what you'll find in these docs:
 
 - [Development guide](./development.md)
-- [APM usage guide](./apm.md)

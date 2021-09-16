@@ -4,6 +4,12 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
+## v4.0.0 - 2021-09-17
+
+### Removed
+
+-   Removed apm to fix node engine errors while building. Use the new [@idearium/apm](https://idearium.github.io/idearium-lib/docs/apm/) library instead.
+
 ## v3.0.0 (26 July 2018)
 
 -   Codecov now only runs in Codefresh.
