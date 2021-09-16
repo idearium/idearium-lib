@@ -6,8 +6,6 @@ test('it can create cookies', () => {
     const now = new Date();
     const serialized = create({ cookie: 'cookie string', name: 'test' });
 
-    console.log('serialized', serialized, typeof serialized);
-
     expect(serialized).toContain('cookie%20string');
     expect(serialized).not.toContain(`Expires=${now.toUTCString()}`);
     expect(serialized).toContain('HttpOnly');
