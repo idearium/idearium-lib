@@ -35,15 +35,19 @@ To create a new cookie:
 ```js
 const { create } = require('@idearium/cookie');
 
-const cookieStr = create({
-    cookie: 'cookie string value',
-    httpOnly: true, // default
-    maxAge: 3600, // default
-    name: 'foo',
-    path: '/', // default
-});
+// Express middleware
 
-res.set('set-cookie', cookieStr);
+app.use((req, res, next) => {
+    const cookieStr = create({
+        cookie: 'cookie string value',
+        httpOnly: true, // default
+        maxAge: 3600, // default
+        name: 'foo',
+        path: '/', // default
+    });
+
+    res.set('set-cookie', cookieStr);
+});
 ```
 
 The create function uses the [cookie](https://www.npmjs.com/package/cookie#options-1) library in the background and can accept any `serialize` options listed there.
