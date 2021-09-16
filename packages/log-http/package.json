@@ -11,11 +11,11 @@
     },
     "dependencies": {
         "@idearium/log": "1.0.0",
-        "pino-http": "5.5.0",
+        "pino-http": "5.7.0",
         "pump": "3.0.0"
     },
     "devDependencies": {
-        "pino-http": "5.5.0",
+        "pino-http": "5.7.0",
         "sink": "0.1.1"
     }
 }
