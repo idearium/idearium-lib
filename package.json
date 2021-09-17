@@ -16,7 +16,7 @@
         ]
     },
     "devDependencies": {
-        "@idearium/eslint-config": "3.0.1",
+        "@idearium/eslint-config": "4.0.0",
         "babel-eslint": "10.0.3",
         "eslint": "6.5.0",
         "eslint-config-prettier": "6.15.0",
