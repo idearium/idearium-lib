@@ -1,6 +1,6 @@
 {
     "name": "@idearium/log",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Idearium logger",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
@@ -13,7 +13,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "pino": "6.11.3",
+        "pino": "6.13.2",
         "pino-pretty": "4.7.1"
     },
     "devDependencies": {
