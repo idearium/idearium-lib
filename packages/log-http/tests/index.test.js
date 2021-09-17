@@ -84,7 +84,7 @@ afterEach(() => {
     process.env = processEnv;
 });
 
-test('logs to the console', async (done) => {
+test('logs to the console', async () => {
     expect.assertions(2);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -93,17 +93,17 @@ test('logs to the console', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result.level).toBe(30);
-        expect(result.message).toBe('request completed');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+
+    expect(result.level).toBe(30);
+    expect(result.message).toBe('request completed');
+
+    server.close();
 });
 
-test('logs 200 status', async (done) => {
+test('logs 200 status', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -112,18 +112,18 @@ test('logs 200 status', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('res');
-        expect(result.res).toHaveProperty('statusCode');
-        expect(result.res.statusCode).toBe(200);
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('statusCode');
+    expect(result.res.statusCode).toBe(200);
+
+    server.close();
 });
 
-test('logs 404 status', async (done) => {
+test('logs 404 status', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -131,19 +131,19 @@ test('logs 404 status', async (done) => {
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('res');
-        expect(result.res).toHaveProperty('statusCode');
-        expect(result.res.statusCode).toBe(404);
-
-        return done();
-    });
 
     get(server, '/missing');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('statusCode');
+    expect(result.res.statusCode).toBe(404);
+
+    server.close();
 });
 
-test('logs 500 status', async (done) => {
+test('logs 500 status', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -152,18 +152,18 @@ test('logs 500 status', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('res');
-        expect(result.res).toHaveProperty('statusCode');
-        expect(result.res.statusCode).toBe(500);
-
-        return done();
-    });
-
     get(server, '/error');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('statusCode');
+    expect(result.res.statusCode).toBe(500);
+
+    server.close();
 });
 
-test('logs the response content-type', async (done) => {
+test('logs the response content-type', async () => {
     expect.assertions(4);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -172,21 +172,19 @@ test('logs the response content-type', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('res');
-        expect(result.res).toHaveProperty('headers');
-        expect(Object.keys(result.res.headers)).toContain('content-type');
-        expect(result.res.headers['content-type']).toContain(
-            'application/json'
-        );
-
-        return done();
-    });
-
     get(server, '/json');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('headers');
+    expect(Object.keys(result.res.headers)).toContain('content-type');
+    expect(result.res.headers['content-type']).toContain('application/json');
+
+    server.close();
 });
 
-test('logs the response size', async (done) => {
+test('logs the response size', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -195,18 +193,18 @@ test('logs the response size', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('res');
-        expect(result.res).toHaveProperty('size');
-        expect(result.res.size).toBe(13);
-
-        return done();
-    });
-
     get(server, '/json');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('size');
+    expect(result.res.size).toBe(13);
+
+    server.close();
 });
 
-test('logs the protocol', async (done) => {
+test('logs the protocol', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -214,19 +212,19 @@ test('logs the protocol', async (done) => {
     const stream = sink();
     const log = logger({ stream });
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('req');
-        expect(result.req).toHaveProperty('protocol');
-        expect(result.req.protocol).toBe('http/1.1');
-
-        return done();
-    });
 
     get(server);
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('req');
+    expect(result.req).toHaveProperty('protocol');
+    expect(result.req.protocol).toBe('http/1.1');
+
+    server.close();
 });
 
-test('uses x-forwarded-for if present', async (done) => {
+test('uses x-forwarded-for if present', async () => {
     expect.assertions(3);
 
     process.env.LOG_PRETTY_PRINT = 'false';
@@ -235,13 +233,13 @@ test('uses x-forwarded-for if present', async (done) => {
     const log = logger({ stream });
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        expect(result).toHaveProperty('req');
-        expect(result.req).toHaveProperty('remoteIp');
-        expect(result.req.remoteIp).toBe('10.0.0.12');
-
-        return done();
-    });
-
     get(server, '/', { 'x-forwarded-for': '10.0.0.12' });
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('req');
+    expect(result.req).toHaveProperty('remoteIp');
+    expect(result.req.remoteIp).toBe('10.0.0.12');
+
+    server.close();
 });
