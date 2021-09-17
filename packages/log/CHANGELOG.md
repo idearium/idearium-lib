@@ -1,5 +1,11 @@
 # @idearium/log
 
+## v2.0.1 - 2021-09-17
+
+### Changed
+
+-   Updated pino to v6.13.2.
+
 ## v2.0.0 - 2021-06-08
 
 ### Changed
