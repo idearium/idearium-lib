@@ -42,9 +42,9 @@ const post = (server, headers = {}) => {
                 headers: {
                     ...headers,
                     ['content-type']: 'application/json',
-                    ['content-length']: Buffer.byteLength(postData)
+                    ['content-length']: Buffer.byteLength(postData),
                 },
-                method: 'POST'
+                method: 'POST',
             },
             (res) => resolve(res)
         );
