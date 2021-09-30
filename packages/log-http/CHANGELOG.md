@@ -1,5 +1,11 @@
 # @idearium/log-http
 
+## Unreleased
+
+### Fixed
+
+-   Fixed Jest tests.
+
 ## v1.0.1-beta.7 - 2021-07-31
 
 ### Changed
@@ -47,6 +53,12 @@
 
 -   Added an `err` serializer.
 -   Added some error handling middleware.
+
+## v1.0.1 - 2021-09-17
+
+### Changed
+
+-   Version bump pino-http to v5.7.0.
 
 ## v1.0.0 - 2021-06-08
 

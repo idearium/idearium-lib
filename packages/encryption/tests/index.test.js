@@ -93,6 +93,21 @@ describe('atomic', () => {
         expect(encryptText({ text: plainText })).toBe(encryptedText);
         expect(decryptText({ text: encryptedText })).toBe(plainText);
     });
+
+    test('can change the input and output encoding types', () => {
+        const o = atomic({
+            decryptInputEncoding: 'base64',
+            decryptOutputEncoding: 'utf8',
+            encryptInputEncoding: 'utf8',
+            encryptOutputEncoding: 'base64',
+            iv: 'b]7rDTw3BF2N6&vH',
+            key: 'dEDZvjbh)ADz3KzjpWW9TQL7(nfuyz2Q'
+        });
+        const { decrypt: decryptText, encrypt: encryptText } = o;
+
+        expect(encryptText({ text: 'plain text' })).toBe('p/ffun3NePOs7w==');
+        expect(decryptText({ text: 'p/ffun3NePOs7w==' })).toBe('plain text');
+    });
 });
 
 describe('decrypt', () => {
@@ -145,6 +160,21 @@ describe('decrypt', () => {
             })
         ).toThrow(/Invalid key length/);
     });
+
+    test('can change the input and output encoding types', () => {
+        const iv = 'b]7rDTw3BF2N6&vH';
+        const key = 'dEDZvjbh)ADz3KzjpWW9TQL7(nfuyz2Q';
+
+        expect(
+            decrypt({
+                inputEncoding: 'base64',
+                iv,
+                key,
+                outputEncoding: 'utf8',
+                text: 'p/ffun3NePOs7w=='
+            })
+        ).toBe('plain text');
+    });
 });
 
 describe('encrypt', () => {
@@ -196,5 +226,20 @@ describe('encrypt', () => {
                 text: 'plain text'
             })
         ).toThrow(/Invalid key length/);
+    });
+
+    test('can change the input and output encoding types', () => {
+        const iv = 'b]7rDTw3BF2N6&vH';
+        const key = 'dEDZvjbh)ADz3KzjpWW9TQL7(nfuyz2Q';
+
+        expect(
+            encrypt({
+                inputEncoding: 'utf8',
+                iv,
+                key,
+                outputEncoding: 'base64',
+                text: 'plain text'
+            })
+        ).toBe('p/ffun3NePOs7w==');
     });
 });

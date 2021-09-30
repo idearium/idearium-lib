@@ -46,9 +46,9 @@ const post = (server, headers = {}) => {
                 headers: {
                     ...headers,
                     ['content-type']: 'application/json',
-                    ['content-length']: Buffer.byteLength(postData)
+                    ['content-length']: Buffer.byteLength(postData),
                 },
-                method: 'POST'
+                method: 'POST',
             },
             (res) => resolve(res)
         );
@@ -102,88 +102,81 @@ const setup = (middleware) =>
         });
     });
 
-test('logs strings without mutation', (done) => {
+test('logs strings without mutation', async () => {
     expect.assertions(1);
 
     const stream = structured();
 
-    once(stream, 'data').then((line) => {
-        expect(line).toBe('test');
-
-        return done();
-    });
-
     stream.write('test');
+
+    const line = await once(stream, 'data');
+
+    expect(line).toBe('test');
 });
 
-test('logs non-http json without mutation', (done) => {
+test('logs non-http json without mutation', async () => {
     expect.assertions(1);
 
     const jsonString =
         '{"level":30,"severity":"INFO","time":"2021-06-07T02:26:30.316Z","logging.googleapis.com/sourceLocation":{"file":"/app/tests/index.test.js"},"message":"test"}';
     const stream = structured();
 
-    once(stream, 'data').then((line) => {
-        expect(line).toEqual(jsonString);
-
-        return done();
-    });
-
     stream.write(jsonString);
+
+    const line = await once(stream, 'data');
+
+    expect(line).toEqual(jsonString);
 });
 
-test('logs req when logging http requests', async (done) => {
+test('logs req when logging http requests', async () => {
     expect.assertions(1);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('req');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('req');
+
+    server.close();
 });
 
-test('logs res when logging http requests', async (done) => {
+test('logs res when logging http requests', async () => {
     expect.assertions(1);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('res');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('res');
+
+    server.close();
 });
 
-test('does not include error information when an error did not occur', async (done) => {
+test('does not include error information when an error did not occur', async () => {
     expect.assertions(1);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).not.toHaveProperty('@type');
-
-        return done();
-    });
-
+  
     get(server);
+  
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+  
+    expect(line).not.toHaveProperty('@type');
+  
+    server.close();
 });
 
 test('logs err when an error occurs during http request/response lifecycle', async (done) => {
@@ -192,235 +185,223 @@ test('logs err when an error occurs during http request/response lifecycle', asy
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('@type');
-        expect(line['@type']).toEqual(
-            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
-        );
-
-        return done();
-    });
-
+  
     get(server, '/error');
+
+    const result = once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('@type');
+    expect(line['@type']).toEqual(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
+
+    server.close();
 });
 
-test('uses structured logging format when logging http requests', async (done) => {
+test('uses structured logging format when logging http requests', async () => {
     expect.assertions(7);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line).toHaveProperty('message');
-        expect(line).toHaveProperty('req');
-        expect(line).toHaveProperty('res');
-        expect(line).toHaveProperty('severity');
-        expect(line).toHaveProperty('severity');
-        expect(line).toHaveProperty('time');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line).toHaveProperty('message');
+    expect(line).toHaveProperty('req');
+    expect(line).toHaveProperty('res');
+    expect(line).toHaveProperty('severity');
+    expect(line).toHaveProperty('severity');
+    expect(line).toHaveProperty('time');
+
+    server.close();
 });
 
-test('http requests includes requestMethod', async (done) => {
+test('http requests includes requestMethod', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('requestMethod');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('requestMethod');
+
+    server.close();
 });
 
-test('http requests includes requestUrl', async (done) => {
+test('http requests includes requestUrl', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('requestUrl');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('requestUrl');
+
+    server.close();
 });
 
-test('http requests includes requestSize', async (done) => {
+test('http requests includes requestSize', async () => {
     expect.assertions(3);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('requestSize');
-        expect(line.httpRequest.requestSize).toBe('29');
-
-        return done();
-    });
 
     post(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('requestSize');
+    expect(line.httpRequest.requestSize).toBe('29');
+
+    server.close();
 });
 
-test('http requests includes responseSize', async (done) => {
+test('http requests includes responseSize', async () => {
     expect.assertions(3);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('responseSize');
-        expect(line.httpRequest.responseSize).toBe(11);
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('responseSize');
+    expect(line.httpRequest.responseSize).toBe(11);
+
+    server.close();
 });
 
-test('http requests includes protocol', async (done) => {
+test('http requests includes protocol', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('protocol');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('protocol');
+
+    server.close();
 });
 
-test('http requests includes status', async (done) => {
+test('http requests includes status', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('status');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('status');
+
+    server.close();
 });
 
-test('http requests includes userAgent', async (done) => {
+test('http requests includes userAgent', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('userAgent');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('userAgent');
+
+    server.close();
 });
 
-test('http requests includes remoteIp', async (done) => {
+test('http requests includes remoteIp', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('remoteIp');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('remoteIp');
+
+    server.close();
 });
 
-test('http requests includes remoteIp and prefers x-forwarded-for header', async (done) => {
+test('http requests includes remoteIp and prefers x-forwarded-for header', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('remoteIp');
-
-        return done();
-    });
 
     get(server, '/', { 'x-forwarded-for': '10.0.0.12' });
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('remoteIp');
+
+    server.close();
 });
 
-test('http requests includes referer', async (done) => {
+test('http requests includes referer', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
 
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('httpRequest');
-        expect(line.httpRequest).toHaveProperty('referer');
-
-        return done();
-    });
-
     get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('httpRequest');
+    expect(line.httpRequest).toHaveProperty('referer');
+
+    server.close();
 });
 
 test('uses structured error logging when an error occurs during http request/response lifecycle', async (done) => {
@@ -429,25 +410,24 @@ test('uses structured error logging when an error occurs during http request/res
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-
-    once(stream, 'data').then((result) => {
-        const line = JSON.parse(result.toString());
-
-        expect(line).toHaveProperty('@type');
-        expect(line['@type']).toEqual(
-            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
-        );
-        expect(line).toHaveProperty('message');
-        expect(line.message).toBe('request errored');
-        expect(line).not.toHaveProperty('httpRequest');
-        expect(line).not.toHaveProperty('err');
-        expect(line).toHaveProperty('context');
-        expect(line.context).toHaveProperty('httpRequest');
-        expect(line).toHaveProperty('exception');
-        expect(line.exception).toContain('Testing errors...');
-
-        return done();
-    });
-
+  
     get(server, '/error');
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('@type');
+    expect(line['@type']).toEqual(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
+    expect(line).toHaveProperty('message');
+    expect(line.message).toBe('request errored');
+    expect(line).not.toHaveProperty('httpRequest');
+    expect(line).not.toHaveProperty('err');
+    expect(line).toHaveProperty('context');
+    expect(line.context).toHaveProperty('httpRequest');
+    expect(line).toHaveProperty('exception');
+    expect(line.exception).toContain('Testing errors...');
+
+    server.close();
 });
