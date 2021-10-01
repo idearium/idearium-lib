@@ -1,0 +1,17 @@
+{
+    "name": "@idearium/certs",
+    "version": "1.0.0",
+    "description": "A package to load custom and OS certificates into Node.js.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/idearium/idearium-lib.git"
+    },
+    "contributors": [
+        "Scott Mebberson <scott@idearium.io>"
+    ],
+    "license": "MIT"
+}

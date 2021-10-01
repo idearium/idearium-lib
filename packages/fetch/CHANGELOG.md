@@ -31,5 +31,3 @@
 ## v1.0.0
 
 -   First version of the package.
-
-@idearium/fetch-v1.0.1-beta.1
