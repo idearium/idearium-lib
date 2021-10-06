@@ -1,0 +1,13 @@
+{
+    "name": "@idearium/redis",
+    "version": "1.0.0-beta.1",
+    "description": "A package that creates a Redis connection.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson",
+    "license": "MIT",
+    "dependencies": {
+        "@idearium/log": "2.0.1",
+        "ioredis": "4.27.10"
+    }
+}
