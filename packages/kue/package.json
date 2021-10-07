@@ -1,6 +1,6 @@
 {
     "name": "@idearium/kue",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "description": "Idearium kue package.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
