@@ -47,6 +47,11 @@ const constructCreateMethod = (queue) => (type, properties) => {
                     if (err) {
                         queue.emit('job failed', settings);
 
+                        log.error(
+                            { err, title, type },
+                            'An error occurred when creating a job.'
+                        );
+
                         return reject(
                             new Error(
                                 `Failed to create job: ${title} of type ${type}`
