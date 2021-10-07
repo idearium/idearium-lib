@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+-   Upgraded to latest @idearium/redis;
+
 ## v1.0.0-beta.3 - 2021-10-08
 
 ### Changed

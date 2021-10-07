@@ -400,10 +400,10 @@
     pino "6.11.3"
     pino-pretty "4.7.1"
 
-"@idearium/redis@1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@idearium/redis/-/redis-1.0.0-beta.1.tgz#c3cb7d795f4c88dcb999aac446eaf30df7e7dfe5"
-  integrity sha512-DlEY7ojRKeutSrwQCcwChZ8I7RUThNJgiPRqY4CzdqyBBI/bkU7KbEPC9DNVFd4VLRNU7+rwmOu77nWAaPQpPA==
+"@idearium/redis@1.0.0-beta.2":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@idearium/redis/-/redis-1.0.0-beta.2.tgz#7cd54665dabf5d36cc6e194e975dc7cd717717da"
+  integrity sha512-GnhDMRsx3CLAnzZ7JuEgKFX3RZL9o38JBL72ECsyVhZ5qfHDLcJJ71qPvyyNFm1RKt1NgainY/K3/UOk1dCuUw==
   dependencies:
     "@idearium/log" "2.0.1"
     ioredis "4.27.10"
