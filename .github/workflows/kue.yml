@@ -1,0 +1,43 @@
+name: '@idearium/kue'
+on:
+    push:
+        paths:
+            - 'packages/kue/**'
+    release:
+        types: [published]
+
+jobs:
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+            - name: Setup yarn
+              run: yarn install
+    publish:
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/kue')
+        name: Publish
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  registry-url: https://registry.npmjs.org/
+            - name: Setup yarn
+              run: yarn install
+            - name: Publish (beta)
+              if: contains(github.ref, 'beta')
+              run: yarn workspace @idearium/kue publish --tag beta --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Publish
+              if: "!contains(github.ref , 'beta')"
+              run: yarn workspace @idearium/kue publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

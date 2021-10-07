@@ -8,13 +8,14 @@ module.exports = {
             'cookie',
             'encryption',
             'fetch',
+            'kue',
             'lists',
             'log',
             'log-http',
             'log-insightops',
             'log-structured',
             'mongoose',
-            'safe-promise'
-        ]
-    }
+            'safe-promise',
+        ],
+    },
 };
