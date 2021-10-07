@@ -9,12 +9,19 @@ const retryLimit = parseInt(process.env.REDIS_RETRY_LIMIT, 10) || 10;
 const cacheUrl = process.env.CACHE_URL;
 /* eslint-enable no-process-env */
 
-let connection;
+const connections = [];
 
-const connect = (opts) => {
-    if (connection) {
-        return connection;
+const connect = (opts = {}) => {
+    const reuse = typeof opts.reuse === 'undefined' ? false : opts.reuse;
+    const reuseIndex =
+        typeof opts.reuseIndex === 'undefined' ? 0 : opts.reuseIndex;
+
+    if (connections && reuse) {
+        return connections[reuseIndex];
     }
+
+    delete opts.reuse;
+    delete opts.reuseIndex;
 
     const redis = new Redis(cacheUrl, {
         retryStrategy: (times) => {
@@ -40,7 +47,7 @@ const connect = (opts) => {
     redis.on('ready', () => log.info('Redis ready'));
     redis.on('reconnecting', () => log.info('Redis reconnecting'));
 
-    connection = redis;
+    connections.push(redis);
 
     return redis;
 };

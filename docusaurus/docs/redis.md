@@ -21,10 +21,18 @@ $ yarn add -E @idearium/redis@beta
 
 ## Usage
 
+The following will always return a new Redis connection.
+
 ```JavaScript
 const redis = require('@idearium/redis');
 
 const connection = redis();
+```
+
+To return an existing redis connection:
+
+```JavaScript
+const existingConnection = redis({ reuse: true });
 ```
 
 This module relies on the following environment variables:
