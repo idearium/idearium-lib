@@ -8,6 +8,6 @@ on:
 
 jobs:
     test:
-        uses: idearium/idearium-lib/.github/workflows/test.yml@v1
+        uses: idearium/idearium-lib/.github/workflows/test.yml@test
         with:
             workspace: '@idearium/cookie'
