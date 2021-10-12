@@ -1,21 +1,22 @@
-name: Setup
+name: Test
 
 on:
     workflow_call:
         inputs:
-            lockfile:
-                description: 'Path to the yarn.lock file'
+            workspace:
+                description: 'The workspace name'
                 required: true
                 type: string
 
 jobs:
-    setup:
+    test:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v2
               with:
-                  cache-dependency-path: ${{ inputs.lockfile }}
+                  cache-dependency-path: yarn.lock
                   cache: yarn
                   node-version: 'lts/*'
             - run: yarn install --frozen-lockfile
+            - run: yarn workspace ${{ inputs.workspace }} test

@@ -8,10 +8,6 @@ on:
 
 jobs:
     test:
-        name: Test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: idearium/idearium-lib/.github/workflows/setup.yml@v1
-              with:
-                  lockfile: yarn.lock
-            - run: yarn workspace @idearium/cookie test
+        uses: idearium/idearium-lib/.github/workflows/test.yml@v1
+        with:
+            workspace: '@idearium/cookie'
