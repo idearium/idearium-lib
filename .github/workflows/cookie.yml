@@ -7,7 +7,7 @@ on:
         types: [published]
 
 jobs:
-    test:
+    call-workflow-test:
         uses: idearium/idearium-lib/.github/workflows/test.yml@test
         with:
             workspace: '@idearium/cookie'
