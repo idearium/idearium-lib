@@ -1,0 +1,9 @@
+{
+    "name": "@idearium/text-sort",
+    "version": "1.0.0",
+    "description": "Idearium Text Sort",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT"
+}
