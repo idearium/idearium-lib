@@ -1,6 +1,10 @@
 'use strict';
 
-const textSort = ({ array = [], asc = true, sortValue = (title) => title }) => {
+const textSort = ({
+    array = [],
+    asc = true,
+    sortValue = (title) => title,
+} = {}) => {
     const collator = new Intl.Collator();
 
     return [...array].sort((a, b) => {
