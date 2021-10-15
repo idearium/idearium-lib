@@ -10,7 +10,6 @@ jobs:
     publish:
         if: github.event_name == 'release' && contains(github.ref, '@idearium/apm')
         name: Publish
-        needs: test
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
