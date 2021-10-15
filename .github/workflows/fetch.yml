@@ -8,7 +8,7 @@ on:
 
 jobs:
     call-workflow-test:
-        uses: idearium/idearium-lib/.github/workflows/test.yml@c25b5abff5bbd69060d203b441d95d7291e8602a
+        uses: idearium/idearium-lib/.github/workflows/test.yml@4c92ae7789ef993f75052b1c320940dbca8d33ab
         with:
             workspace: '@idearium/fetch'
     publish:
