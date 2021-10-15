@@ -17,4 +17,4 @@ jobs:
                   cache: 'yarn'
                   node-version: 'lts/*'
             - run: yarn install
-            - run: yarn workspace {{ inputs.workspace }} test
+            - run: yarn workspace ${{ inputs.workspace }} test
