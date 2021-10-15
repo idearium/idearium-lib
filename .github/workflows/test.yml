@@ -1,0 +1,20 @@
+name: Testing packages workflow
+
+on:
+    workflow_call:
+        inputs:
+            workspace:
+                required: true
+                type: string
+jobs:
+    test:
+        name: Test package
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+              with:
+                  cache: 'yarn'
+                  node-version: 'lts/*'
+            - run: yarn install
+            - run: yarn workspace {{ inputs.workspace }} test
