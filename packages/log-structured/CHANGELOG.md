@@ -2,25 +2,11 @@
 
 ## Unreleased
 
-## v1.0.2-beta.1 - 2021-10-19
-
-### Fixed
-
--   Fixed Jest tests.
-
-## v1.0.1-beta.3 - 2021-06-11
-
-### Fixed
-
--   Fixed potential XSS issue.
-
-## v1.0.1-beta.2 - 2021-06-11
+## v1.0.2 - 2021-10-19
 
 ### Changed
 
 -   Updated tests to support newer @idearium/log-http.
-
-## v1.0.1-beta.1 - 2021-06-11
 
 ### Added
 
