@@ -63,7 +63,7 @@ const setup = (middleware) =>
         app.get('/error-with-context', (req, res, next) => {
             const err = new Error('Testing errors...');
             err.context = {
-                code: 123
+                code: 123,
             };
             next(err);
         });
@@ -156,11 +156,11 @@ test('logs 500 status', async () => {
     const stream = sink();
     const log = requestLogger({ stream });
     const server = await setup(log);
-  
+
     get(server, '/500');
-  
+
     const result = await once(stream, 'data');
-  
+
     expect(result).toHaveProperty('res');
     expect(result.res).toHaveProperty('statusCode');
     expect(result.res.statusCode).toBe(500);
@@ -168,7 +168,7 @@ test('logs 500 status', async () => {
     server.close();
 });
 
-test('logs errors', async (done) => {
+test('logs errors', async () => {
     expect.assertions(10);
 
     const stream = sink();
@@ -203,9 +203,9 @@ test('logs error context', async () => {
     const server = await setup(log);
 
     get(server, '/error-with-context');
-  
+
     const result = await once(stream, 'data');
-  
+
     expect(result).toHaveProperty('res');
     expect(result.res).toHaveProperty('statusCode');
     expect(result.res.statusCode).toBe(500);
@@ -218,7 +218,7 @@ test('logs error context', async () => {
     );
     expect(result.err).toHaveProperty('context');
     expect(result.err.context).toEqual({ code: 123 });
-  
+
     server.close();
 });
 
@@ -259,16 +259,15 @@ test('logs the response size', async () => {
     server.close();
 });
 
-
 test('logs the response time', async () => {
     expect.assertions(1);
 
     const stream = sink();
     const log = requestLogger({ stream });
     const server = await setup(log);
-  
+
     get(server, '/json');
-  
+
     const result = await once(stream, 'data');
 
     expect(result).toHaveProperty('responseTime');
