@@ -9,7 +9,7 @@
         "structured": "bin/structured.js"
     },
     "scripts": {
-        "test": "jest --forceExit --testRunner='jest-jasmine2'"
+        "test": "jest --testRunner='jest-jasmine2'"
     },
     "dependencies": {
         "pump": "3.0.0"

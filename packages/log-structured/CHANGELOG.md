@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.0.2-beta.1 - 2021-10-19
+
 ### Fixed
 
 -   Fixed Jest tests.

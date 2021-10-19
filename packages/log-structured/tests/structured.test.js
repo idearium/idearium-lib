@@ -45,8 +45,8 @@ const post = (server, headers = {}) => {
             {
                 headers: {
                     ...headers,
-                    ['content-type']: 'application/json',
-                    ['content-length']: Buffer.byteLength(postData),
+                    'content-type': 'application/json',
+                    'content-length': Buffer.byteLength(postData),
                 },
                 method: 'POST',
             },
@@ -58,12 +58,12 @@ const post = (server, headers = {}) => {
     });
 };
 
-const setup = (middleware) =>
+const setup = (serverMiddleware) =>
     new Promise((resolve, reject) => {
         const app = express();
         const server = http.createServer(app);
 
-        app.use(middleware);
+        app.use(serverMiddleware);
 
         app.get('/', (req, res) => res.end('hello world'));
 
@@ -79,7 +79,7 @@ const setup = (middleware) =>
         app.get('/error-with-context', (req, res, next) => {
             const err = new Error('Testing errors...');
             err.context = {
-                code: 123
+                code: 123,
             };
             next(err);
         });
@@ -168,27 +168,27 @@ test('does not include error information when an error did not occur', async () 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-  
+
     get(server);
-  
+
     const result = await once(stream, 'data');
     const line = JSON.parse(result.toString());
-  
+
     expect(line).not.toHaveProperty('@type');
-  
+
     server.close();
 });
 
-test('logs err when an error occurs during http request/response lifecycle', async (done) => {
+test('logs err when an error occurs during http request/response lifecycle', async () => {
     expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-  
+
     get(server, '/error');
 
-    const result = once(stream, 'data');
+    const result = await once(stream, 'data');
     const line = JSON.parse(result.toString());
 
     expect(line).toHaveProperty('@type');
@@ -404,13 +404,13 @@ test('http requests includes referer', async () => {
     server.close();
 });
 
-test('uses structured error logging when an error occurs during http request/response lifecycle', async (done) => {
+test('uses structured error logging when an error occurs during http request/response lifecycle', async () => {
     expect.assertions(10);
 
     const stream = structured();
     const log = middleware(stream);
     const server = await setup(log);
-  
+
     get(server, '/error');
 
     const result = await once(stream, 'data');
