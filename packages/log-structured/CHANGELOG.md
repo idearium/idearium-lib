@@ -2,9 +2,15 @@
 
 ## Unreleased
 
-### Fixed
+## v1.0.2 - 2021-10-19
 
--   Fixed Jest tests.
+### Changed
+
+-   Updated tests to support newer @idearium/log-http.
+
+### Added
+
+-   Now supports error logs.
 
 ## v1.0.1 - 2021-09-17
 

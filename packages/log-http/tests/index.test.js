@@ -1,7 +1,11 @@
 'use strict';
 
 const http = require('http');
-const logger = require('../');
+const express = require('express');
+const requestLogger = require('../');
+const errorLogger = require('../middleware/log-error');
+const notFound = require('../middleware/not-found');
+const serverError = require('../middleware/server-error');
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -43,26 +47,35 @@ const get = (server, path = '/', headers = {}) =>
 
 const setup = (middleware) =>
     new Promise((resolve, reject) => {
-        const server = http.createServer((req, res) => {
-            middleware(req, res);
+        const app = express();
+        const server = http.createServer(app);
 
-            if (req.url === '/') {
-                return res.end('hello world');
-            }
+        app.use(middleware);
 
-            if (req.url === '/json') {
-                res.setHeader('content-type', 'application/json');
-                return res.end(JSON.stringify({ test: true }));
-            }
+        app.get('/', (req, res) => res.send('hello world'));
 
-            if (req.url === '/error') {
-                res.statusCode = 500;
-                return res.end('error');
-            }
+        app.get('/json', (req, res) => res.json({ test: true }));
 
-            res.statusCode = 404;
-            return res.end('Not found');
+        app.get('/error', (req, res, next) =>
+            next(new Error('Testing errors...'))
+        );
+
+        app.get('/error-with-context', (req, res, next) => {
+            const err = new Error('Testing errors...');
+            err.context = {
+                code: 123,
+            };
+            next(err);
         });
+
+        app.get('/500', (req, res) => {
+            res.statusCode = 500;
+            return res.send('error');
+        });
+
+        app.use(notFound());
+        app.use(errorLogger());
+        app.use(serverError());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
@@ -87,10 +100,8 @@ afterEach(() => {
 test('logs to the console', async () => {
     expect.assertions(2);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server);
@@ -106,10 +117,8 @@ test('logs to the console', async () => {
 test('logs 200 status', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server);
@@ -126,10 +135,8 @@ test('logs 200 status', async () => {
 test('logs 404 status', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server, '/missing');
@@ -146,13 +153,11 @@ test('logs 404 status', async () => {
 test('logs 500 status', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
-    get(server, '/error');
+    get(server, '/500');
 
     const result = await once(stream, 'data');
 
@@ -163,13 +168,65 @@ test('logs 500 status', async () => {
     server.close();
 });
 
+test('logs errors', async () => {
+    expect.assertions(10);
+
+    const stream = sink();
+    const log = requestLogger({ stream });
+    const server = await setup(log);
+
+    get(server, '/error');
+
+    const result = await once(stream, 'data');
+
+    expect(result.severity).toBe('ERROR');
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('statusCode');
+    expect(result.res.statusCode).toBe(500);
+    expect(result).toHaveProperty('err');
+    expect(result.err).toHaveProperty('message');
+    expect(result.err.message).toContain('Testing errors...');
+    expect(result.err).toHaveProperty('@type');
+    expect(result.err['@type']).toBe(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
+    expect(result.err).not.toHaveProperty('context');
+
+    server.close();
+});
+
+test('logs error context', async () => {
+    expect.assertions(10);
+
+    const stream = sink();
+    const log = requestLogger({ stream });
+    const server = await setup(log);
+
+    get(server, '/error-with-context');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('res');
+    expect(result.res).toHaveProperty('statusCode');
+    expect(result.res.statusCode).toBe(500);
+    expect(result).toHaveProperty('err');
+    expect(result.err).toHaveProperty('message');
+    expect(result.err.message).toContain('Testing errors...');
+    expect(result.err).toHaveProperty('@type');
+    expect(result.err['@type']).toBe(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
+    expect(result.err).toHaveProperty('context');
+    expect(result.err.context).toEqual({ code: 123 });
+
+    server.close();
+});
+
 test('logs the response content-type', async () => {
     expect.assertions(4);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server, '/json');
@@ -187,10 +244,8 @@ test('logs the response content-type', async () => {
 test('logs the response size', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server, '/json');
@@ -204,13 +259,27 @@ test('logs the response size', async () => {
     server.close();
 });
 
+test('logs the response time', async () => {
+    expect.assertions(1);
+
+    const stream = sink();
+    const log = requestLogger({ stream });
+    const server = await setup(log);
+
+    get(server, '/json');
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('responseTime');
+
+    server.close();
+});
+
 test('logs the protocol', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server);
@@ -227,10 +296,8 @@ test('logs the protocol', async () => {
 test('uses x-forwarded-for if present', async () => {
     expect.assertions(3);
 
-    process.env.LOG_PRETTY_PRINT = 'false';
-
     const stream = sink();
-    const log = logger({ stream });
+    const log = requestLogger({ stream });
     const server = await setup(log);
 
     get(server, '/', { 'x-forwarded-for': '10.0.0.12' });

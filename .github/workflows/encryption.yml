@@ -37,7 +37,7 @@ jobs:
             - name: Test
               run: yarn workspace @idearium/encryption test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/encryption')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/encryption-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
