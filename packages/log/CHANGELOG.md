@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.2-beta.2 - 2021-10-22
+
 ### Added
 
 -   Added transform for trace_flags to traceFlags.
