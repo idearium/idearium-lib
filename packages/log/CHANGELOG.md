@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.2-beta.1 - 2021-10-22
+
 ### Added
 
 -   Added support for renaming opentelemetry key names in snake_case to camelCase;
