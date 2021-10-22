@@ -31,6 +31,11 @@ const logFormatter = (object) => {
         delete object.span_id;
     }
 
+    if (typeof object.trace_flags !== 'undefined') {
+        object.traceFlags = object.trace_flags;
+        delete object.trace_flags;
+    }
+
     if (typeof object.trace_id !== 'undefined') {
         object.traceId = object.trace_id;
         delete object.trace_id;
