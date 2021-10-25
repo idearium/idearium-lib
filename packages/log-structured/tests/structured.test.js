@@ -9,7 +9,16 @@ const errorLogger = require('../../log-http/middleware/log-error');
 const errorHandler = require('../../log-http/middleware/server-error');
 const notFound = require('../../log-http/middleware/not-found');
 
-const middleware = (stream) => requestLogger({ stream });
+const middleware = (stream) =>
+    requestLogger({
+        stream,
+    });
+
+const tracedMiddleware = (stream) =>
+    requestLogger({
+        stream,
+        customProps: () => ({ spanId: 'XYZ', traceId: 'ABC123' }),
+    });
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -125,7 +134,7 @@ test('logs non-http json without mutation', async () => {
 
     const line = await once(stream, 'data');
 
-    expect(line).toEqual(jsonString);
+    expect(line).toMatch(jsonString);
 });
 
 test('logs req when logging http requests', async () => {
@@ -428,6 +437,40 @@ test('uses structured error logging when an error occurs during http request/res
     expect(line.context).toHaveProperty('httpRequest');
     expect(line).toHaveProperty('exception');
     expect(line.exception).toContain('Testing errors...');
+
+    server.close();
+});
+
+test('non-http requests that include traceId information is transformed to structured logging format', async () => {
+    expect.assertions(1);
+
+    const jsonString =
+        '{"level":30,"severity":"INFO","time":"2021-06-07T02:26:30.316Z","logging.googleapis.com/sourceLocation":{"file":"/app/tests/index.test.js"},"message":"test","traceId":"ABC123"}';
+    const stream = structured();
+
+    stream.write(jsonString);
+
+    const line = await once(stream, 'data');
+
+    expect(line).toMatch(
+        '{"level":30,"severity":"INFO","time":"2021-06-07T02:26:30.316Z","logging.googleapis.com/sourceLocation":{"file":"/app/tests/index.test.js"},"message":"test","traceId":"ABC123","trace":"projects/TEST_PROJECT/traces/ABC123"}'
+    );
+});
+
+test('http requests that include traceId information is transformed to structured logging format', async () => {
+    expect.assertions(2);
+
+    const stream = structured();
+    const log = tracedMiddleware(stream);
+    const server = await setup(log);
+
+    get(server, '/');
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('trace');
+    expect(line.trace).toBe('projects/TEST_PROJECT/traces/ABC123');
 
     server.close();
 });

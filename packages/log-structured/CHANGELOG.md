@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Add
+
+-   Added support for linking opentelemetry traces to Cloud Logging.
+
 ## v1.0.2 - 2021-10-19
 
 ### Changed
