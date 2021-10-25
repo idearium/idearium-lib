@@ -29,3 +29,31 @@ You must have a few environment variables present in order for this package to d
 You can also have the following optional environment variables:
 
 -   `OPENTELEMETRY_DEBUG` set to `'true'` if you want to enable Open Telemetry debugging output in the console.
+-   `SVC` should be set to the name of the app/service to include this information along with the request.
+
+> **Please note**: this package hasn't been designed to run locally.
+
+## Features
+
+There are a few extra features for this package.
+
+### `traceId` middleware
+
+If you'd like to expose a `x-trace-id` header with the `traceId` for a particular request, you can do so like this:
+
+```JavaScript
+const traceId = require('@idearium/telemetry/middleware/trace-id');
+
+const bootstrapExpress = (opts) =>
+    new Promise((resolve) => {
+        log.info('Bootstrapping express');
+
+        const { app } = opts;
+
+        app.use(traceId);
+
+        return resolve(opts);
+    });
+```
+
+Each request that generates a trace ID, will now include the ID in the `x-trace-id` response header.
