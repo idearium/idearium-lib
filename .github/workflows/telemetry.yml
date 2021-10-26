@@ -1,8 +1,8 @@
-name: '@idearium/log-insightops'
+name: '@idearium/telemetry'
 on:
     push:
         paths:
-            - 'packages/log-insightops/**'
+            - 'packages/telemetry/**'
     release:
         types: [published]
 
@@ -34,10 +34,8 @@ jobs:
                       ${{ runner.os }}-node_modules-
             - name: Setup yarn
               run: yarn install
-            - name: Test
-              run: yarn workspace @idearium/log-insightops test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-insightops-v')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/telemetry-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
@@ -69,11 +67,11 @@ jobs:
               run: yarn install
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
-              run: yarn workspace @idearium/log-insightops publish --tag beta --access public
+              run: yarn workspace @idearium/telemetry publish --tag beta --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish
               if: "!contains(github.ref , 'beta')"
-              run: yarn workspace @idearium/log-insightops publish --access public
+              run: yarn workspace @idearium/telemetry publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

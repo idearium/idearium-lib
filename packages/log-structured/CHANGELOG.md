@@ -2,9 +2,21 @@
 
 ## Unreleased
 
-### Fixed
+## v1.0.3 - 2021-10-26
 
--   Fixed Jest tests.
+### Add
+
+-   Added support for linking opentelemetry traces to Cloud Logging.
+
+## v1.0.2 - 2021-10-19
+
+### Changed
+
+-   Updated tests to support newer @idearium/log-http.
+
+### Added
+
+-   Now supports error logs.
 
 ## v1.0.1 - 2021-09-17
 
