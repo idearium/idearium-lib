@@ -2,17 +2,11 @@
 
 ## Unreleased
 
-## v2.0.2-beta.2 - 2021-10-22
+## v2.0.2 - 2021-10-26
 
 ### Added
 
--   Added transform for trace_flags to traceFlags.
-
-## v2.0.2-beta.1 - 2021-10-22
-
-### Added
-
--   Added support for renaming opentelemetry key names in snake_case to camelCase;
+-   Added support for renaming opentelemetry key names in snake_case to camelCase.
 
 ## v2.0.1 - 2021-09-17
 
