@@ -1,11 +1,24 @@
 'use strict';
 
+const express = require('express');
 const http = require('http');
 
-const httpLogger = require('../../log-http');
 const structured = require('../index');
+const requestLogger = require('../../log-http');
+const errorLogger = require('../../log-http/middleware/log-error');
+const errorHandler = require('../../log-http/middleware/server-error');
+const notFound = require('../../log-http/middleware/not-found');
 
-const middleware = (stream) => httpLogger({ stream });
+const middleware = (stream) =>
+    requestLogger({
+        stream,
+    });
+
+const tracedMiddleware = (stream) =>
+    requestLogger({
+        stream,
+        customProps: () => ({ spanId: 'XYZ', traceId: 'ABC123' }),
+    });
 
 const once = (emitter, name) =>
     new Promise((resolve, reject) => {
@@ -41,8 +54,8 @@ const post = (server, headers = {}) => {
             {
                 headers: {
                     ...headers,
-                    ['content-type']: 'application/json',
-                    ['content-length']: Buffer.byteLength(postData),
+                    'content-type': 'application/json',
+                    'content-length': Buffer.byteLength(postData),
                 },
                 method: 'POST',
             },
@@ -54,28 +67,40 @@ const post = (server, headers = {}) => {
     });
 };
 
-const setup = (logger) =>
+const setup = (serverMiddleware) =>
     new Promise((resolve, reject) => {
-        const server = http.createServer((req, res) => {
-            logger(req, res);
+        const app = express();
+        const server = http.createServer(app);
 
-            if (req.url === '/') {
-                return res.end('hello world');
-            }
+        app.use(serverMiddleware);
 
-            if (req.url === '/json') {
-                res.setHeader('content-type', 'application/json');
-                return res.end(JSON.stringify({ test: true }));
-            }
+        app.get('/', (req, res) => res.end('hello world'));
 
-            if (req.url === '/error') {
-                res.statusCode = 500;
-                return res.end('error');
-            }
-
-            res.statusCode = 404;
-            return res.end('Not found');
+        app.get('/json', (req, res) => {
+            res.setHeader('content-type', 'application/json');
+            return res.end(JSON.stringify({ test: true }));
         });
+
+        app.get('/error', (req, res, next) =>
+            next(new Error('Testing errors...'))
+        );
+
+        app.get('/error-with-context', (req, res, next) => {
+            const err = new Error('Testing errors...');
+            err.context = {
+                code: 123,
+            };
+            next(err);
+        });
+
+        app.get('/500', (req, res) => {
+            res.statusCode = 500;
+            return res.end('error');
+        });
+
+        app.use(notFound());
+        app.use(errorLogger());
+        app.use(errorHandler());
 
         server.listen(0, '127.0.0.1', (err) => {
             if (err) {
@@ -109,7 +134,7 @@ test('logs non-http json without mutation', async () => {
 
     const line = await once(stream, 'data');
 
-    expect(line).toEqual(jsonString);
+    expect(line).toMatch(jsonString);
 });
 
 test('logs req when logging http requests', async () => {
@@ -142,6 +167,43 @@ test('logs res when logging http requests', async () => {
     const line = JSON.parse(result.toString());
 
     expect(line).toHaveProperty('res');
+
+    server.close();
+});
+
+test('does not include error information when an error did not occur', async () => {
+    expect.assertions(1);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    get(server);
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).not.toHaveProperty('@type');
+
+    server.close();
+});
+
+test('logs err when an error occurs during http request/response lifecycle', async () => {
+    expect.assertions(2);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    get(server, '/error');
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('@type');
+    expect(line['@type']).toEqual(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
 
     server.close();
 });
@@ -347,6 +409,68 @@ test('http requests includes referer', async () => {
 
     expect(line).toHaveProperty('httpRequest');
     expect(line.httpRequest).toHaveProperty('referer');
+
+    server.close();
+});
+
+test('uses structured error logging when an error occurs during http request/response lifecycle', async () => {
+    expect.assertions(10);
+
+    const stream = structured();
+    const log = middleware(stream);
+    const server = await setup(log);
+
+    get(server, '/error');
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('@type');
+    expect(line['@type']).toEqual(
+        'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent'
+    );
+    expect(line).toHaveProperty('message');
+    expect(line.message).toBe('request errored');
+    expect(line).not.toHaveProperty('httpRequest');
+    expect(line).not.toHaveProperty('err');
+    expect(line).toHaveProperty('context');
+    expect(line.context).toHaveProperty('httpRequest');
+    expect(line).toHaveProperty('exception');
+    expect(line.exception).toContain('Testing errors...');
+
+    server.close();
+});
+
+test('non-http requests that include traceId information is transformed to structured logging format', async () => {
+    expect.assertions(1);
+
+    const jsonString =
+        '{"level":30,"severity":"INFO","time":"2021-06-07T02:26:30.316Z","logging.googleapis.com/sourceLocation":{"file":"/app/tests/index.test.js"},"message":"test","traceId":"ABC123"}';
+    const stream = structured();
+
+    stream.write(jsonString);
+
+    const line = await once(stream, 'data');
+
+    expect(line).toMatch(
+        '{"level":30,"severity":"INFO","time":"2021-06-07T02:26:30.316Z","logging.googleapis.com/sourceLocation":{"file":"/app/tests/index.test.js"},"message":"test","traceId":"ABC123","trace":"projects/TEST_PROJECT/traces/ABC123"}'
+    );
+});
+
+test('http requests that include traceId information is transformed to structured logging format', async () => {
+    expect.assertions(2);
+
+    const stream = structured();
+    const log = tracedMiddleware(stream);
+    const server = await setup(log);
+
+    get(server, '/');
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('trace');
+    expect(line.trace).toBe('projects/TEST_PROJECT/traces/ABC123');
 
     server.close();
 });
