@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.0.2-beta.1 - 2021-11-09
+
 ### Added
 
 -   Updated to the latest version of @idearium/log.
