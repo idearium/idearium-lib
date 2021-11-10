@@ -13,7 +13,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "pino": "6.13.2",
+        "pino": "7.2.0",
         "pino-pretty": "4.7.1"
     },
     "devDependencies": {
