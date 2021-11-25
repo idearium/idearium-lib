@@ -12,19 +12,19 @@ const write = (callback, line) => {
 
 const createHttpRequest = (req, res) => ({
     protocol: req.protocol,
-    referer: req.headers.referer || '',
+    referer: (req.headers && req.headers.referer) || '',
     remoteIp:
-        req.headers['x-forwarded-for'] ||
+        (req.headers && req.headers['x-forwarded-for']) ||
         // This is for < v13
         req.remoteIp ||
         // This is for > v14
         '',
     requestMethod: req.method,
-    requestSize: req.headers['content-length'] || 0,
+    requestSize: (req.headers && req.headers['content-length']) || 0,
     requestUrl: req.url,
     responseSize: res.size || 0,
     status: res.statusCode,
-    userAgent: req.headers['user-agent'] || '',
+    userAgent: (req.headers && req.headers['user-agent']) || '',
 });
 
 const transformOpentelemetry = (log) => {
