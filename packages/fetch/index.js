@@ -24,9 +24,9 @@ const fetchApi = async (url, opts = {}) => {
     const headers = {};
 
     if (opts?.headers) {
-        Object.keys(opts.headers)
-            .map((key) => key.toLowerCase())
-            .forEach((key) => (headers[key] = opts.headers[key]));
+        Object.keys(opts.headers).forEach(
+            (key) => (headers[key.toLowerCase()] = opts.headers[key])
+        );
     }
 
     if (!headers['content-type']) {
