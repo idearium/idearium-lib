@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "pino": "6.13.2",
-        "pino-pretty": "4.7.1"
+        "pino-pretty": "7.6.0"
     },
     "devDependencies": {
         "split2": "3.2.2"
