@@ -419,14 +419,6 @@
     eslint-plugin-node "11.1.0"
     prettier "2.3.2"
 
-"@idearium/log@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-1.0.0.tgz#166eefa6ceba6f801ba7f58c2cbbc3834000838d"
-  integrity sha512-EsGqD+s8emug1xxfWTp8/8V51Ichw8IhDndyt0mMHFRRMM9g/VexzTVuyEnrUNIqtKAOdOTyeFb6RcKp5+W6vQ==
-  dependencies:
-    pino "6.11.3"
-    pino-pretty "4.7.1"
-
 "@idearium/log@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@idearium/log/-/log-2.0.0.tgz#b3230299c250138d1b11147b94dcbc6d77367a90"
