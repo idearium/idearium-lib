@@ -33,16 +33,16 @@ There are 3 properties you can pass:
 const textSort = require('@idearium/text-sort');
 
 textSort({
-    array: [{ a: 3 }, { a: 2 }, { a: 1 }],
+    array: [{ a: 'third' }, { a: 'second' }, { a: 'first' }],
     asc: true, // default
     sortValue: ({ a }) => a,
 });
-// returns [{ a: 1 }, { a: 2 }, { a: 3 }]
+// returns [{ a: 'first' }, { a: 'second' }, { a: 'third' }]
 
 textSort({
-    array: [{ a: 1 }, { a: 2 }, { a: 3 }],
+    array: [{ a: 'first' }, { a: 'second' }, { a: 'third' }],
     asc: false,
     sortValue: ({ a }) => a,
 });
-// returns [{ a: 3 }, { a: 2 }, { a: 1 }]
+// returns [{ a: 'third' }, { a: 'second' }, { a: 'first' }]
 ```
