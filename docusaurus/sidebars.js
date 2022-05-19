@@ -15,6 +15,7 @@ module.exports = {
             'log-structured',
             'mongoose',
             'safe-promise',
+            'safe-promise-all',
             'telemetry',
             'text-sort',
         ],

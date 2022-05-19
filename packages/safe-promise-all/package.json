@@ -1,0 +1,12 @@
+{
+    "name": "@idearium/safe-promise-all",
+    "version": "1.0.0",
+    "description": "A packages to make arrays of promises safe.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    }
+}
