@@ -1,8 +1,8 @@
-name: '@idearium/safe-promise-all'
+name: '@idearium/promise-all-settled'
 on:
     push:
         paths:
-            - 'packages/safe-promise-all/**'
+            - 'packages/promise-all-settled/**'
     release:
         types: [published]
 
@@ -35,9 +35,9 @@ jobs:
             - name: Setup yarn
               run: yarn install
             - name: Test
-              run: yarn workspace @idearium/safe-promise-all test
+              run: yarn workspace @idearium/promise-all-settled test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/safe-promise-all-v')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/promise-all-settled-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
@@ -69,11 +69,11 @@ jobs:
               run: yarn install
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
-              run: yarn workspace @idearium/safe-promise-all publish --tag beta --access public
+              run: yarn workspace @idearium/promise-all-settled publish --tag beta --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish
               if: "!contains(github.ref , 'beta')"
-              run: yarn workspace @idearium/safe-promise-all publish --access public
+              run: yarn workspace @idearium/promise-all-settled publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

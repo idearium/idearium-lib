@@ -1,5 +1,5 @@
 {
-    "name": "@idearium/safe-promise-all",
+    "name": "@idearium/promise-all-settled",
     "version": "1.0.0",
     "description": "A packages to make arrays of promises safe.",
     "main": "index.js",

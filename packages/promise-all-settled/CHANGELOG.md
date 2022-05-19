@@ -1,4 +1,4 @@
-# @idearium/safe-promise-all
+# @idearium/promise-all-settled
 
 ## v1.0.0
 
