@@ -3,7 +3,7 @@ id: promise-all-settled
 title: '@idearium/promise-all-settled'
 ---
 
-Makes working with promises safer.
+Makes working with `Promise.allSettled` easier.
 
 ## Installation
 
@@ -29,9 +29,9 @@ To use `promiseAllSettled`, require it from `@idearium/promise-all-settled`.
 const promiseAllSettled = require('@idearium/promise-all-settled');
 ```
 
-This will take an array of promises and always use `resolve` to return a result in the format `[errs, results]`.
+`promiseAllSettled` will take an array of promises and return a result in the format `[errors, results]`. The result will always contain all promises passed to it as it waits until all promises have settled before it returns.
 
-This provides the ability to use async/wait without try/catch blocks.
+This provides the ability to use async/await without try/catch blocks.
 
 Use it like so:
 
