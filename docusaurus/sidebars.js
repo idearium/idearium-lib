@@ -16,6 +16,7 @@ module.exports = {
             'mongoose',
             'safe-promise',
             'telemetry',
+            'text-sort',
         ],
     },
 };

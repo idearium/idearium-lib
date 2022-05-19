@@ -46,6 +46,12 @@ To manage application logging and optionally log to a remote server (InsightOps)
 
 Easily create connections to MongoDB via Mongoose.
 
+### [@idearium/text-sort](https://idearium.github.io/idearium-lib/docs/text-sort)
+
+![@idearium/text-sort](https://github.com/idearium/idearium-lib/workflows/@idearium/text-sort/badge.svg)
+
+Function to help sort arrays by text.
+
 ### [@idearium/utils](https://idearium.github.io/idearium-lib/docs/utils)
 
 ![@idearium/utils](https://github.com/idearium/idearium-lib/workflows/@idearium/utils/badge.svg)
