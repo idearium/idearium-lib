@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v1.0.4 - 2022-05-10
+
+### Fixed
+
+-   An issue when formatting a request log that has no headers.
+
 ## v1.0.3 - 2021-10-26
 
 ### Add
