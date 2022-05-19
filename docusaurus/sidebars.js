@@ -14,6 +14,7 @@ module.exports = {
             'log-insightops',
             'log-structured',
             'mongoose',
+            'promise-all-settled',
             'safe-promise',
             'telemetry',
             'text-sort',
