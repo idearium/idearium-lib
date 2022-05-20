@@ -12,7 +12,7 @@ jobs:
         with:
             workspace: '@idearium/fetch'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/fetch')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/fetch-v')
         name: Publish
         needs: call-workflow-test
         runs-on: ubuntu-latest

@@ -1,0 +1,12 @@
+{
+    "name": "@idearium/promise-all-settled",
+    "version": "1.0.0",
+    "description": "A package to make using Promise.allSettled easier to use.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    }
+}

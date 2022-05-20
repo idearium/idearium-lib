@@ -12,7 +12,7 @@ jobs:
         with:
             workspace: '@idearium/encryption'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/encryption')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/encryption-v')
         name: Publish
         needs: call-workflow-test
         runs-on: ubuntu-latest

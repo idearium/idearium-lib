@@ -14,7 +14,10 @@ module.exports = {
             'log-insightops',
             'log-structured',
             'mongoose',
-            'safe-promise'
-        ]
-    }
+            'promise-all-settled',
+            'safe-promise',
+            'telemetry',
+            'text-sort',
+        ],
+    },
 };

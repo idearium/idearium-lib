@@ -12,7 +12,7 @@ jobs:
         with:
             workspace: '@idearium/log-http'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-http')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-http-v')
         name: Publish
         needs: call-workflow-test
         runs-on: ubuntu-latest

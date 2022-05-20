@@ -12,7 +12,7 @@ jobs:
         with:
             workspace: '@idearium/log-insightops'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-insightops')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-insightops-v')
         name: Publish
         needs: call-workflow-test
         runs-on: ubuntu-latest
