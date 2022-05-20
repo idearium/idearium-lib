@@ -12,7 +12,7 @@ jobs:
         with:
             workspace: '@idearium/cookie'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/cookie')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/cookie-v')
         name: Publish
         needs: call-workflow-test
         runs-on: ubuntu-latest
