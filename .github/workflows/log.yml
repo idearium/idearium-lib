@@ -13,6 +13,6 @@ jobs:
             workspace: '@idearium/log'
     call-workflow-publish:
         needs: call-workflow-test
-        uses: idearium/idearium-lib/.github/workflows/publish.yml@328bf7ca2b09ca2ede76f874c9eb95dcea8a576d
+        uses: idearium/idearium-lib/.github/workflows/publish.yml@20b563d62ec32daea34f3a8f8005dfe73d7d444e
         with:
             workspace: '@idearium/log'
