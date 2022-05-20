@@ -10,9 +10,45 @@ jobs:
     call-workflow-test:
         uses: idearium/idearium-lib/.github/workflows/test.yml@4c92ae7789ef993f75052b1c320940dbca8d33ab
         with:
-            workspace: '@idearium/log'
-    call-workflow-publish:
+            workspace: ${{ env.GITHUB_WORKFLOW }}
+    publish:
+        if: github.event_name == 'release' && contains(github.ref, '${{ env.GITHUB_WORKFLOW }}-v')
+        name: Publish
         needs: call-workflow-test
-        uses: idearium/idearium-lib/.github/workflows/publish.yml@20b563d62ec32daea34f3a8f8005dfe73d7d444e
-        with:
-            workspace: '@idearium/log'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  registry-url: https://registry.npmjs.org/
+            - name: Get yarn cache
+              id: yarn-cache
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - name: Cache yarn
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.yarn-cache.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
+            - name: Cache node_modules
+              uses: actions/cache@v1
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node_modules-
+            - name: Setup yarn
+              run: yarn install
+            - name: Publish (beta)
+              if: contains(github.ref, 'beta')
+              run: yarn workspace ${{ env.GITHUB_WORKFLOW }} publish --tag beta --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Publish
+              if: "!contains(github.ref , 'beta')"
+              run: yarn workspace ${{ env.GITHUB_WORKFLOW }} publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
