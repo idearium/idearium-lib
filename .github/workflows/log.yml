@@ -1,6 +1,5 @@
 name: '@idearium/log'
 on:
-    workflow_dispatch:
     push:
         paths:
             - 'packages/log/**'
