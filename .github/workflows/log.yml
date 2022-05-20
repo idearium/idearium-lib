@@ -14,7 +14,7 @@ jobs:
     publish:
         if: github.event_name == 'release' && contains(github.ref, '${{ env.GITHUB_WORKFLOW }}-v')
         name: Publish
-        needs: call-workflow-test
+        # needs: call-workflow-test
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
