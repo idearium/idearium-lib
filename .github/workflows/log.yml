@@ -10,11 +10,11 @@ jobs:
     call-workflow-test:
         uses: idearium/idearium-lib/.github/workflows/test.yml@4c92ae7789ef993f75052b1c320940dbca8d33ab
         with:
-            workspace: ${{ env.GITHUB_WORKFLOW }}
+            workspace: '@idearium/log'
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '${{ env.GITHUB_WORKFLOW }}-v')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/log-v')
         name: Publish
-        # needs: call-workflow-test
+        needs: call-workflow-test
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -44,11 +44,11 @@ jobs:
               run: yarn install
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
-              run: yarn workspace ${{ env.GITHUB_WORKFLOW }} publish --tag beta --access public
+              run: yarn workspace @idearium/log publish --tag beta --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish
               if: "!contains(github.ref , 'beta')"
-              run: yarn workspace ${{ env.GITHUB_WORKFLOW }} publish --access public
+              run: yarn workspace @idearium/log publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
