@@ -16,7 +16,7 @@
     },
     "devDependencies": {
         "express": "4.17.1",
-        "pino-http": "5.7.0",
+        "pino-http": "8.1.1",
         "sink": "0.1.1"
     }
 }
