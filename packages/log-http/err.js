@@ -6,7 +6,7 @@ module.exports = (err) => {
     const data = {
         '@type':
             'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent',
-        'message': stack
+        'message': stack,
     };
 
     if (context) {
