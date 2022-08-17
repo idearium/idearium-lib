@@ -26,14 +26,14 @@ const find = ({ cookies, name, ...cookieOpts } = {}) => {
     );
 
     if (!foundCookie) {
-        log.debug({ cookies, name }, 'Cookie does not exist.');
+        log.trace({ cookies, name }, 'Cookie does not exist.');
 
         return null;
     }
 
     const cookie = parsedCookies[name];
 
-    log.debug({ cookie, cookies, name }, 'Found cookie.');
+    log.trace({ cookie, cookies, name }, 'Found cookie.');
 
     return cookie;
 };

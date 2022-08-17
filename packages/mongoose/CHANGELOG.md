@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+-   Updated log levels to avoid polluting logs in projects.
+
 ## v1.0.2 - 2022-05-10
 
 ### Added
