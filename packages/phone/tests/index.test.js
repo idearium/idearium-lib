@@ -14,7 +14,7 @@ twilio.mockImplementation(() => ({
 
 const { parsePhoneNumber } = require('../');
 
-it('throws an error if the country code is not provided', async () => {
+it('throws an error if the parameter object is not provided', async () => {
     expect.assertions(1);
 
     await expect(parsePhoneNumber()).rejects.toThrow(
