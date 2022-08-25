@@ -1,7 +1,7 @@
 {
     "name": "@idearium/phone",
     "version": "1.0.0-beta.1",
-    "description": "Wrapper around the Twilio phone lookup api.",
+    "description": "Utilities for working with phone numbers.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Allan Chau <allan@idearium.io>",
