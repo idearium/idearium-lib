@@ -1,6 +1,6 @@
 {
     "name": "@idearium/phone",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.4",
     "description": "Utilities for working with phone numbers.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
