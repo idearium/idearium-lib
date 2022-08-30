@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/telemetry/**'
     release:
+        paths:
+            - 'packages/telemetry/**'
         types: [published]
 
 jobs:

@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/lists/**'
     release:
+        paths:
+            - 'packages/lists/**'
         types: [published]
 
 jobs:

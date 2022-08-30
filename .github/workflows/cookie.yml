@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/cookie/**'
     release:
+        paths:
+            - 'packages/cookie/**'
         types: [published]
 
 jobs:

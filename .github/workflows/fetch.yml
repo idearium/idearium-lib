@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/fetch/**'
     release:
+        paths:
+            - 'packages/fetch/**'
         types: [published]
 
 jobs:

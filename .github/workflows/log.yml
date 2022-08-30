@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/log/**'
     release:
+        paths:
+            - 'packages/log/**'
         types: [published]
 
 jobs:

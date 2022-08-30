@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/log-insightops/**'
     release:
+        paths:
+            - 'packages/log-insightops/**'
         types: [published]
 
 jobs:

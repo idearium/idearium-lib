@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/phone/**'
     release:
+        paths:
+            - 'packages/phone/**'
         types: [published]
 
 jobs:

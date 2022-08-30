@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/encryption/**'
     release:
+        paths:
+            - 'packages/encryption/**'
         types: [published]
 
 jobs:

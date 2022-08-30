@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/apm/**'
     release:
+        paths:
+            - 'packages/apm/**'
         types: [published]
 
 jobs:

@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/text-sort/**'
     release:
+        paths:
+            - 'packages/text-sort/**'
         types: [published]
 
 jobs:

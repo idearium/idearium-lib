@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/promise-all-settled/**'
     release:
+        paths:
+            - 'packages/promise-all-settled/**'
         types: [published]
 
 jobs:

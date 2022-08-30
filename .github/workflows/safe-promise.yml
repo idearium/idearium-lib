@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/safe-promise/**'
     release:
+        paths:
+            - 'packages/safe-promise/**'
         types: [published]
 
 jobs:

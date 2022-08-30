@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/mongoose/**'
     release:
+        paths:
+            - 'packages/mongoose/**'
         types: [published]
 
 jobs:

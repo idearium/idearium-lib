@@ -4,6 +4,8 @@ on:
         paths:
             - 'packages/log-structured/**'
     release:
+        paths:
+            - 'packages/log-structured/**'
         types: [published]
 
 jobs:
