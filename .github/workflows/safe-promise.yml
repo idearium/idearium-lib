@@ -4,32 +4,28 @@ on:
         paths:
             - 'packages/safe-promise/**'
     release:
-        paths:
-            - 'packages/safe-promise/**'
         types: [published]
 
 jobs:
     test:
+        if: github.event_name == 'push' || (github.event_name == 'release' && contains(github.ref, '@idearium/safe-promise-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn
                 node-version: lts/*
             - run: yarn
-            - name: Test
-              run: yarn workspace @idearium/safe-promise test
+            - run: yarn workspace @idearium/safe-promise test
     publish:
         if: github.event_name == 'release' && contains(github.ref, '@idearium/safe-promise-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn

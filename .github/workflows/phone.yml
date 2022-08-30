@@ -4,32 +4,28 @@ on:
         paths:
             - 'packages/phone/**'
     release:
-        paths:
-            - 'packages/phone/**'
         types: [published]
 
 jobs:
     test:
+        if: github.event_name == 'push' || (github.event_name == 'release' && contains(github.ref, '@idearium/phone-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn
                 node-version: lts/*
             - run: yarn
-            - name: Test
-              run: yarn workspace @idearium/phone test
+            - run: yarn workspace @idearium/phone test
     publish:
         if: github.event_name == 'release' && contains(github.ref, '@idearium/phone-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn

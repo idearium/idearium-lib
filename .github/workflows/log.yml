@@ -4,32 +4,28 @@ on:
         paths:
             - 'packages/log/**'
     release:
-        paths:
-            - 'packages/log/**'
         types: [published]
 
 jobs:
     test:
+        if: github.event_name == 'push' || (github.event_name == 'release' && contains(github.ref, '@idearium/log-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn
                 node-version: lts/*
             - run: yarn
-            - name: Test
-              run: yarn workspace @idearium/log test
+            - run: yarn workspace @idearium/log test
     publish:
         if: github.event_name == 'release' && contains(github.ref, '@idearium/log-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn

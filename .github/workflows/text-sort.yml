@@ -4,17 +4,15 @@ on:
         paths:
             - 'packages/text-sort/**'
     release:
-        paths:
-            - 'packages/text-sort/**'
         types: [published]
 
 jobs:
     test:
+        if: github.event_name == 'push' || (github.event_name == 'release' && contains(github.ref, '@idearium/text-sort-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn
@@ -26,8 +24,7 @@ jobs:
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - name: Setup
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 cache: yarn
