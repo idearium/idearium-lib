@@ -8,7 +8,7 @@ on:
 
 jobs:
     test:
-        if: github.event_name == 'push' || (github.event_name == 'release' && contains(github.ref, '@idearium/log-v'))
+        if: (github.event_name == 'push' && !contains(github.ref, '@idearium/')) || (github.event_name == 'release' && contains(github.ref, '@idearium/log-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
