@@ -70,6 +70,12 @@ Works with @idearium/log to update log output to match [GCP Structured Logging r
 
 Easily create connections to MongoDB via Mongoose.
 
+### [@idearium/phone](https://idearium.github.io/idearium-lib/docs/phone)
+
+![@idearium/phone](https://github.com/idearium/idearium-lib/workflows/@idearium/phone/badge.svg)
+
+Wrapper around the Twilio phone lookup api.
+
 ### [@idearium/promise-all-settled](https://idearium.github.io/idearium-lib/docs/promise-all-settled)
 
 ![@idearium/promise-all-settled](https://github.com/idearium/idearium-lib/workflows/@idearium/promise-all-settled/badge.svg)
