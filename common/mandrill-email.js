@@ -3,7 +3,7 @@
 const config = require('./config');
 const Email = require('../lib/email');
 const emailServices = require('../lib/email-services');
-const log = require('./log')('idearium-lib:common/mandrill-email');
+const log = require('@idearium/log')();
 
 class MandrillEmail extends Email {
 

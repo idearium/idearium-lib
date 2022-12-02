@@ -2,7 +2,7 @@
 
 const config = require('./config');
 const Redis = require('ioredis');
-const log = require('./log')('idearium-lib:common/redis');
+const log = require('@idearium/log')();
 
 Redis.Promise.onPossiblyUnhandledRejection(err => log.error({ err }, 'Unhandled Redis error'));
 
