@@ -4,7 +4,7 @@ var fs = require('fs'),
     path = require('path'),
     async = require('async'),
     config = require('../config'),
-    debug = require('debug')('idearium-lib:common/mq/client');
+    log = require('@idearium/log')();
 
 /**
  * Load the certificates for RabbitMQ, if they exist.
@@ -43,7 +43,7 @@ const certs = () => {
                     // Do we have a cert and a key?
                     if (certAndKeyExists) {
 
-                        debug(`Loading SSL cert and key from ${certsDir}`);
+                        log.info(`Loading SSL cert and key from ${certsDir}`);
 
                         // Load in the cert and the key.
                         options.cert = fs.readFileSync(path.join(certsDir, certsFiles.filter(file => certRegex.test(file) === true)[0]));
@@ -74,7 +74,7 @@ const certs = () => {
                     options.ca = caFiles || [];
 
                     if (options.ca.length) {
-                        debug(`Loading CA certs from ${caDir}`);
+                        log.info(`Loading CA certs from ${caDir}`);
                     }
 
                     // Load each and every file.

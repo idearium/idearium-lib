@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../config');
-const debug = require('debug')('idearium-lib:common:mongo/certs');
+const log = require('@idearium/log')();
 
 /**
  * Load the CA certificates for MongoDB, if they exist.
@@ -35,7 +35,7 @@ const certs = () => {
             // If that directory didn't exist, `caFiles` will be undefined.
             certs = caFiles || [];
 
-            debug(`Loading ${certs.length} CA certs from ${caDir}`);
+            log.info(`Loading ${certs.length} CA certs from ${caDir}`);
 
             // Load each and every file.
             certs = certs.map(file => fs.readFileSync(path.join(caDir, file)));

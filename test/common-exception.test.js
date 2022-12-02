@@ -2,8 +2,6 @@
 
 jest.mock('/app/config/config.js', () => ({
     logLevel: 'debug',
-    logLocation: 'local',
-    logToStdout: true,
 }));
 
 const { logPath } = require('./util');

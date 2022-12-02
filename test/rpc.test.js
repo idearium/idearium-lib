@@ -2,8 +2,6 @@
 
 jest.mock('/app/config/config.js', () => ({
     logLevel: 'debug',
-    logLocation: 'local',
-    logToStdout: true,
     mqRpcClientTimeout: 10000,
     mqUrl: require('./conf').rabbitUrl,
 }));

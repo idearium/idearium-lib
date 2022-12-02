@@ -5,7 +5,7 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 const certs = require('./certs');
-const debug = require('debug')('idearium-lib:common:mongo/connection');
+const log = require('@idearium/log')();
 
 // Options will go here.
 const opts = {};
@@ -27,7 +27,7 @@ certs.
 
         }
 
-        debug(`Connecting to database ${Object.keys(opts).length > 0 ? 'with' : 'without'} SSL.`);
+        log.info(`Connecting to database ${Object.keys(opts).length > 0 ? 'with' : 'without'} SSL.`);
 
         // Connect to Mongo on Compose.io using the certificates loaded.
         mongoose.connect(config.get('dbUrl'), opts);
