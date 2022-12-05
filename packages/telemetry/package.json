@@ -1,6 +1,6 @@
 {
     "name": "@idearium/telemetry",
-    "version": "1.0.0",
+    "version": "1.0.1-beta.1",
     "description": "Idearium Open Telemetry integrations",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
