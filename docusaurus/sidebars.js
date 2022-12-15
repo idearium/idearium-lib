@@ -16,6 +16,7 @@ module.exports = {
             'mongoose',
             'phone',
             'promise-all-settled',
+            'react-state-router',
             'safe-promise',
             'telemetry',
             'text-sort',
