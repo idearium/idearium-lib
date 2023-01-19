@@ -82,6 +82,12 @@ Wrapper around the Twilio phone lookup api.
 
 Makes working with `Promise.allSettled` easier.
 
+### [@idearium/redis](https://idearium.github.io/idearium-lib/docs/redis)
+
+![@idearium/redis](https://github.com/idearium/idearium-lib/workflows/@idearium/redis/badge.svg)
+
+The Idearium ioredis connection wrapper.
+
 ### [@idearium/safe-promise](https://idearium.github.io/idearium-lib/docs/safe-promise)
 
 ![@idearium/safe-promise](https://github.com/idearium/idearium-lib/workflows/@idearium/safe-promise/badge.svg)
