@@ -210,7 +210,7 @@ test('automatically includes a the source location', async () => {
     const result = await once(stream, 'data');
 
     expect(result[sourceLocation]).toEqual({
-        file: path.resolve(process.cwd(), __filename)
+        file: path.resolve(process.cwd(), __filename),
     });
 });
 
@@ -222,7 +222,7 @@ test('can override the source location', async () => {
     const stream = sink();
     const log = require('../')({
         sourceLocation: { file: 'test' },
-        stream
+        stream,
     });
 
     log.info('info-test');
@@ -230,4 +230,33 @@ test('can override the source location', async () => {
     const result = await once(stream, 'data');
 
     expect(result[sourceLocation]).toEqual({ file: 'test' });
+});
+
+test('will rename opentelemetry snake_case to camelCase', async () => {
+    expect.assertions(9);
+
+    process.env.LOG_LEVEL = 'info';
+
+    const stream = sink();
+    const log = require('../')({
+        sourceLocation: { file: 'test' },
+        stream,
+    });
+
+    log.info(
+        { span_id: 'XYZ', trace_flags: '01', trace_id: 'ABC123' },
+        'trace-id-test'
+    );
+
+    const result = await once(stream, 'data');
+
+    expect(result).toHaveProperty('spanId');
+    expect(result).not.toHaveProperty('span_id');
+    expect(result.spanId).toEqual('XYZ');
+    expect(result).toHaveProperty('traceId');
+    expect(result).not.toHaveProperty('trace_id');
+    expect(result.traceId).toEqual('ABC123');
+    expect(result).toHaveProperty('traceFlags');
+    expect(result).not.toHaveProperty('trace_flags');
+    expect(result.traceFlags).toEqual('01');
 });

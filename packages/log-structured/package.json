@@ -1,6 +1,6 @@
 {
     "name": "@idearium/log-structured",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "description": "Idearium logger structured logging formatter",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Scott Mebberson <scott@idearium.io>",
@@ -9,12 +9,13 @@
         "structured": "bin/structured.js"
     },
     "scripts": {
-        "test": "jest --forceExit --testRunner='jest-jasmine2'"
+        "test": "jest --testRunner='jest-jasmine2'"
     },
     "dependencies": {
         "pump": "3.0.0"
     },
     "devDependencies": {
+        "express": "4.17.1",
         "pino-http": "5.7.0",
         "sink": "0.1.1"
     }

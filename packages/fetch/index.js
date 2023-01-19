@@ -20,10 +20,20 @@ const parseResponse = async (response) => {
     return response;
 };
 
-const fetchApi = async (url, { headers, ...options } = {}) => {
-    const opts = { ...options };
+const fetchApi = async (url, opts = {}) => {
+    const headers = {};
 
-    opts.headers = { 'content-type': 'application/json', ...headers };
+    if (opts?.headers) {
+        Object.keys(opts.headers).forEach(
+            (key) => (headers[key.toLowerCase()] = opts.headers[key])
+        );
+    }
+
+    if (!headers['content-type']) {
+        headers['content-type'] = 'application/json';
+    }
+
+    opts.headers = headers;
 
     return parseResponse(await fetch(url, opts));
 };

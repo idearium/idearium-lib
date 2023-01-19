@@ -8,65 +8,31 @@ on:
 
 jobs:
     test:
+        if: (github.event_name == 'push' && !contains(github.ref, '@idearium/')) || (github.event_name == 'release' && contains(github.ref, '@idearium/cookie-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-            - name: Setup Node.js
-              uses: actions/setup-node@v2
-            - name: Get yarn cache
-              id: yarn-cache
-              run: echo "::set-output name=dir::$(yarn cache dir)"
-            - name: Cache yarn
-              uses: actions/cache@v1
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
               with:
-                  path: ${{ steps.yarn-cache.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-            - name: Cache node_modules
-              uses: actions/cache@v1
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node_modules-
-            - name: Setup yarn
-              run: yarn install
-            - name: Test
-              run: yarn workspace @idearium/cookie test
+                  cache: yarn
+                  node-version: lts/*
+                  registry-url: 'https://registry.npmjs.org'
+            - run: yarn
+            - run: yarn workspace @idearium/cookie test
     publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/cookie')
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/cookie-v')
         name: Publish
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-            - name: Setup Node.js
-              uses: actions/setup-node@v2
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
               with:
-                  registry-url: https://registry.npmjs.org/
-            - name: Get yarn cache
-              id: yarn-cache
-              run: echo "::set-output name=dir::$(yarn cache dir)"
-            - name: Cache yarn
-              uses: actions/cache@v1
-              with:
-                  path: ${{ steps.yarn-cache.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-            - name: Cache node_modules
-              uses: actions/cache@v1
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node_modules-
-            - name: Setup yarn
-              run: yarn install
+                  cache: yarn
+                  node-version: lts/*
+                  registry-url: 'https://registry.npmjs.org'
+            - run: yarn
             - name: Publish (beta)
               if: contains(github.ref, 'beta')
               run: yarn workspace @idearium/cookie publish --tag beta --access public
