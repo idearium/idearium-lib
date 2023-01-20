@@ -17,6 +17,7 @@ module.exports = {
             'phone',
             'promise-all-settled',
             'react-state-router',
+            'redis',
             'safe-promise',
             'telemetry',
             'text-sort',
