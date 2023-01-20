@@ -8,6 +8,7 @@ module.exports = {
             'cookie',
             'encryption',
             'fetch',
+            'kue',
             'lists',
             'log',
             'log-http',
