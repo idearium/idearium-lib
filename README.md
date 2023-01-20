@@ -34,6 +34,12 @@ Making it painless to encrypt and decrypt plain text.
 
 Making fetch requests easy.
 
+### [@idearium/kue](https://idearium.github.io/idearium-lib/docs/kue)
+
+![@idearium/kue](https://github.com/idearium/idearium-lib/workflows/@idearium/kue/badge.svg)
+
+A library to make working with Kue painless.
+
 ### [@idearium/lists](https://idearium.github.io/idearium-lib/docs/lists)
 
 ![@idearium/lists](https://github.com/idearium/idearium-lib/workflows/@idearium/lists/badge.svg)
