@@ -400,12 +400,20 @@
     pino "6.11.3"
     pino-pretty "4.7.1"
 
-"@idearium/redis@1.0.0-beta.2":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@idearium/redis/-/redis-1.0.0-beta.2.tgz#7cd54665dabf5d36cc6e194e975dc7cd717717da"
-  integrity sha512-GnhDMRsx3CLAnzZ7JuEgKFX3RZL9o38JBL72ECsyVhZ5qfHDLcJJ71qPvyyNFm1RKt1NgainY/K3/UOk1dCuUw==
+"@idearium/log@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-2.0.2.tgz#68b9df142ce7bac26ceb92f58e1c11fb48b5ccbe"
+  integrity sha512-skoUN+w1gRdfMHHdDuAnuo6woeOkzoqfuDkdSI1yH9B6IXh0cw5bnfcAx5Wqi0253flwXBA4lvX1xu7b1XtzqA==
   dependencies:
-    "@idearium/log" "2.0.1"
+    pino "6.13.2"
+    pino-pretty "4.7.1"
+
+"@idearium/redis@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@idearium/redis/-/redis-1.0.0.tgz#9619a483445236c5065b8f5e4ba5263ec0501b75"
+  integrity sha512-nuoUsXcc6T1rEKpIQKQJKNP/VyJrQhXtn0n+oBY6L1EUbfsr/RdyDL+5uo8LAiPJcJii0UrhXCTFRj+IVDTYtA==
+  dependencies:
+    "@idearium/log" "2.0.2"
     ioredis "4.27.10"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
