@@ -1,0 +1,17 @@
+{
+    "name": "@idearium/react-state-router",
+    "version": "1.0.0",
+    "description": "React state router component for XState",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "contributors": [
+        "Allan Chau <allan@idearium.io>",
+        "Scott Mebberson <scott@idearium.io>"
+    ],
+    "license": "MIT",
+    "peerDependencies": {
+        "react": ">=18",
+        "react-dom": ">=18",
+        "xstate": ">=4"
+    }
+}

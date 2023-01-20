@@ -138,7 +138,7 @@ test('logs non-http json without mutation', async () => {
 });
 
 test('logs req when logging http requests', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
 
     const stream = structured();
     const log = middleware(stream);
@@ -150,8 +150,25 @@ test('logs req when logging http requests', async () => {
     const line = JSON.parse(result.toString());
 
     expect(line).toHaveProperty('req');
+    expect(line.req).toHaveProperty('headers');
 
     server.close();
+});
+
+test('logs req even without headers', async () => {
+    expect.assertions(2);
+
+    const stream = structured();
+
+    stream.write(
+        '{"level":30,"severity":"INFO","time":"2021-11-25T02:51:57.024Z","req":{"id":1,"method":"GET","protocol":"http/1.1","remoteAddress":"127.0.0.1","remoteIp":"127.0.0.1","remotePort":65404,"url":"/"},"spanId":"XYZ","traceId":"ABC123","res":{"headers":{"x-powered-by":"Express"},"size":11,"statusCode":200},"responseTime":0.001,"message":"request completed"}'
+    );
+
+    const result = await once(stream, 'data');
+    const line = JSON.parse(result.toString());
+
+    expect(line).toHaveProperty('req');
+    expect(line.req).not.toHaveProperty('headers');
 });
 
 test('logs res when logging http requests', async () => {

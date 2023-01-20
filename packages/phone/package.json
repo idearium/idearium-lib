@@ -1,0 +1,18 @@
+{
+    "name": "@idearium/phone",
+    "version": "1.0.1",
+    "description": "Utilities for working with phone numbers.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Allan Chau <allan@idearium.io>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "dependencies": {
+        "twilio": "3.82.1"
+    },
+    "devDependencies": {
+        "jest": "29.0.3"
+    }
+}
