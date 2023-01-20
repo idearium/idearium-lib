@@ -15,7 +15,13 @@ module.exports = {
             'log-insightops',
             'log-structured',
             'mongoose',
+            'phone',
+            'promise-all-settled',
+            'react-state-router',
+            'redis',
             'safe-promise',
+            'telemetry',
+            'text-sort',
         ],
     },
 };

@@ -1,5 +1,13 @@
 # @idearium/log
 
+## Unreleased
+
+## v2.0.2 - 2021-10-26
+
+### Added
+
+-   Added support for renaming opentelemetry key names in snake_case to camelCase.
+
 ## v2.0.1 - 2021-09-17
 
 ### Changed

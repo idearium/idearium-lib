@@ -1,21 +1,23 @@
 {
     "name": "@idearium/log-http",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Idearium HTTP logger",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Scott Mebberson <scott@idearium.io>",
     "license": "MIT",
     "scripts": {
-        "test": "jest --forceExit --testRunner='jest-jasmine2'"
+        "test": "jest"
     },
     "dependencies": {
-        "@idearium/log": "1.0.0",
-        "pino-http": "5.7.0",
+        "@idearium/log": "2.0.1",
+        "escape-html": "1.0.3",
+        "pino-http": "5.5.0",
         "pump": "3.0.0"
     },
     "devDependencies": {
-        "pino-http": "5.7.0",
+        "express": "4.17.1",
+        "pino-http": "5.5.0",
         "sink": "0.1.1"
     }
 }

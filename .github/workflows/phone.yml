@@ -1,0 +1,45 @@
+name: '@idearium/phone'
+on:
+    push:
+        paths:
+            - 'packages/phone/**'
+    release:
+        types: [published]
+
+jobs:
+    test:
+        if: (github.event_name == 'push' && !contains(github.ref, '@idearium/')) || (github.event_name == 'release' && contains(github.ref, '@idearium/phone-v'))
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  cache: yarn
+                  node-version: lts/*
+                  registry-url: 'https://registry.npmjs.org'
+            - run: yarn
+            - run: yarn workspace @idearium/phone test
+    publish:
+        if: github.event_name == 'release' && contains(github.ref, '@idearium/phone-v')
+        name: Publish
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  cache: yarn
+                  node-version: lts/*
+                  registry-url: 'https://registry.npmjs.org'
+            - run: yarn
+            - name: Publish (beta)
+              if: contains(github.ref, 'beta')
+              run: yarn workspace @idearium/phone publish --tag beta --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Publish
+              if: "!contains(github.ref , 'beta')"
+              run: yarn workspace @idearium/phone publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,5 +1,11 @@
 # @idearium/fetch
 
+## v2.0.4
+
+### Fixed
+
+-   Fixed duplicate content type headers.
+
 ## v2.0.2
 
 ### Fixed

@@ -5,7 +5,7 @@ jest.mock('isomorphic-fetch', () => require('fetch-mock-jest').sandbox());
 const fetchMock = require('isomorphic-fetch');
 const fetchApi = require('../');
 
-const testUrl = 'http://www.idearium.io/';
+const testUrl = 'https://www.idearium.io/';
 const headers = { 'content-type': 'application/json' };
 
 beforeEach(() => {
@@ -25,7 +25,7 @@ it('returns a tuple for successful requests', async () => {
     await expect(fetchApi(testUrl)).resolves.toMatchObject({
         ok: true,
         result: { pass: true },
-        status: 200
+        status: 200,
     });
 });
 
@@ -35,13 +35,13 @@ it('returns a tuple for error requests', async () => {
     fetchMock.get(testUrl, {
         body: { pass: false },
         headers,
-        status: 400
+        status: 400,
     });
 
     await expect(fetchApi(testUrl)).resolves.toMatchObject({
         ok: false,
         result: { pass: false },
-        status: 400
+        status: 400,
     });
 });
 
@@ -64,16 +64,14 @@ it('result contains the main response properties', async () => {
 it('automatically sets the content-type header', async () => {
     expect.assertions(1);
 
-    const headers = { 'content-type': 'application/json' };
-
     fetchMock.mock(testUrl, [], {
-        headers
+        headers,
     });
 
     await fetchApi(testUrl);
 
     await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
-        headers
+        headers,
     });
 });
 
@@ -82,14 +80,14 @@ it('allows POST requests', async () => {
 
     fetchMock.mock(testUrl, [], {
         headers,
-        method: 'POST'
+        method: 'POST',
     });
 
     await fetchApi(testUrl, { method: 'POST' });
 
     await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
         headers,
-        method: 'POST'
+        method: 'POST',
     });
 });
 
@@ -100,14 +98,14 @@ it('allows fetch parameters', async () => {
 
     fetchMock.mock(testUrl, [], {
         credentials,
-        headers
+        headers,
     });
 
     await fetchApi(testUrl, { credentials });
 
     expect(fetchMock).toHaveBeenCalledWith(testUrl, {
         credentials,
-        headers
+        headers,
     });
 });
 
@@ -119,7 +117,7 @@ it('allows multiple fetch parameters', async () => {
     const opts = {
         cache,
         credentials,
-        headers
+        headers,
     };
 
     fetchMock.mock(testUrl, [], opts);
@@ -137,6 +135,26 @@ it('does not fail if no content header is returned', async () => {
     await expect(fetchApi(testUrl)).resolves.toMatchObject({
         ok: false,
         result: {},
-        status: 400
+        status: 400,
+    });
+});
+
+it('does not duplicate the content type header', async () => {
+    expect.assertions(2);
+
+    fetchMock.mock(testUrl, [], {
+        headers,
+    });
+
+    await fetchApi(testUrl, {
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
+        headers: { 'content-type': 'application/json' },
+    });
+
+    await expect(fetchMock).not.toHaveBeenCalledWith(testUrl, {
+        headers: { 'Content-Type': 'application/json' },
     });
 });
