@@ -7,7 +7,7 @@
     "author": "Scott Mebberson",
     "license": "MIT",
     "dependencies": {
-        "@idearium/log": "2.0.1",
+        "@idearium/log": "2.0.2",
         "ioredis": "4.27.10"
     }
 }
