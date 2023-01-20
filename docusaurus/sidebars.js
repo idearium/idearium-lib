@@ -5,6 +5,7 @@ module.exports = {
         packages: [
             'about',
             'apm',
+            'certs',
             'cookie',
             'encryption',
             'fetch',
