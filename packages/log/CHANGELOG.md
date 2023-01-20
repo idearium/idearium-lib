@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+-   Fixed an issue when building with Next.js.
+
 ## v2.0.2 - 2021-10-26
 
 ### Added
