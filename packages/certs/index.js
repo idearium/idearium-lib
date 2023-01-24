@@ -32,15 +32,15 @@ const loadFiles = (certPaths) =>
     Promise.all(
         certPaths.map(
             (file) =>
-                new Promise((resolve, reject) => {
+                new Promise((resolve, reject) =>
                     fs.readFile(file, 'utf8', (readErr, cert) => {
                         if (readErr) {
                             return reject(readErr);
                         }
 
                         return resolve(cert);
-                    });
-                })
+                    })
+                )
         )
     );
 
@@ -49,7 +49,7 @@ const loadFiles = (certPaths) =>
  * @returns {Promise} An array of paths to OS distributed CA certs.
  */
 const osCaPaths = () =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
         fs.readFile('/etc/ca-certificates.conf', (err, content) => {
             if (err) {
                 return reject(err);
@@ -69,8 +69,8 @@ const osCaPaths = () =>
                         resolvePath('/usr/share/ca-certificates/', file)
                     )
             );
-        });
-    });
+        })
+    );
 
 module.exports = {
     loadAllCerts: (path) =>
