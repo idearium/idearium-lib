@@ -16,6 +16,12 @@ All the libraries are stored under `packages/*`.
 
 Defaults for our Elastic APM integration.
 
+### [@idearium/certs](https://idearium.github.io/idearium-lib/docs/certs)
+
+![@idearium/certs](https://github.com/idearium/idearium-lib/workflows/@idearium/certs/badge.svg)
+
+Easily load custom and OS certificate authority certs into Node.js.
+
 ### [@idearium/cookie](https://idearium.github.io/idearium-lib/docs/cookie)
 
 ![@idearium/cookie](https://github.com/idearium/idearium-lib/workflows/@idearium/cookie/badge.svg)
