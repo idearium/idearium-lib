@@ -48,6 +48,26 @@ This module can be configured with the following optional environment variables:
 
 You can also pass in an options object to further configure ioredis. See [the ioredis documentation](https://github.com/luin/ioredis) for configuration options.
 
+## Examples
+
+### Self-signed certificates
+
+This example shows how to use [@idearium/certs](/idearium-lib/docs/certs) to load a self-signed certificate and pass it to `redis` to allow making secure connections to Redis instances protected with self-signed certificates.
+
+```JavaScript
+const redis = require('@idearium/redis');
+const { loadProvidedCerts } = require('@idearium/certs');
+
+module.exports = async () => {
+
+    const certs = await loadProvidedCerts('/ssl/redis');
+    const opts = certs.length ? { tls: { ca: certs } } : {};
+
+    return redis(opts);
+
+}
+```
+
 ## Logging
 
 This package uses [@idearium/log](https://idearium.github.io/idearium-lib/docs/log). Follow the docs on how to configure it as required.
