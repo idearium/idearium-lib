@@ -1,6 +1,6 @@
 {
   "name": "@idearium/idearium-lib",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "A Node.js shared library for Idearium applications.",
   "main": "index.js",
   "directories": {
@@ -11,7 +11,7 @@
     "app-test": "./devops/test.sh",
     "build": "./devops/build.sh",
     "clean": "./devops/clean.sh",
-    "jest": "DEBUG=lib:* jest --forceExit",
+    "jest": "jest --forceExit",
     "report-coverage": "./devops/report-coverage.sh",
     "test": "./node_modules/.bin/npm-run-all --sequential build app-test clean",
     "test-app": "./node_modules/.bin/npm-run-all -s jest report-coverage"
@@ -29,13 +29,12 @@
     "middleware"
   ],
   "dependencies": {
+    "@idearium/log": "2.0.2",
     "amqplib": "0.4.1",
     "async": "2.4.1",
     "bcryptjs": "2.4.0",
-    "bunyan": "1.8.12",
     "connect-redis": "3.3.0",
     "csv-parse": "1.2.0",
-    "debug": "2.2.0",
     "express": "4.14.0",
     "express-session": "1.15.3",
     "ioredis": "3.2.2",

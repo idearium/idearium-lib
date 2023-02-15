@@ -3,7 +3,7 @@
 const config = require('./config');
 const kue = require('kue');
 const Redis = require('./redis');
-const log = require('./log')('idearium-lib:common/kue-queue');
+const log = require('@idearium/log')();
 
 if (!config.get('kuePrefix')) {
     throw new Error('You must define a configuration called \'kuePrefix\' to determine which KUE queue should be used.');

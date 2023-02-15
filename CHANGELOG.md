@@ -4,6 +4,17 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
+## v5.0.0 - 2023-02-15
+
+### Removed
+
+-   Removed support for DEBUG.
+-   Removed support for LogEntries.
+
+### Added
+
+-   Added support for @idearium/log.
+
 ## v4.0.0 - 2021-09-17
 
 ### Removed

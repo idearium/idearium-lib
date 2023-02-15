@@ -1,7 +1,7 @@
 'use strict';
 
 const manager = require('./messages');
-const log = require('../log')('idearium-lib:common:mq/publisher');
+const log = require('@idearium/log')();
 
 /**
  * Check if a RabbitMQ message exists before publishing.

@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('./log')('idearium-lib:common/exception');
+const log = require('@idearium/log')();
 
 module.exports = (err) => {
 

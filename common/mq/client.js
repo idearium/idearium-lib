@@ -3,7 +3,7 @@
 const amqp = require('amqplib');
 const certs = require('./certs');
 const config = require('../config');
-const log = require('../log')('idearium-lib:common/mq/client');
+const log = require('@idearium/log')();
 const mq = require('../../lib/mq');
 
 const retryLimit = config.get('rabbitmqRetryLimit') || 10;

@@ -3,8 +3,6 @@
 jest.mock('/app/config/config.js', () => ({
     cacheUrl: '',
     logLevel: 'debug',
-    logLocation: 'local',
-    logToStdout: true,
 }));
 
 const Redis = require('../common/redis');
