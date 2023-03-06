@@ -4,6 +4,17 @@ const log = require('@idearium/log')();
 
 const amqpUrl = process.env.MQ_URL;
 
+const redactUrl = (url) => {
+    const [protocol, remainder] = url.split('://');
+    let host = remainder;
+
+    if (host.includes('@')) {
+        [, host] = remainder.split('@');
+    }
+
+    return `${protocol}://${host}`;
+};
+
 module.exports = () => {
     let _connection;
     let _state = 'disconnected';
@@ -13,10 +24,7 @@ module.exports = () => {
             throw new Error('mqUrl parameter is required');
         }
 
-        const url = mqUrl.replace(
-            /(.*?):\/\/((?:.*?):(?:.*?)@)?(.*)/gm,
-            '$1://$3'
-        );
+        const url = redactUrl(mqUrl);
 
         log.info({ url }, 'Connecting to AMQP server.');
 
