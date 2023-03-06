@@ -2,8 +2,6 @@ const multiLog = require('@idearium/log/multi')();
 
 const publishingChannels = {};
 
-const shouldDrain = () => Math.floor(Math.random() * 2);
-
 const bufferAsJson = (buffer) => {
     let result = '<buffer>';
 
@@ -167,10 +165,7 @@ const channels = (connect) => {
             publishOpts
         );
 
-        const c = await get(name);
-        const testDrain = shouldDrain() === 1;
-
-        if (!published || (!c.drain && testDrain)) {
+        if (!published) {
             setupDrain({
                 exchange,
                 name,
@@ -186,10 +181,6 @@ const channels = (connect) => {
                 routingKey,
                 type,
             });
-
-            setTimeout(() => {
-                c.republish();
-            }, 10000);
         }
     };
 
