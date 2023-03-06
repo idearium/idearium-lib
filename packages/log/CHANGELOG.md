@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v2.1.0-beta.1 - 2023-03-06
+
+### Added
+
+-   Added the @idearium/log/multi entrypoint.
+
 ## v2.0.2 - 2021-10-26
 
 ### Added
