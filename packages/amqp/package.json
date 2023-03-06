@@ -7,7 +7,7 @@
     "author": "Scott Mebberson <scott@idearium.io>",
     "license": "MIT",
     "dependencies": {
-        "@idearium/log": "2.0.2",
+        "@idearium/log": "2.1.0-beta.1",
         "@idearium/promise-all-settled": "1.0.0",
         "@idearium/safe-promise": "1.0.0",
         "amqplib": "0.10.3"

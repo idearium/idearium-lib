@@ -1,8 +1,20 @@
-const multiLog = require('./multi');
+const multiLog = require('@idearium/log/multi')();
 
 const publishingChannels = {};
 
 const shouldDrain = () => Math.floor(Math.random() * 2);
+
+const bufferAsJson = (buffer) => {
+    let result = '<buffer>';
+
+    try {
+        result = JSON.parse(buffer.toString());
+    } catch (e) {
+        // Ignore the error and just return '<buffer>'
+    }
+
+    return result;
+};
 
 const channels = (connect) => {
     const setupDrain = async ({ exchange, name, routingKey, type }) => {
@@ -32,7 +44,7 @@ const channels = (connect) => {
 
         multiLog(
             {
-                debug: { data: data.toString(), type },
+                debug: { data: bufferAsJson(data), type },
                 info: { exchange, name, routingKey },
             },
             'Publishing a queued message'
