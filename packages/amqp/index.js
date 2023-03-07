@@ -1,6 +1,6 @@
 const log = require('@idearium/log')();
 const multiLog = require('@idearium/log/multi')();
-const publishingChannels = require('./lib/publishing-channels');
+const publishingChannels = require('./lib/publish');
 const connect = require('./lib/connect');
 
 const createClient = () => {
