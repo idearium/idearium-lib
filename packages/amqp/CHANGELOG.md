@@ -2,4 +2,6 @@
 
 ## Unreleased
 
+## v1.0.0-beta.1 - 2023-03-07
+
 -   First version of the package.
