@@ -133,7 +133,7 @@ const channels = (connect) => {
         if (drain) {
             multiLog(
                 {
-                    debug: { data: bufferAsJson(data), type },
+                    debug: { data: bufferAsJson(dataAsBuffer), type },
                     info: { exchange, name, routingKey },
                 },
                 'Queuing a message for publishing'
@@ -152,7 +152,7 @@ const channels = (connect) => {
 
         multiLog(
             {
-                debug: { data: bufferAsJson(data), type },
+                debug: { data: bufferAsJson(dataAsBuffer), type },
                 info: { exchange, name, routingKey },
             },
             'Publishing a message'
