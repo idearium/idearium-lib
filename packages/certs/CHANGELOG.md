@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.0-beta.1 - 2023-03-09
+
 ### Changed
 
 **Please note**: these are all breaking changes.
