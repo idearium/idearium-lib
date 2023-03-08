@@ -10,11 +10,15 @@ const traverse = (dir) => {
     const parts = pathParts(dir);
     let place = mockFiles;
 
-    parts.forEach((part) => {
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+
         if (place[part]) {
             place = place[part];
+        } else {
+            return {};
         }
-    });
+    }
 
     return place;
 };
