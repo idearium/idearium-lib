@@ -3,9 +3,11 @@ const multiLog = require('@idearium/log/multi')();
 const publishingChannels = require('./lib/publish');
 const connect = require('./lib/connect');
 
-const createClient = () => {
-    const _connection = connect();
-    const channels = publishingChannels(_connection.connect);
+const amqpUrl = process.env.MQ_URL;
+
+const amqp = async (mqUrl = amqpUrl, opts = {}) => {
+    const connection = await connect(mqUrl, opts);
+    const channels = publishingChannels(connection);
 
     const consume = async (name, consumer, options) => {
         if (!name) {
@@ -20,7 +22,7 @@ const createClient = () => {
             throw new Error('The options parameter must be provided');
         }
 
-        if (!_connection.isConnected()) {
+        if (!connection.isConnected()) {
             throw new Error(
                 'You must connect to a server before using consume'
             );
@@ -36,7 +38,6 @@ const createClient = () => {
             type = 'topic',
         } = options;
 
-        const connection = await _connection.connect();
         const channel = await connection.createChannel();
         await channel.assertExchange(exchange, type, {
             durable,
@@ -82,7 +83,7 @@ const createClient = () => {
     };
 
     const publish = async (name, data, options) => {
-        if (!_connection.isConnected()) {
+        if (!connection.isConnected()) {
             throw new Error(
                 'You must connect to a server before using publish'
             );
@@ -92,10 +93,9 @@ const createClient = () => {
     };
 
     return {
-        connect: _connection.connect,
         consume,
         publish,
     };
 };
 
-module.exports = createClient();
+module.exports = amqp;

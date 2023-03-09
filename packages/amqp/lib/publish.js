@@ -14,7 +14,7 @@ const bufferAsJson = (buffer) => {
     return result;
 };
 
-const channels = (connect) => {
+const channels = (connection) => {
     const setupDrain = async ({ exchange, name, routingKey, type }) => {
         // eslint-disable-next-line no-use-before-define
         const channel = await get(name);
@@ -84,11 +84,7 @@ const channels = (connect) => {
 
         // This is to avoid a race condition in setting up publishing channels.
         publishingChannels[name] = new Promise((resolve) => {
-            connect().then(async (connection) => {
-                const channelPromise = connection.createChannel();
-
-                const channel = await channelPromise;
-
+            connection.createChannel().then((channel) => {
                 channel.on('drain', republish);
 
                 return resolve({

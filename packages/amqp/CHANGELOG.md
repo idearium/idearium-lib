@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+-   @idearium/amqp is no longer a singleton.
+-   Introduced tests for @idearium/amqp.
+
 ## v1.0.0-beta.3 - 2023-03-07
 
 -   Fixed data logging at the debug level.
