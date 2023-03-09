@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v2.0.0-beta.2 - 2023-03-09
+
+### Changed
+
+-   Refactored the tests to use a mock per test.
+
 ## v2.0.0-beta.1 - 2023-03-09
 
 ### Changed
