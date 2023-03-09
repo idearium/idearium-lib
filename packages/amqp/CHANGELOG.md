@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.0.0-beta.4 - 2023-03-10
+
 -   @idearium/amqp is no longer a singleton.
 -   Introduced tests for @idearium/amqp.
 
