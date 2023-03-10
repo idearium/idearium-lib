@@ -7,6 +7,9 @@ const os = require('os');
 const customCaPath = (path) =>
     new Promise((resolve, reject) => {
         fs.readdir(path, (err, customCas) => {
+            if (err && /ENOENT/.test(err.message)) {
+                return resolve([]);
+            }
             if (err) {
                 return reject(err);
             }

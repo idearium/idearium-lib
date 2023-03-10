@@ -23,20 +23,6 @@ it('will load ca certs', async () => {
     ]);
 });
 
-it('will load ca certs', async () => {
-    require('fs').__setMockFiles({
-        '/ssl/ca/a.crt': 'ca-a-data',
-        '/ssl/ca/b.crt': 'ca-b-data',
-        '/ssl/ca/c.crt': 'ca-c-data',
-        '/ssl/mq.crt': 'ssl-mq-crt-data',
-        '/ssl/mq.key': 'ssl-mq-key-data',
-        '/ssl/redis.crt': 'redis-crt-data',
-        '/ssl/redis.key': 'redis-key-data',
-    });
-    const certs = await loadCerts();
-    expect(certs).toHaveProperty('ca', ['ca-a-data', 'ca-b-data', 'ca-c-data']);
-});
-
 it('will load custom certs', async () => {
     require('fs').__setMockFiles({
         '/ssl/ca/one.crt': 'ca-one-data',
