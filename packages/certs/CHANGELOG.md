@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+-   Fixed an issue when loading real files.
+
 ## v2.0.0-beta.3 - 2023-03-10
 
 ### Fixed

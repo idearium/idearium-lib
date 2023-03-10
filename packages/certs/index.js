@@ -22,15 +22,21 @@ const customCaPath = (path) =>
 
 const loadFiles = async (certPaths) => {
     const results = {};
-    await Promise.all(
-        certPaths.map((file) =>
-            fs.readFile(file, 'utf8', (readErr, cert) => {
-                if (readErr) {
-                    throw readErr;
-                }
 
-                results[file] = cert;
-            })
+    await Promise.all(
+        certPaths.map(
+            (file) =>
+                new Promise((resolve, reject) => {
+                    fs.readFile(file, 'utf8', (readErr, cert) => {
+                        if (readErr) {
+                            reject(readErr);
+                        }
+
+                        results[file] = cert;
+
+                        resolve();
+                    });
+                })
         )
     );
 

@@ -82,6 +82,48 @@ it("will return an empty ca array if the ca directory doesn't exist", async () =
     });
 });
 
+it('supports files with periods in the name', async () => {
+    require('fs').__setMockFiles({
+        '/ssl/ca/first.ca.crt': 'ssl-ca-first-content',
+        '/ssl/ca/second.ca.crt': 'ssl-ca-second-content',
+        '/ssl/mq.common.crt': 'ssl-mq-common-crt-data',
+        '/ssl/mq.common.key': 'ssl-mq-common-key-data',
+    });
+    const certs = await loadCerts();
+
+    expect(certs).toHaveProperty('ca', [
+        'ssl-ca-first-content',
+        'ssl-ca-second-content',
+    ]);
+    expect(certs).toHaveProperty('certs', {
+        'mq.common': {
+            crt: 'ssl-mq-common-crt-data',
+            key: 'ssl-mq-common-key-data',
+        },
+    });
+});
+
+it('supports nested directories', async () => {
+    require('fs').__setMockFiles({
+        '/ssl/local/ca/first.ca.crt': 'ssl-local-ca-first-content',
+        '/ssl/local/ca/second.ca.crt': 'ssl-local-ca-second-content',
+        '/ssl/local/mq.common.crt': 'ssl-local-mq-common-crt-data',
+        '/ssl/local/mq.common.key': 'ssl-local-mq-common-key-data',
+    });
+    const certs = await loadCerts('/ssl/local');
+
+    expect(certs).toHaveProperty('ca', [
+        'ssl-local-ca-first-content',
+        'ssl-local-ca-second-content',
+    ]);
+    expect(certs).toHaveProperty('certs', {
+        'mq.common': {
+            crt: 'ssl-local-mq-common-crt-data',
+            key: 'ssl-local-mq-common-key-data',
+        },
+    });
+});
+
 it('will load OS provided certs', async () => {
     require('fs').__setMockFiles({
         '/etc/ca-certificates.conf': `# test files${os.EOL}/usr/share/ca-certificates/one-cert.crt${os.EOL}/usr/share/ca-certificates/two-cert.crt`,
