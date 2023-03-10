@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.0-beta.3 - 2023-03-10
+
 ### Fixed
 
 -   Won't error if the ca directory doesn't exist.
