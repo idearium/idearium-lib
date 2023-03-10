@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.0-beta.4 - 2023-03-10
+
 ### Fixed
 
 -   Fixed an issue when loading real files.
