@@ -2,25 +2,7 @@
 
 ## Unreleased
 
-## v2.0.0-beta.4 - 2023-03-10
-
-### Fixed
-
--   Fixed an issue when loading real files.
-
-## v2.0.0-beta.3 - 2023-03-10
-
-### Fixed
-
--   Won't error if the ca directory doesn't exist.
-
-## v2.0.0-beta.2 - 2023-03-09
-
-### Changed
-
--   Refactored the tests to use a mock per test.
-
-## v2.0.0-beta.1 - 2023-03-09
+## v2.0.0 - 2023-03-20
 
 ### Changed
 
