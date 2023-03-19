@@ -35,7 +35,7 @@ const multi = (log) => {
     return multiLogger;
 };
 
-module.exports = (options = {}) => {
+const multiLog = (options = {}) => {
     const log = logger({
         sourceLocation: options.sourceLocation || {
             file: Error()
@@ -53,3 +53,5 @@ module.exports = (options = {}) => {
 
     return multi(log);
 };
+
+module.exports = multiLog;
