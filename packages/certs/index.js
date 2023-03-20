@@ -1,18 +1,15 @@
 'use strict';
 
-const { extname, resolve: resolvePath } = require('path');
+const { basename, extname, join, resolve: resolvePath } = require('path');
 const fs = require('fs');
 const os = require('os');
-const https = require('https');
 
-/**
- * Read a directory for a list of custom CA certs to load.
- * @param {String} path An path containing certs
- * @returns {Promise} An array of paths to custom CA certs.
- */
-const customCaPath = (path = '/ssl') =>
+const customCaPath = (path) =>
     new Promise((resolve, reject) => {
         fs.readdir(path, (err, customCas) => {
+            if (err && /ENOENT/.test(err.message)) {
+                return resolve([]);
+            }
             if (err) {
                 return reject(err);
             }
@@ -23,31 +20,29 @@ const customCaPath = (path = '/ssl') =>
         });
     });
 
-/**
- * Given an array of certificate paths, load them and return the results.
- * @param {Array} certPaths An array of paths to CA certs
- * @returns {Promise} An array containing each cert.
- */
-const loadFiles = (certPaths) =>
-    Promise.all(
+const loadFiles = async (certPaths) => {
+    const results = {};
+
+    await Promise.all(
         certPaths.map(
             (file) =>
-                new Promise((resolve, reject) =>
+                new Promise((resolve, reject) => {
                     fs.readFile(file, 'utf8', (readErr, cert) => {
                         if (readErr) {
-                            return reject(readErr);
+                            reject(readErr);
                         }
 
-                        return resolve(cert);
-                    })
-                )
+                        results[file] = cert;
+
+                        resolve();
+                    });
+                })
         )
     );
 
-/**
- * Read /etc/ca-certificates for a list of OS distributed CA certs to load.
- * @returns {Promise} An array of paths to OS distributed CA certs.
- */
+    return results;
+};
+
 const osCaPaths = () =>
     new Promise((resolve, reject) =>
         fs.readFile('/etc/ca-certificates.conf', (err, content) => {
@@ -73,20 +68,37 @@ const osCaPaths = () =>
     );
 
 module.exports = {
-    loadAllCerts: (path) =>
-        new Promise((resolve, reject) => {
-            // Load the custom and OS distributed CA cert paths.
-            Promise.all([customCaPath(path), osCaPaths()])
-                .then(([customCas, osCas]) => [].concat(customCas, osCas))
-                .then((certPaths) => loadFiles(certPaths))
-                .then((certs) => {
-                    // Replace the global agents CA certs.
-                    https.globalAgent.options.ca = certs;
+    loadOsCerts: async () => {
+        const osCertPaths = await osCaPaths();
+        const osCertContents = await loadFiles(osCertPaths);
+        return Object.values(osCertContents);
+    },
+    loadCerts: async (path = '/ssl') => {
+        const [caPaths, customCertPaths] = await Promise.all([
+            customCaPath(join(path, 'ca')),
+            customCaPath(path),
+        ]);
+        const [caCerts, customCerts] = await Promise.all([
+            loadFiles(caPaths),
+            loadFiles(
+                customCertPaths.filter((certPath) =>
+                    ['.crt', '.key'].includes(extname(certPath))
+                )
+            ),
+        ]);
+        const certs = {};
 
-                    return resolve(certs);
-                })
-                .catch(reject);
-        }),
-    loadProvidedCerts: (path) =>
-        customCaPath(path).then((paths) => loadFiles(paths)),
+        for (const [certPath, certContent] of Object.entries(customCerts)) {
+            const ext = extname(certPath).replace('.', '');
+            const file = basename(certPath, extname(certPath));
+
+            if (!certs[file]) {
+                certs[file] = {};
+            }
+
+            certs[file][ext] = certContent;
+        }
+
+        return { ca: Object.values(caCerts), certs };
+    },
 };

@@ -21,34 +21,53 @@ $ yarn add -E @idearium/certs@beta
 
 ## Usage
 
-Use the `loadAllCerts` function to load both OS and custom certs:
+### `loadCerts`
+
+Use the `loadCerts` function to load multiple certificates and keys from a directory structure.
+
+Given the following directory structure:
+
+```
+/ssl/amqp.crt
+/ssl/amqp.key
+/ssl/redis.crt
+/ssl/redis.key
+/ssl/ca/ca.crt
+```
+
+`loadCerts` will return the following:
 
 ```JavaScript
-const { loadAllCerts } = require('@idearium/certs');
-
-await loadAllCerts();
+{
+    ca: [ 'ca.crt content' ],
+    certs: {
+        amqp: { crt: 'amqp.crt content', key: 'amqp.key content' },
+        redis: { crt: 'redis.crt content', key: 'redis.key content' }
+    }
+}
 ```
 
 By default, it will look for custom certs in the `/ssl` directory but this can easily be changed:
 
 ```JavaScript
-const { loadAllCerts } = require('@idearium/certs');
+const { loadCerts } = require('@idearium/certs');
 
-await loadAllCerts('/certs');
+await loadCerts('/certs');
 ```
 
-Use the `loadProvidedCerts` to load only custom certs:
+#### Requirements
+
+`loadCerts` has the following expectations:
+
+-   It will load CA certs in the `ca` directory, relative to the directory provided to it. If the directory doesn't exist, it will ignored.
+-   It will only load files with `.crt` and `.key` extensions.
+
+### `loadOsCerts`
+
+Use the `loadOsCerts` function to OS provided certs:
 
 ```JavaScript
-const { loadProvidedCerts } = require('@idearium/certs');
+const { loadOsCerts } = require('@idearium/certs');
 
-await loadProvidedCerts();
-```
-
-By default, it will look for custom certs in the `/ssl` directory but this can easily be changed:
-
-```JavaScript
-const { loadProvidedCerts } = require('@idearium/certs');
-
-await loadProvidedCerts('/certs');
+await loadOsCerts();
 ```
