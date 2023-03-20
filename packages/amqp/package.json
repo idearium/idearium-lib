@@ -1,0 +1,22 @@
+{
+    "name": "@idearium/amqp",
+    "version": "1.0.0",
+    "description": "A library for working with AMQP.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@idearium.io>",
+    "license": "MIT",
+    "dependencies": {
+        "@idearium/certs": "2.0.0",
+        "@idearium/log": "2.1.0",
+        "@idearium/promise-all-settled": "1.0.0",
+        "@idearium/safe-promise": "1.0.0",
+        "amqplib": "0.10.3"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "engines": {
+        "node": ">=16"
+    }
+}

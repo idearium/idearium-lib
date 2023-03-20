@@ -4,6 +4,7 @@ module.exports = {
     sidebar: {
         packages: [
             'about',
+            'amqp',
             'apm',
             'certs',
             'cookie',
