@@ -13,7 +13,9 @@ $ yarn add @idearium/log-structured
 
 ## Usage
 
-The Idearium logger HTTP structured logging formatter transport takes log output from [`@idearium/log`](log.md) and [`@idearium/log-http`](log-http.md) and structures it according to [GCP Structured Logging](https://cloud.google.com/logging/docs/structured-logging).
+The Idearium logger HTTP structured logging formatter transport takes log output from [`@idearium/log-http`](log-http.md) and structures it according to [GCP Structured Logging](https://cloud.google.com/logging/docs/structured-logging).
+
+It will transform log with `req` and `res` properties, completely ignoring anything.
 
 Start your Node application and pipe the output to the `structured` script (found at `node_modules/.bin/structured` once this package is installed):
 
