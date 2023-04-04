@@ -98,3 +98,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Not needed in a monorepo
+yarn.lock
