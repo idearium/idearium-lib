@@ -16,6 +16,12 @@ All the libraries are stored under `packages/*`.
 
 Defaults for our Elastic APM integration.
 
+### [@idearium/certs](https://idearium.github.io/idearium-lib/docs/certs)
+
+![@idearium/certs](https://github.com/idearium/idearium-lib/workflows/@idearium/certs/badge.svg)
+
+Easily load custom and OS certificate authority certs into Node.js.
+
 ### [@idearium/cookie](https://idearium.github.io/idearium-lib/docs/cookie)
 
 ![@idearium/cookie](https://github.com/idearium/idearium-lib/workflows/@idearium/cookie/badge.svg)
@@ -33,6 +39,12 @@ Making it painless to encrypt and decrypt plain text.
 ![@idearium/fetch](https://github.com/idearium/idearium-lib/workflows/@idearium/fetch/badge.svg)
 
 Making fetch requests easy.
+
+### [@idearium/kue](https://idearium.github.io/idearium-lib/docs/kue)
+
+![@idearium/kue](https://github.com/idearium/idearium-lib/workflows/@idearium/kue/badge.svg)
+
+A library to make working with Kue painless.
 
 ### [@idearium/lists](https://idearium.github.io/idearium-lib/docs/lists)
 
@@ -81,6 +93,12 @@ Wrapper around the Twilio phone lookup api.
 ![@idearium/promise-all-settled](https://github.com/idearium/idearium-lib/workflows/@idearium/promise-all-settled/badge.svg)
 
 Makes working with `Promise.allSettled` easier.
+
+### [@idearium/redis](https://idearium.github.io/idearium-lib/docs/redis)
+
+![@idearium/redis](https://github.com/idearium/idearium-lib/workflows/@idearium/redis/badge.svg)
+
+The Idearium ioredis connection wrapper.
 
 ### [@idearium/safe-promise](https://idearium.github.io/idearium-lib/docs/safe-promise)
 

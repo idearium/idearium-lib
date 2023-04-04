@@ -14,6 +14,6 @@ module.exports = Object.assign({}, defaults, {
         err,
         req,
         res,
-        responseTime
-    }
+        responseTime,
+    },
 });

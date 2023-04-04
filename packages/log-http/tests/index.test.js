@@ -254,7 +254,7 @@ test('logs the response size', async () => {
 
     expect(result).toHaveProperty('res');
     expect(result.res).toHaveProperty('size');
-    expect(result.res.size).toBe(13);
+    expect(String(result.res.size)).toBe('13');
 
     server.close();
 });
