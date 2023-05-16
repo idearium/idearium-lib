@@ -1,6 +1,6 @@
 {
     "name": "@idearium/react-state-router",
-    "version": "1.0.1-beta.1",
+    "version": "1.0.1-beta.2",
     "description": "React state router component for XState",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
