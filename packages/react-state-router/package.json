@@ -9,6 +9,7 @@
         "Scott Mebberson <scott@idearium.io>"
     ],
     "license": "MIT",
+    "type": "module",
     "peerDependencies": {
         "react": ">=18",
         "react-dom": ">=18",

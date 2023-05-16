@@ -2,7 +2,11 @@
 
 ## Unreleased
 
-## v1.0.1 - 2023-05-15
+### Added
+
+-   Added type set to module in package.json.
+
+## v1.0.1-beta.1 - 2023-05-15
 
 ### Added
 
