@@ -367,9 +367,9 @@
   integrity sha512-1NCk5o4mJEMgeJaCjffwAsbdrfRepFJ0ZbfSQ3eS4IyqnUZn5wyX027xtk7lNy0RBJF7lyhQwxtN7sSbtvp+YA==
 
 "@grpc/grpc-js@^1.1.8":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.8.4.tgz#316674e8905e2dd310d8aa60331e05b32584e6ad"
-  integrity sha512-oaETBotls7FTBpySg5dhyUCyXSxSeCMmkBBXHXG1iw57MiNoB6D7VRhkrXYbwyHM3Q3Afjp4KlsBX0Zb+ELZXw==
+  version "1.8.17"
+  resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.8.17.tgz#a3a2f826fc033eae7d2f5ee41e0ab39cee948838"
+  integrity sha512-DGuSbtMFbaRsyffMf+VEkVu8HkSXEUfO3UyGJNtqxW9ABdtTIA+2UXAJpwbJS+xfQxuwqLUeELmL6FuZkOqPxw==
   dependencies:
     "@grpc/proto-loader" "^0.7.0"
     "@types/node" ">=12.12.47"
@@ -415,11 +415,6 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@idearium/certs@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@idearium/certs/-/certs-2.0.0.tgz#b60c06eb3dd006b59ab662e74506a83e2488610f"
-  integrity sha512-/KiOfxV7qDqgzD1iunEjSr/SwL9w0o2l7YmHysoPded1SC5sn615JgbSIO2VwhkZMOXA6qgPzHhcyCG50YhZ/w==
-
 "@idearium/eslint-config@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@idearium/eslint-config/-/eslint-config-4.0.0.tgz#c51d2899e32b0e296d8886589030d64c4d274509"
@@ -448,10 +443,10 @@
     pino "6.13.2"
     pino-pretty "4.7.1"
 
-"@idearium/log@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-2.1.0.tgz#8de1aa90bbe80fe1655ecce76d92f02847534ecc"
-  integrity sha512-zvQtYOKCbd4WDETBKcGH+dnL3ZchULFN5DRp54IJezjKv99tsyWZab3SBhRdw05WMDb2WyO8ITEPWPh4rNu6Iw==
+"@idearium/log@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@idearium/log/-/log-2.0.2.tgz#68b9df142ce7bac26ceb92f58e1c11fb48b5ccbe"
+  integrity sha512-skoUN+w1gRdfMHHdDuAnuo6woeOkzoqfuDkdSI1yH9B6IXh0cw5bnfcAx5Wqi0253flwXBA4lvX1xu7b1XtzqA==
   dependencies:
     pino "6.13.2"
     pino-pretty "4.7.1"
