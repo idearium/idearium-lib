@@ -52,3 +52,25 @@ export default StateRouterComponent;
 ```
 
 The state router will now automatically display the component when the `when` attribute matches the xstate state.
+
+### Multiple states
+
+You can also pass an array of states to the `when` attribute to display the component when multiple states match.
+
+```js
+import StateRouter from '@idearium/react-state-router';
+import ReactContext from 'context/reactContext';
+import Step1 from 'steps/step1';
+import Step2 from 'steps/step2';
+import Step3 from 'steps/step3';
+
+const StateRouterComponent = () => (
+    <StateRouter context={ReactContext}>
+        <Step1 when={['A', 'Z']} />
+        <Step2 when="B" />
+        <Step3 when="C" />
+    </StateRouter>
+);
+
+export default StateRouterComponent;
+```

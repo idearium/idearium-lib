@@ -24,11 +24,19 @@ const StateRouter = ({ children, context }) => {
             serviceState && serviceState.matches
                 ? kids
                       .filter((child) => isValidElement(child))
-                      .filter((view) =>
-                          view.props.when
-                              ? serviceState.matches(view.props.when)
-                              : true
-                      )
+                      .filter((view) => {
+                          if (!view.props.when) {
+                              return true;
+                          }
+
+                          let when = view.props.when;
+
+                          if (!Array.isArray(when)) {
+                              when = [when];
+                          }
+
+                          return when.some(serviceState.matches);
+                      })
                 : [],
         [kids, serviceState]
     );
@@ -39,10 +47,10 @@ const StateRouter = ({ children, context }) => {
                   return cloneElement(
                       view,
                       {
-                          service,
                           context: serviceState.context,
                           key: index,
                           send: service.send,
+                          service,
                       },
                       null
                   );

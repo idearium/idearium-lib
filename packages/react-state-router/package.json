@@ -1,6 +1,6 @@
 {
     "name": "@idearium/react-state-router",
-    "version": "1.0.0",
+    "version": "1.0.1-beta.2",
     "description": "React state router component for XState",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
@@ -9,6 +9,7 @@
         "Scott Mebberson <scott@idearium.io>"
     ],
     "license": "MIT",
+    "type": "module",
     "peerDependencies": {
         "react": ">=18",
         "react-dom": ">=18",
