@@ -1,0 +1,15 @@
+{
+    "name": "@idearium/cloudflare-queues",
+    "version": "1.0.0",
+    "description": "A library to safely process Cloudflare messages.",
+    "main": "index.js",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "author": "Scott Mebberson <scott@idearium.io>",
+    "license": "MIT",
+    "dependencies": {
+        "@idearium/safe-promise": "1.0.0"
+    },
+    "scripts": {
+        "test": "jest"
+    }
+}

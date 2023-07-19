@@ -7,6 +7,7 @@ module.exports = {
             'amqp',
             'apm',
             'certs',
+            'cloudflare-queues',
             'cookie',
             'encryption',
             'fetch',
