@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkidearium_lib_docs=self.webpackChunkidearium_lib_docs||[]).push([[244],{3769:function(e){e.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"default"}')}}]);
