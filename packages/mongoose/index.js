@@ -18,13 +18,13 @@ const getOptions = (opts = {}) =>
             reconnectInterval: 500,
             reconnectTries: Number.MAX_VALUE,
             sslValidate: Boolean(opts.ssl || opts.tls),
-            useMongoClient: true
+            useMongoClient: true,
         },
         opts
     );
 
 const getDbInfo = (connection) => ({
-    db: `${connection.host}:${connection.port}/${connection.name}`
+    db: `${connection.host}:${connection.port}/${connection.name}`,
 });
 
 const connect = async ({ mongoose, options = {}, uri } = {}) => {
@@ -40,11 +40,11 @@ const connect = async ({ mongoose, options = {}, uri } = {}) => {
 
     setupMongoose(mongoose);
 
-    log.info('Connecting to the database...');
+    log.trace('Connecting to the database...');
 
     const connection = await mongoose.connect(uri, opts);
 
-    log.info(getDbInfo(connection), 'Connected to the database');
+    log.trace(getDbInfo(connection), 'Connected to the database');
 
     return mongoose;
 };
@@ -62,15 +62,15 @@ const createConnections = async ({ mongoose, options = {}, uris } = {}) => {
 
     setupMongoose(mongoose);
 
-    log.info('Creating connections to the databases...');
+    log.trace('Creating connections to the databases...');
 
     const connections = await Promise.all(
         uris.map((uri) => mongoose.createConnection(uri, opts))
     );
 
-    log.info(
+    log.trace(
         {
-            dbs: connections.map((connection) => getDbInfo(connection))
+            dbs: connections.map((connection) => getDbInfo(connection)),
         },
         'Connected to the databases'
     );
