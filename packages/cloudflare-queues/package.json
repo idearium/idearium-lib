@@ -1,6 +1,6 @@
 {
     "name": "@idearium/cloudflare-queues",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0",
     "description": "A library to safely process Cloudflare messages.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
