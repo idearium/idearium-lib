@@ -1,8 +1,6 @@
 'use strict';
 
-jest.mock('isomorphic-fetch', () => require('fetch-mock-jest').sandbox());
-
-const fetchMock = require('isomorphic-fetch');
+const fetchMock = require('fetch-mock-jest');
 const fetchApi = require('../');
 
 const testUrl = 'https://www.idearium.io/';
