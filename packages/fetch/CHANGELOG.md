@@ -1,5 +1,12 @@
 # @idearium/fetch
 
+## v3.0.0-beta.1
+
+### Removed
+
+-   Removed isomorphic-fetch.
+-   Minimum Node.js version is now v18.0.0.
+
 ## v2.0.4
 
 ### Fixed
