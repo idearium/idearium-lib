@@ -18,13 +18,12 @@ const getOptions = (opts = {}) =>
             reconnectInterval: 500,
             reconnectTries: Number.MAX_VALUE,
             sslValidate: Boolean(opts.ssl || opts.tls),
-            useMongoClient: true
         },
         opts
     );
 
 const getDbInfo = (connection) => ({
-    db: `${connection.host}:${connection.port}/${connection.name}`
+    db: `${connection.host}:${connection.port}/${connection.name}`,
 });
 
 const connect = async ({ mongoose, options = {}, uri } = {}) => {
@@ -70,7 +69,7 @@ const createConnections = async ({ mongoose, options = {}, uris } = {}) => {
 
     log.info(
         {
-            dbs: connections.map((connection) => getDbInfo(connection))
+            dbs: connections.map((connection) => getDbInfo(connection)),
         },
         'Connected to the databases'
     );
