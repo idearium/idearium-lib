@@ -10,7 +10,7 @@ const setupMongoose = (mongoose) => {
 
 // Allow overriding the defaults.
 const getOptions = (opts = {}) => ({
-    sslValidate: Boolean(opts.ssl || opts.tls),
+    tlsAllowInvalidCertificates: !Boolean(opts.tls),
     ...opts,
 });
 
