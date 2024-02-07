@@ -12,9 +12,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Setup Node.js
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v4
             - name: Setup yarn
               run: yarn install
     publish:
@@ -24,9 +24,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Setup Node.js
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v4
               with:
                   registry-url: https://registry.npmjs.org/
             - name: Setup yarn
