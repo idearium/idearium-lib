@@ -1,6 +1,6 @@
 {
     "name": "@idearium/fetch",
-    "version": "2.0.4",
+    "version": "3.0.0-beta.1",
     "description": "A package to make fetching trivial.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
@@ -12,10 +12,8 @@
     "scripts": {
         "test": "jest"
     },
-    "dependencies": {
-        "isomorphic-fetch": "3.0.0"
-    },
+    "dependencies": {},
     "devDependencies": {
-        "fetch-mock-jest": "^1.5.1"
+        "fetch-mock-jest": "1.5.1"
     }
 }

@@ -3,28 +3,19 @@
 const log = require('@idearium/log')();
 
 const setupMongoose = (mongoose) => {
-    mongoose.Promise = global.Promise;
-
     mongoose.plugin((schema) => {
         schema.options.usePushEach = true;
     });
 };
 
 // Allow overriding the defaults.
-const getOptions = (opts = {}) =>
-    Object.assign(
-        {},
-        {
-            reconnectInterval: 500,
-            reconnectTries: Number.MAX_VALUE,
-            sslValidate: Boolean(opts.ssl || opts.tls),
-            useMongoClient: true
-        },
-        opts
-    );
+const getOptions = (opts = {}) => ({
+    tlsAllowInvalidCertificates: !Boolean(opts.tls),
+    ...opts,
+});
 
 const getDbInfo = (connection) => ({
-    db: `${connection.host}:${connection.port}/${connection.name}`
+    db: `${connection.host}:${connection.port}/${connection.name}`,
 });
 
 const connect = async ({ mongoose, options = {}, uri } = {}) => {
@@ -42,9 +33,9 @@ const connect = async ({ mongoose, options = {}, uri } = {}) => {
 
     log.info('Connecting to the database...');
 
-    const connection = await mongoose.connect(uri, opts);
+    await mongoose.connect(uri, opts);
 
-    log.info(getDbInfo(connection), 'Connected to the database');
+    log.info(getDbInfo(mongoose?.connection), 'Connected to the database');
 
     return mongoose;
 };
@@ -65,14 +56,14 @@ const createConnections = async ({ mongoose, options = {}, uris } = {}) => {
     log.info('Creating connections to the databases...');
 
     const connections = await Promise.all(
-        uris.map((uri) => mongoose.createConnection(uri, opts))
+        uris.map((uri) => mongoose.createConnection(uri, opts).asPromise()),
     );
 
     log.info(
         {
-            dbs: connections.map((connection) => getDbInfo(connection))
+            dbs: connections.map((connection) => getDbInfo(connection)),
         },
-        'Connected to the databases'
+        'Connected to the databases',
     );
 
     return mongoose;

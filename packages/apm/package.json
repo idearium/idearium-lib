@@ -7,6 +7,6 @@
     "author": "Allan Chau <allan@idearium.io>",
     "license": "MIT",
     "dependencies": {
-        "elastic-apm-node": "3.41.0"
+        "elastic-apm-node": "4.1.0"
     }
 }

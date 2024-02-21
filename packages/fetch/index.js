@@ -1,7 +1,5 @@
 'use strict';
 
-const fetch = require('isomorphic-fetch');
-
 const parseBody = (response) => {
     if (
         response.headers &&
