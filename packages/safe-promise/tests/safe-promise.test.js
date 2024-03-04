@@ -1,6 +1,6 @@
 'use strict';
 
-const safePromise = require('..');
+import { safePromise } from '../index.js';
 
 describe('safePromise', () => {
     it('is a function', () => {
@@ -12,7 +12,7 @@ describe('safePromise', () => {
 
         await expect(safePromise(Promise.resolve('test'))).resolves.toEqual([
             null,
-            'test'
+            'test',
         ]);
     });
 
@@ -22,7 +22,7 @@ describe('safePromise', () => {
         const error = new Error('test');
 
         await expect(safePromise(Promise.reject(error))).resolves.toEqual([
-            error
+            error,
         ]);
     });
 });

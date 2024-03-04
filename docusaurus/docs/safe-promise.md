@@ -23,10 +23,10 @@ $ yarn add -E @idearium/safe-promise@beta
 
 ### safePromise
 
-To use `safePromise`, require it from `@idearium/safe-promise`.
+To use `safePromise`, import it from `@idearium/safe-promise`.
 
 ```js
-const safePromise = require('@idearium/safe-promise');
+import { safePromise } from '@idearium/safe-promise';
 ```
 
 This will take a promise and always use `resolve` to return a result in the format `[err, result]`.

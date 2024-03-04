@@ -1,12 +1,13 @@
 {
     "name": "@idearium/safe-promise",
-    "version": "1.0.0",
-    "description": "A packages to make promises safe.",
+    "version": "2.0.0-beta.1",
+    "description": "A package to make promises safe.",
     "main": "index.js",
     "repository": "https://github.com/idearium/idearium-lib",
     "author": "Scott Mebberson <scott@idearium.io>",
     "license": "MIT",
     "scripts": {
-        "test": "jest"
-    }
+        "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js"
+    },
+    "type": "module"
 }
