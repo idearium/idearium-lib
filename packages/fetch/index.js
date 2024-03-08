@@ -1,15 +1,21 @@
 'use strict';
 
-const parseBody = (response) => {
+const parseBody = async (response) => {
+    let body = '';
+
+    for await (const chunk of response.body) {
+        body += new TextDecoder().decode(chunk);
+    }
+
     if (
         response.headers &&
         response.headers.get('Content-Type') &&
         response.headers.get('Content-Type').includes('application/json')
     ) {
-        return response.json();
+        return JSON.parse(body);
     }
 
-    return response.text();
+    return body;
 };
 
 const parseResponse = async (response) => {
@@ -23,7 +29,7 @@ const fetchApi = async (url, opts = {}) => {
 
     if (opts?.headers) {
         Object.keys(opts.headers).forEach(
-            (key) => (headers[key.toLowerCase()] = opts.headers[key])
+            (key) => (headers[key.toLowerCase()] = opts.headers[key]),
         );
     }
 
@@ -33,7 +39,7 @@ const fetchApi = async (url, opts = {}) => {
 
     opts.headers = headers;
 
-    return parseResponse(await fetch(url, opts));
+    return await parseResponse(await fetch(url, opts));
 };
 
 module.exports = fetchApi;
