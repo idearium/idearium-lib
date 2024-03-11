@@ -55,7 +55,7 @@ const fetchApi = async (url, opts = {}) => {
 
     const response = await fetch(url, opts);
 
-    return await parseResponse(response, opts.method || 'GET');
+    return await parseResponse(response);
 };
 
 module.exports = fetchApi;
