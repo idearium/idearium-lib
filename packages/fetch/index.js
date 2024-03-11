@@ -31,9 +31,7 @@ const parseBody = async (response) => {
 };
 
 const parseResponse = async (response) => {
-    if (response.body) {
-        response.result = await parseBody(response);
-    }
+    response.result = response.body ? await parseBody(response) : {};
 
     return response;
 };
