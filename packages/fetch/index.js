@@ -3,41 +3,37 @@
 const { Readable } = require('stream');
 
 const parseBody = async (response) => {
-    const isJson =
+    let bodyStream = response.body;
+
+    // bodyStream is used to bypass a bug in the testing library that causes response.body to be an object.
+    // In non-testing environments response.body should always be a ReadableStream.
+    if (typeof bodyStream.getReader !== 'function') {
+        // If response.body is an object, convert it to a JSON string and then to a ReadableStream
+        bodyStream = Readable.from([bodyStream]);
+    }
+
+    let body = '';
+
+    for await (const chunk of bodyStream) {
+        body += new TextDecoder().decode(chunk);
+    }
+
+    if (
         response.headers &&
         response.headers.get('Content-Type') &&
-        response.headers.get('Content-Type').includes('application/json');
-
-    if (response.body) {
-        let bodyStream = response.body;
-
-        if (typeof bodyStream.getReader !== 'function') {
-            // If response.body is an object, convert it to a JSON string and then to a ReadableStream
-            bodyStream = Readable.from([bodyStream]);
-        }
-
-        let body = '';
-
-        for await (const chunk of bodyStream) {
-            body += new TextDecoder().decode(chunk);
-        }
-
-        if (isJson && body.length) {
-            return JSON.parse(body);
-        }
-
-        return body;
+        response.headers.get('Content-Type').includes('application/json') &&
+        body.length
+    ) {
+        return JSON.parse(body);
     }
 
-    if (isJson) {
-        return await response.json();
-    }
-
-    return response.text();
+    return body;
 };
 
 const parseResponse = async (response) => {
-    response.result = await parseBody(response);
+    if (response.body) {
+        response.result = await parseBody(response);
+    }
 
     return response;
 };

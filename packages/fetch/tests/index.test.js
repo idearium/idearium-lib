@@ -132,7 +132,6 @@ it('does not fail if no content header is returned', async () => {
 
     await expect(fetchApi(testUrl)).resolves.toMatchObject({
         ok: false,
-        result: {},
         status: 400,
     });
 });
