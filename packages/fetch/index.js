@@ -1,21 +1,39 @@
 'use strict';
 
+const { Readable } = require('stream');
+
 const parseBody = async (response) => {
-    let body = '';
-
-    for await (const chunk of response.body) {
-        body += new TextDecoder().decode(chunk);
-    }
-
-    if (
+    const isJson =
         response.headers &&
         response.headers.get('Content-Type') &&
-        response.headers.get('Content-Type').includes('application/json')
-    ) {
-        return JSON.parse(body);
+        response.headers.get('Content-Type').includes('application/json');
+
+    if (response.body) {
+        let bodyStream = response.body;
+
+        if (typeof bodyStream.getReader !== 'function') {
+            // If response.body is an object, convert it to a JSON string and then to a ReadableStream
+            bodyStream = Readable.from([bodyStream]);
+        }
+
+        let body = '';
+
+        for await (const chunk of bodyStream) {
+            body += new TextDecoder().decode(chunk);
+        }
+
+        if (isJson && body.length) {
+            return JSON.parse(body);
+        }
+
+        return body;
     }
 
-    return body;
+    if (isJson) {
+        return await response.json();
+    }
+
+    return response.text();
 };
 
 const parseResponse = async (response) => {
@@ -39,7 +57,9 @@ const fetchApi = async (url, opts = {}) => {
 
     opts.headers = headers;
 
-    return await parseResponse(await fetch(url, opts));
+    const response = await fetch(url, opts);
+
+    return await parseResponse(response, opts.method || 'GET');
 };
 
 module.exports = fetchApi;
