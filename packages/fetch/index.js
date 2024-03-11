@@ -8,7 +8,7 @@ const parseBody = async (response) => {
     // bodyStream is used to bypass a bug in the testing library that causes response.body to be an object.
     // In non-testing environments response.body should always be a ReadableStream.
     if (typeof bodyStream.getReader !== 'function') {
-        // If response.body is an object, convert it to a JSON string and then to a ReadableStream
+        // If response.body is an object, convert it to a ReadableStream
         bodyStream = Readable.from([bodyStream]);
     }
 
