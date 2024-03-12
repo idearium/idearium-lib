@@ -21,7 +21,9 @@ const parseBody = async (response) => {
 };
 
 const parseResponse = async (response) => {
-    response.result = response.body ? await parseBody(response) : {};
+    if (response.body) {
+        response.result = await parseBody(response);
+    }
 
     return response;
 };

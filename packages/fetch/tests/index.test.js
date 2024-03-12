@@ -265,7 +265,6 @@ it('does not fail if no content header is returned', async () => {
 
     await expect(fetchApi(`${testBaseUrl}${testPath}`)).resolves.toMatchObject({
         ok: false,
-        result: {},
         status: 400,
     });
 
@@ -273,7 +272,6 @@ it('does not fail if no content header is returned', async () => {
         fetchApi(`${testBaseUrl}${testPath}?stream=true`),
     ).resolves.toMatchObject({
         ok: false,
-        result: {},
         status: 400,
     });
 });
