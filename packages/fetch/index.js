@@ -1,20 +1,9 @@
 'use strict';
 
-const { Readable } = require('stream');
-
 const parseBody = async (response) => {
-    let bodyStream = response.body;
-
-    // bodyStream is used to bypass a bug in the testing library that causes response.body to be an object.
-    // In non-testing environments response.body should always be a ReadableStream.
-    if (typeof bodyStream.getReader !== 'function') {
-        // If response.body is an object, convert it to a ReadableStream
-        bodyStream = Readable.from([bodyStream]);
-    }
-
     let body = '';
 
-    for await (const chunk of bodyStream) {
+    for await (const chunk of response.body) {
         body += new TextDecoder().decode(chunk);
     }
 

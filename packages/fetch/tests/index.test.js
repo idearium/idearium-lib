@@ -1,15 +1,48 @@
 'use strict';
 
-const fetchMock = require('fetch-mock-jest');
+const express = require('express');
+const { Readable } = require('stream');
+
 const fetchApi = require('../');
 
-const testUrl = 'https://www.idearium.io/';
+const testBaseUrl = 'http://localhost:8888';
 const headers = { 'content-type': 'application/json' };
 
-beforeEach(() => {
-    fetchMock.mockClear();
-    fetchMock.mockReset();
+let app;
+let server;
+
+beforeAll((done) => {
+    app = express();
+
+    server = app.listen(8888, () => done());
 });
+
+afterEach(() => {
+    jest.restoreAllMocks();
+});
+
+afterAll((done) => {
+    server.close(() => done());
+});
+
+function streamResponse(res, { body, status = 200, type } = {}) {
+    const stream = new Readable({
+        read() {
+            if (body) {
+                this.push(JSON.stringify(body));
+            }
+            this.push(null);
+        },
+    });
+
+    res.status(status);
+
+    if (type) {
+        res.type(type);
+    }
+
+    stream.pipe(res);
+}
 
 it('is a function', () => {
     expect(typeof fetchApi).toBe('function');
@@ -18,9 +51,13 @@ it('is a function', () => {
 it('returns a tuple for successful requests', async () => {
     expect.assertions(1);
 
-    fetchMock.get(testUrl, { pass: true });
+    const testPath = '/tuple-success';
 
-    await expect(fetchApi(testUrl)).resolves.toMatchObject({
+    app.get(testPath, (req, res) => {
+        streamResponse(res, { body: { pass: true }, type: 'application/json' });
+    });
+
+    await expect(fetchApi(`${testBaseUrl}${testPath}`)).resolves.toMatchObject({
         ok: true,
         result: { pass: true },
         status: 200,
@@ -30,13 +67,17 @@ it('returns a tuple for successful requests', async () => {
 it('returns a tuple for error requests', async () => {
     expect.assertions(1);
 
-    fetchMock.get(testUrl, {
-        body: { pass: false },
-        headers,
-        status: 400,
+    const testPath = '/tuple-failed';
+
+    app.get(testPath, (req, res) => {
+        streamResponse(res, {
+            body: { pass: false },
+            status: 400,
+            type: 'application/json',
+        });
     });
 
-    await expect(fetchApi(testUrl)).resolves.toMatchObject({
+    await expect(fetchApi(`${testBaseUrl}${testPath}`)).resolves.toMatchObject({
         ok: false,
         result: { pass: false },
         status: 400,
@@ -46,9 +87,13 @@ it('returns a tuple for error requests', async () => {
 it('result contains the main response properties', async () => {
     expect.assertions(6);
 
-    fetchMock.get(testUrl, {});
+    const testPath = '/main-response-properties';
 
-    const response = await fetchApi(testUrl);
+    app.get(testPath, (req, res) => {
+        streamResponse(res, { type: 'application/json' });
+    });
+
+    const response = await fetchApi(`${testBaseUrl}${testPath}`);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Response#properties
     expect(response).toHaveProperty('headers');
@@ -62,13 +107,17 @@ it('result contains the main response properties', async () => {
 it('automatically sets the content-type header', async () => {
     expect.assertions(1);
 
-    fetchMock.mock(testUrl, [], {
-        headers,
+    const fetchSpy = jest.spyOn(global, 'fetch');
+    const testPath = '/automatic-content-type-header';
+    const testUrl = `${testBaseUrl}${testPath}`;
+
+    app.get(testPath, (req, res) => {
+        streamResponse(res, {});
     });
 
     await fetchApi(testUrl);
 
-    await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
+    expect(fetchSpy).toHaveBeenCalledWith(testUrl, {
         headers,
     });
 });
@@ -76,14 +125,17 @@ it('automatically sets the content-type header', async () => {
 it('allows POST requests', async () => {
     expect.assertions(1);
 
-    fetchMock.mock(testUrl, [], {
-        headers,
-        method: 'POST',
+    const fetchSpy = jest.spyOn(global, 'fetch');
+    const testPath = '/post-requests';
+    const testUrl = `${testBaseUrl}${testPath}`;
+
+    app.post(testPath, (req, res) => {
+        streamResponse(res, {});
     });
 
     await fetchApi(testUrl, { method: 'POST' });
 
-    await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
+    expect(fetchSpy).toHaveBeenCalledWith(testUrl, {
         headers,
         method: 'POST',
     });
@@ -92,16 +144,18 @@ it('allows POST requests', async () => {
 it('allows fetch parameters', async () => {
     expect.assertions(1);
 
+    const fetchSpy = jest.spyOn(global, 'fetch');
+    const testPath = '/fetch-parameters';
+    const testUrl = `${testBaseUrl}${testPath}`;
     const credentials = 'same-origin';
 
-    fetchMock.mock(testUrl, [], {
-        credentials,
-        headers,
+    app.get(testPath, (req, res) => {
+        streamResponse(res, {});
     });
 
     await fetchApi(testUrl, { credentials });
 
-    expect(fetchMock).toHaveBeenCalledWith(testUrl, {
+    expect(fetchSpy).toHaveBeenCalledWith(testUrl, {
         credentials,
         headers,
     });
@@ -110,6 +164,9 @@ it('allows fetch parameters', async () => {
 it('allows multiple fetch parameters', async () => {
     expect.assertions(1);
 
+    const fetchSpy = jest.spyOn(global, 'fetch');
+    const testPath = '/multiple-fetch-parameters';
+    const testUrl = `${testBaseUrl}${testPath}`;
     const cache = 'no-store';
     const credentials = 'same-origin';
     const opts = {
@@ -118,19 +175,25 @@ it('allows multiple fetch parameters', async () => {
         headers,
     };
 
-    fetchMock.mock(testUrl, [], opts);
+    app.get(testPath, (req, res) => {
+        streamResponse(res, {});
+    });
 
     await fetchApi(testUrl, { cache, credentials });
 
-    expect(fetchMock).toHaveBeenCalledWith(testUrl, opts);
+    expect(fetchSpy).toHaveBeenCalledWith(testUrl, opts);
 });
 
 it('does not fail if no content header is returned', async () => {
     expect.assertions(1);
 
-    fetchMock.get(testUrl, { status: 400 });
+    const testPath = '/no-content-header';
 
-    await expect(fetchApi(testUrl)).resolves.toMatchObject({
+    app.get(testPath, (req, res) => {
+        streamResponse(res, { status: 400 });
+    });
+
+    await expect(fetchApi(`${testBaseUrl}${testPath}`)).resolves.toMatchObject({
         ok: false,
         result: {},
         status: 400,
@@ -140,19 +203,23 @@ it('does not fail if no content header is returned', async () => {
 it('does not duplicate the content type header', async () => {
     expect.assertions(2);
 
-    fetchMock.mock(testUrl, [], {
-        headers,
+    const fetchSpy = jest.spyOn(global, 'fetch');
+    const testPath = '/no-duplicate-content-header';
+    const testUrl = `${testBaseUrl}${testPath}`;
+
+    app.get(testPath, (req, res) => {
+        streamResponse(res, {});
     });
 
     await fetchApi(testUrl, {
         headers: { 'Content-Type': 'application/json' },
     });
 
-    await expect(fetchMock).toHaveBeenCalledWith(testUrl, {
+    await expect(fetchSpy).toHaveBeenCalledWith(testUrl, {
         headers: { 'content-type': 'application/json' },
     });
 
-    await expect(fetchMock).not.toHaveBeenCalledWith(testUrl, {
+    await expect(fetchSpy).not.toHaveBeenCalledWith(testUrl, {
         headers: { 'Content-Type': 'application/json' },
     });
 });
