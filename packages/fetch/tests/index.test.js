@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const { Readable } = require('stream');
 
 const fetchApi = require('../');
 
@@ -36,16 +35,22 @@ function generateResponse(req, res, { body, status = 200, type } = {}) {
         return res.send(body);
     }
 
-    const stream = new Readable({
-        read() {
-            if (body) {
-                this.push(JSON.stringify(body));
+    if (body && Array.isArray(body)) {
+        res.write('[');
+        body.forEach((chunk, index) => {
+            res.write(JSON.stringify(chunk));
+            if (index < body.length - 1) {
+                res.write(',');
             }
-            this.push(null);
-        },
-    });
+        });
+        res.write(']');
+    }
 
-    stream.pipe(res);
+    if (body && !Array.isArray(body)) {
+        res.write(JSON.stringify(body));
+    }
+
+    return res.end();
 }
 
 it('is a function', () => {
@@ -308,5 +313,26 @@ it('does not duplicate the content type header', async () => {
 
     await expect(fetchSpy).not.toHaveBeenCalledWith(testUrl, {
         headers: { 'Content-Type': 'application/json' },
+    });
+});
+
+it('can handle multiple chunks', async () => {
+    expect.assertions(1);
+
+    const testPath = '/multiple-chunks';
+
+    app.get(testPath, (req, res) => {
+        generateResponse(req, res, {
+            body: [{ pass1: true }, { pass2: false }, { pass3: true }],
+            type: 'application/json',
+        });
+    });
+
+    await expect(
+        fetchApi(`${testBaseUrl}${testPath}?stream=true`),
+    ).resolves.toMatchObject({
+        ok: true,
+        result: [{ pass1: true }, { pass2: false }, { pass3: true }],
+        status: 200,
     });
 });
