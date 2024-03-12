@@ -1,10 +1,11 @@
 'use strict';
 
 const parseBody = async (response) => {
+    const decoder = new TextDecoder();
     let body = '';
 
     for await (const chunk of response.body) {
-        body += new TextDecoder().decode(chunk);
+        body += decoder.decode(chunk);
     }
 
     if (
