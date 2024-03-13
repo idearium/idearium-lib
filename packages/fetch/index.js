@@ -1,7 +1,7 @@
 'use strict';
 
 const parseBody = async (response) => {
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder('utf-8', { fatal: true });
     let body = '';
 
     for await (const chunk of response.body) {
@@ -9,8 +9,6 @@ const parseBody = async (response) => {
     }
 
     if (
-        response.headers &&
-        response.headers.get('Content-Type') &&
         response.headers.get('Content-Type').includes('application/json') &&
         body.length
     ) {
@@ -21,7 +19,21 @@ const parseBody = async (response) => {
 };
 
 const parseResponse = async (response) => {
-    if (response.body) {
+    console.log('response.headers', response.headers);
+    console.log(
+        'response.headers',
+        /^(application\/json|text\/)/i.test(
+            response.headers.get('Content-Type'),
+        ),
+    );
+    if (
+        response.headers &&
+        response.headers.get('Content-Type') &&
+        /^(application\/json|text\/)/i.test(
+            response.headers.get('Content-Type'),
+        ) &&
+        response.body
+    ) {
         response.result = await parseBody(response);
     }
 

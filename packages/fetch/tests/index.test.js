@@ -334,3 +334,31 @@ it('can handle multiple chunks', async () => {
         status: 200,
     });
 });
+
+it('only parses supported content-types', async () => {
+    expect.assertions(2);
+
+    const testPathTest = '/supported-content-types-test';
+    const testPathJson = '/supported-content-types-json';
+
+    app.get(testPathTest, (req, res) => {
+        generateResponse(req, res, {
+            body: { pass: true },
+            type: 'application/test',
+        });
+    });
+    app.get(testPathJson, (req, res) => {
+        generateResponse(req, res, {
+            body: { pass: true },
+            type: 'application/json',
+        });
+    });
+
+    await expect(
+        fetchApi(`${testBaseUrl}${testPathTest}`),
+    ).resolves.not.toHaveProperty('result');
+
+    await expect(
+        fetchApi(`${testBaseUrl}${testPathJson}`),
+    ).resolves.toHaveProperty('result', { pass: true });
+});
