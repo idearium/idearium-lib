@@ -19,13 +19,6 @@ const parseBody = async (response) => {
 };
 
 const parseResponse = async (response) => {
-    console.log('response.headers', response.headers);
-    console.log(
-        'response.headers',
-        /^(application\/json|text\/)/i.test(
-            response.headers.get('Content-Type'),
-        ),
-    );
     if (
         response.headers &&
         response.headers.get('Content-Type') &&
