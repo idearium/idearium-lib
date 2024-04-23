@@ -1,39 +1,24 @@
 'use strict';
 
-const parseBody = async (response, opts) => {
-    const decoder = new TextDecoder('utf-8', { fatal: true });
-    const body = [];
-    const isObjectMode = opts?.objectMode || false;
+const parseBody = async (response) => {
+    const decoder = new TextDecoderStream('utf-8', { fatal: true });
+    let body = '';
 
-    for await (const chunk of response.body) {
-        const value = decoder.decode(chunk);
-
-        if (value.match(/\n/)) {
-            body.push(...value.split('\n').filter((val) => val.length));
-        }
-
-        if (!value.match(/\n/)) {
-            body.push(value);
-        }
-    }
-
-    if (isObjectMode) {
-        return body.length > 1
-            ? body.map((chunk) => JSON.parse(chunk))
-            : JSON.parse(body[0]);
+    for await (const chunk of response.body.pipeThrough(decoder)) {
+        body += chunk;
     }
 
     if (
         response.headers.get('Content-Type').includes('application/json') &&
         body.length
     ) {
-        return JSON.parse(body.join(''));
+        return JSON.parse(body);
     }
 
-    return body.join('');
+    return body;
 };
 
-const parseResponse = async (response, opts) => {
+const parseResponse = async (response) => {
     if (
         response.headers &&
         response.headers.get('Content-Type') &&
@@ -42,13 +27,13 @@ const parseResponse = async (response, opts) => {
         ) &&
         response.body
     ) {
-        response.result = await parseBody(response, opts);
+        response.result = await parseBody(response);
     }
 
     return response;
 };
 
-const fetchApi = async (url, fetchOptions = {}, opts = {}) => {
+const fetchApi = async (url, fetchOptions = {}) => {
     const headers = {};
 
     if (fetchOptions?.headers) {
@@ -65,7 +50,7 @@ const fetchApi = async (url, fetchOptions = {}, opts = {}) => {
 
     const response = await fetch(url, fetchOptions);
 
-    return await parseResponse(response, opts);
+    return await parseResponse(response);
 };
 
 module.exports = fetchApi;
