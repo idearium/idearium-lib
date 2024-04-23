@@ -1,6 +1,12 @@
 # @idearium/fetch
 
-## v3.0.0-beta.1
+## v3.0.1
+
+### Added
+
+-   Added support for parsing stream responses.
+
+## v3.0.0
 
 ### Removed
 

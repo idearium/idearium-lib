@@ -1,29 +1,44 @@
 'use strict';
 
-const parseBody = (response) => {
-    if (
-        response.headers &&
-        response.headers.get('Content-Type') &&
-        response.headers.get('Content-Type').includes('application/json')
-    ) {
-        return response.json();
+const parseBody = async (response) => {
+    const decoder = new TextDecoderStream('utf-8', { fatal: true });
+    let body = '';
+
+    for await (const chunk of response.body.pipeThrough(decoder)) {
+        body += chunk;
     }
 
-    return response.text();
+    if (
+        response.headers.get('Content-Type').includes('application/json') &&
+        body.length
+    ) {
+        return JSON.parse(body);
+    }
+
+    return body;
 };
 
 const parseResponse = async (response) => {
-    response.result = await parseBody(response);
+    if (
+        response.headers &&
+        response.headers.get('Content-Type') &&
+        /^(application\/json|text\/)/i.test(
+            response.headers.get('Content-Type'),
+        ) &&
+        response.body
+    ) {
+        response.result = await parseBody(response);
+    }
 
     return response;
 };
 
-const fetchApi = async (url, opts = {}) => {
+const fetchApi = async (url, fetchOptions = {}) => {
     const headers = {};
 
-    if (opts?.headers) {
-        Object.keys(opts.headers).forEach(
-            (key) => (headers[key.toLowerCase()] = opts.headers[key])
+    if (fetchOptions?.headers) {
+        Object.keys(fetchOptions.headers).forEach(
+            (key) => (headers[key.toLowerCase()] = fetchOptions.headers[key]),
         );
     }
 
@@ -31,9 +46,11 @@ const fetchApi = async (url, opts = {}) => {
         headers['content-type'] = 'application/json';
     }
 
-    opts.headers = headers;
+    fetchOptions.headers = headers;
 
-    return parseResponse(await fetch(url, opts));
+    const response = await fetch(url, fetchOptions);
+
+    return await parseResponse(response);
 };
 
 module.exports = fetchApi;

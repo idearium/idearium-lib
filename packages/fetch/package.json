@@ -1,19 +1,20 @@
 {
-    "name": "@idearium/fetch",
-    "version": "3.0.0-beta.1",
-    "description": "A package to make fetching trivial.",
-    "main": "index.js",
-    "repository": "https://github.com/idearium/idearium-lib",
     "contributors": [
         "Allan Chau <allan@idearium.io>",
         "Scott Mebberson <scott@idearium.io>"
     ],
-    "license": "MIT",
-    "scripts": {
-        "test": "jest"
-    },
     "dependencies": {},
+    "description": "A package to make fetching trivial.",
     "devDependencies": {
-        "fetch-mock-jest": "1.5.1"
-    }
+        "express": "4.18.3"
+    },
+    "license": "MIT",
+    "main": "index.js",
+    "name": "@idearium/fetch",
+    "repository": "https://github.com/idearium/idearium-lib",
+    "scripts": {
+        "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
+        "test:watch": "yarn node --experimental-vm-modules $(yarn bin jest) --watch"
+    },
+    "version": "3.0.0-beta.4"
 }
