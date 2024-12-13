@@ -2,6 +2,7 @@
 
 const manager = require('./messages');
 const log = require('@idearium/log')();
+const multiLog = require('@idearium/log/multi')();
 
 /**
  * Check if a RabbitMQ message exists before publishing.
@@ -12,8 +13,14 @@ const log = require('@idearium/log')();
 const publish = (type, data) => {
 
     return manager.publish(type, data)
-        .then(() => log.trace({ data, type }, `Published message of type: ${type}`))
-        .catch(err => log.warn({ err }, `Could not publish message of type: ${type}`));
+        .then(() => multiLog(
+            {
+                trace: { data },
+                info: { type },
+            },
+            'Published message'
+        ))
+        .catch((err) => log.warn({ err, type }, 'Could not publish message'));
 
 };
 
