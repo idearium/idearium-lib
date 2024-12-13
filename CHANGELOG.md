@@ -4,6 +4,12 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
+## v5.0.1 - 2024-12-13
+
+### Changed
+
+-   Reduced logging level of mq publisher.
+
 ## v5.0.0 - 2023-02-15
 
 ### Removed
