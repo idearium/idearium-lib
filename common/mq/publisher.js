@@ -15,12 +15,12 @@ const publish = (type, data) => {
     return manager.publish(type, data)
         .then(() => multiLog(
             {
-                trace: { data },
+                debug: { data },
                 info: { type },
             },
             'Published message'
         ))
-        .catch((err) => log.warn({ err, type }, 'Could not publish message'));
+        .catch((err) => log.error({ err, type }, 'Could not publish message'));
 
 };
 
