@@ -4,6 +4,13 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
+## v5.0.2 - 2025-01-07
+
+### Changed
+
+-   Updated `express` to `4.21.2`.
+-   Updated `express-session` to `1.18.1`.
+
 ## v5.0.1 - 2024-12-13
 
 ### Changed
