@@ -4,7 +4,7 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
-## v5.0.2-beta.1 - 2025-01-07
+## v5.0.2 - 2025-01-07
 
 ### Changed
 
