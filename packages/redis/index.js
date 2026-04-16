@@ -11,13 +11,25 @@ const cacheUrl = process.env.CACHE_URL;
 
 const connections = [];
 
+const removeConnection = (redis) => {
+    const index = connections.indexOf(redis);
+
+    if (index !== -1) {
+        connections.splice(index, 1);
+    }
+};
+
 const connect = (opts = {}) => {
     const reuse = typeof opts.reuse === 'undefined' ? false : opts.reuse;
     const reuseIndex =
         typeof opts.reuseIndex === 'undefined' ? 0 : opts.reuseIndex;
 
-    if (connections && reuse) {
+    if (reuse && connections.length > 0 && connections[reuseIndex]) {
         return connections[reuseIndex];
+    }
+
+    if (!cacheUrl) {
+        throw new Error('CACHE_URL environment variable is required');
     }
 
     delete opts.reuse;
@@ -27,7 +39,7 @@ const connect = (opts = {}) => {
         retryStrategy: (times) => {
             if (times >= retryLimit) {
                 log.fatal(
-                    `Retry limit of ${retryLimit} reached, could not connect to Redis`
+                    `Retry limit of ${retryLimit} reached, could not connect to Redis`,
                 );
 
                 // eslint-disable-next-line no-process-exit
@@ -40,12 +52,18 @@ const connect = (opts = {}) => {
         ...opts,
     });
 
-    redis.on('close', () => log.info('Redis closed'));
-    redis.on('connect', () => log.info('Redis connected'));
-    redis.on('end', () => log.info('Redis ended'));
+    redis.on('close', () => {
+        log.trace('Redis closed');
+        removeConnection(redis);
+    });
+    redis.on('connect', () => log.trace('Redis connected'));
+    redis.on('end', () => {
+        log.trace('Redis ended');
+        removeConnection(redis);
+    });
     redis.on('error', (err) => log.error({ err }, err.message));
-    redis.on('ready', () => log.info('Redis ready'));
-    redis.on('reconnecting', () => log.info('Redis reconnecting'));
+    redis.on('ready', () => log.trace('Redis ready'));
+    redis.on('reconnecting', () => log.trace('Redis reconnecting'));
 
     connections.push(redis);
 
