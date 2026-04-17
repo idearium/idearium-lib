@@ -15,7 +15,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: npm
-                  node-version: '22'
+                  node-version: '24'
             - name: Test Build
               run: |
                   npm ci
@@ -28,7 +28,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: npm
-                  node-version: '22'
+                  node-version: '24'
             - name: Add key to allow access to repository
               env:
                   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
