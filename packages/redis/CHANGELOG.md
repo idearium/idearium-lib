@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v1.0.1-beta.2 - 2026-04-17
+
+- Fixes for the release process.
+
 ## v1.0.1-beta.1 - 2026-04-16
 
 - Fixes for first time connections.
