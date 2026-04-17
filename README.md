@@ -124,7 +124,8 @@ We use [Docusaurus](https://docusaurus.io/en/) for our documentation. To get sta
 
 ```shell
 $ cd docusaurus
-$ yarn start
+$ npm install
+$ npm run start
 ```
 
 It's that easy! You can now make changes to the documentation and they will be live reloaded in the browser.

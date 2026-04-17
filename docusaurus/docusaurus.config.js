@@ -3,8 +3,12 @@
 module.exports = {
     baseUrl: '/idearium-lib/',
     favicon: 'img/favicon.ico',
+    markdown: {
+        hooks: {
+            onBrokenMarkdownLinks: 'warn',
+        },
+    },
     onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
     organizationName: 'idearium',
     presets: [
         [
@@ -13,13 +17,13 @@ module.exports = {
                 docs: {
                     editUrl:
                         'https://github.com/idearium/idearium-lib/tree/master/docusaurus/',
-                    sidebarPath: require.resolve('./sidebars.js')
+                    sidebarPath: require.resolve('./sidebars.js'),
                 },
                 theme: {
-                    customCss: require.resolve('./src/css/custom.css')
-                }
-            }
-        ]
+                    customCss: require.resolve('./src/css/custom.css'),
+                },
+            },
+        ],
     ],
     projectName: 'idearium-lib',
     tagline: 'For developer productivity',
@@ -27,7 +31,7 @@ module.exports = {
         footer: {
             copyright: `Copyright © ${new Date().getFullYear()} Idearium Pty ltd`,
             links: [],
-            style: 'dark'
+            style: 'dark',
         },
         navbar: {
             items: [
@@ -35,21 +39,21 @@ module.exports = {
                     activeBasePath: 'packages',
                     label: 'Packages',
                     position: 'left',
-                    to: 'docs/'
+                    to: 'docs/',
                 },
                 {
                     href: 'https://github.com/idearium/idearium-lib',
                     label: 'GitHub',
-                    position: 'right'
-                }
+                    position: 'right',
+                },
             ],
             logo: {
                 alt: 'Idearium Lib Logo',
-                src: 'img/il-logo.png'
+                src: 'img/il-logo.png',
             },
-            title: 'Idearium Lib'
-        }
+            title: 'Idearium Lib',
+        },
     },
     title: 'Idearium Lib',
-    url: 'https://idearium.github.io'
+    url: 'https://idearium.github.io',
 };

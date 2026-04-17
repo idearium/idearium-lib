@@ -8,7 +8,7 @@ The Idearium logger HTTP structured logging formatter.
 ## Installation
 
 ```shell
-$ yarn add @idearium/log-structured
+$ npm install @idearium/log-structured
 ```
 
 ## Usage

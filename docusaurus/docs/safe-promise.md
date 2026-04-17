@@ -8,7 +8,7 @@ Makes working with promises safer.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/safe-promise
+$ npm install -E @idearium/safe-promise
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/safe-promise
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/safe-promise@beta
+$ npm install -E @idearium/safe-promise@beta
 ```
 
 ## Usage

@@ -17,6 +17,7 @@
         "pretty-quick": "4.0.0"
     },
     "scripts": {
+        "lint-staged": "lint-staged",
         "prepare": "husky install"
     }
 }

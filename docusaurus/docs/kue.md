@@ -8,7 +8,7 @@ A library to make working with Kue painless.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/kue
+$ npm install -E @idearium/kue
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/kue
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/kue@beta
+$ npm install -E @idearium/kue@beta
 ```
 
 ## Usage

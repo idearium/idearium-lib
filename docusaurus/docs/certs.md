@@ -8,7 +8,7 @@ Easily load custom and OS certificate authority certs into Node.js.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/certs
+$ npm install -E @idearium/certs
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/certs
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/certs@beta
+$ npm install -E @idearium/certs@beta
 ```
 
 ## Usage
@@ -59,8 +59,8 @@ await loadCerts('/certs');
 
 `loadCerts` has the following expectations:
 
--   It will load CA certs in the `ca` directory, relative to the directory provided to it. If the directory doesn't exist, it will ignored.
--   It will only load files with `.crt` and `.key` extensions.
+- It will load CA certs in the `ca` directory, relative to the directory provided to it. If the directory doesn't exist, it will ignored.
+- It will only load files with `.crt` and `.key` extensions.
 
 ### `loadOsCerts`
 

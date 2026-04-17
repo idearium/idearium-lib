@@ -8,7 +8,7 @@ Wrapper around the Twilio phone lookup api.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/phone
+$ npm install -E @idearium/phone
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/phone
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/phone@beta
+$ npm install -E @idearium/phone@beta
 ```
 
 ## Usage

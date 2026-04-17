@@ -8,7 +8,7 @@ Defaults for our Elastic APM integration.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/apm
+$ npm install -E @idearium/apm
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/apm
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/apm@beta
+$ npm install -E @idearium/apm@beta
 ```
 
 ## Usage

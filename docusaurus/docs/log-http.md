@@ -8,7 +8,7 @@ The Idearium HTTP JSON logger middleware. Uses [@idearium/log](log.md) and [pino
 ## Installation
 
 ```shell
-$ yarn add @idearium/log-http
+$ npm install @idearium/log-http
 ```
 
 ## Usage
@@ -60,11 +60,11 @@ You can use an options object to customise how @idearium/log-http works. It exte
 
 This package extends the standard serialisers provided by [pino-std-serializers](https://github.com/pinojs/pino-std-serializers) with the following additional information:
 
--   req
-    -   protocol: The protocol (i.e. `http/1.1`).
-    -   remoteIp: The IP of the client making the request.
--   res
-    -   size: The response size.
+- req
+    - protocol: The protocol (i.e. `http/1.1`).
+    - remoteIp: The IP of the client making the request.
+- res
+    - size: The response size.
 
 ## Error logging
 

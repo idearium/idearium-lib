@@ -15,13 +15,13 @@ export default {
 };
 ```
 
--   `group` is used to define a group of lists which share a context (usually described by the group name).
--   `list` is the list itself.
+- `group` is used to define a group of lists which share a context (usually described by the group name).
+- `list` is the list itself.
 
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/lists
+$ npm install -E @idearium/lists
 ```
 
 ### Beta installation
@@ -29,15 +29,15 @@ $ yarn add -E @idearium/lists
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/lists@beta
+$ npm install -E @idearium/lists@beta
 ```
 
 ## Usage
 
 To use `@idearium/lists`, follow these steps:
 
--   [Create a library file.](#create-a-library-file)
--   [Use the library file within your app.](#use-the-library-file)
+- [Create a library file.](#create-a-library-file)
+- [Use the library file within your app.](#use-the-library-file)
 
 ### Create a library file
 

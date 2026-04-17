@@ -8,7 +8,7 @@ The Idearium React state router component for XState.
 ## Installation
 
 ```shell
-$ yarn add @idearium/react-state-router
+$ npm install @idearium/react-state-router
 ```
 
 ## Usage

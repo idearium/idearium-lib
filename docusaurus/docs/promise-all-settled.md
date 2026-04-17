@@ -8,7 +8,7 @@ Makes working with `Promise.allSettled` easier.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/promise-all-settled
+$ npm install -E @idearium/promise-all-settled
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/promise-all-settled
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/promise-all-settled@beta
+$ npm install -E @idearium/promise-all-settled@beta
 ```
 
 ## Usage

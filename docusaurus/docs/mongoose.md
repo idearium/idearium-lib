@@ -10,7 +10,7 @@ Mongoose connection defaults.
 **Please note**: mongoose is a peer dependency so you'll need to add it specifically to your project.
 
 ```shell
-$ yarn add -E mongoose@4.11 @idearium/mongoose
+$ npm install -E mongoose@4.11 @idearium/mongoose
 ```
 
 ### Beta installation
@@ -18,7 +18,7 @@ $ yarn add -E mongoose@4.11 @idearium/mongoose
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E mongoose@4.11 @idearium/mongoose@beta
+$ npm install -E mongoose@4.11 @idearium/mongoose@beta
 ```
 
 ## Usage

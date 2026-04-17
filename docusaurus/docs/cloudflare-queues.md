@@ -8,7 +8,7 @@ Safely process Cloudflare Queues batches and messages.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/cloudflare-queues
+$ npm install -E @idearium/cloudflare-queues
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/cloudflare-queues
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/cloudflare-queues@beta
+$ npm install -E @idearium/cloudflare-queues@beta
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ export default {
         await safeBatchProcess({
             process: async (batch) => {
                 await Promise.all(
-                    batch.messages.map(({ body }) => Promise.resolve(body))
+                    batch.messages.map(({ body }) => Promise.resolve(body)),
                 );
             },
             batch: messageBatch,
@@ -78,8 +78,8 @@ You can process entire batches of messages or each individual message. If you pr
 
 `safeBatchProcess` expects an object with the following properties:
 
--   `process`: A function that processes the batch.
--   `batch`: The batch to process.
+- `process`: A function that processes the batch.
+- `batch`: The batch to process.
 
 `safeBatchProcess` will call the `process` function provided to it and pass the batch as the only argument.
 
@@ -91,8 +91,8 @@ If the batch cannot be processed, the promise will reject with an error. It will
 
 `safeMessageProcess` expects an object with the following properties:
 
--   `process`: A function that processes the message.
--   `message`: The message to process.
+- `process`: A function that processes the message.
+- `message`: The message to process.
 
 `safeMessageProcess` will call the `process` function provided to it and pass the message as the only argument.
 

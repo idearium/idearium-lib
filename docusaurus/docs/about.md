@@ -15,7 +15,7 @@ The [Idearium Lib repository](https://github.com/idearium/idearium-lib) is a mon
 
 Each package is individually versioned. We don't version the entire repository.
 
-We use semver for versioning, however, each version is prefixed with the package is corresponds to, for example, <code>@idearium/lists-v1.0.0</code>.
+We use semver for versioning, however, each version is prefixed with the package is corresponds to, for example, `@idearium/lists-v1.0.0`.
 
 You can find all of [our releases on GitHub](https://github.com/idearium/idearium-lib/releases).
 

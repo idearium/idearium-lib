@@ -1,0 +1,60 @@
+name: Publish
+
+on:
+    release:
+        types: [published]
+
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+    test:
+        name: Test
+        if: startsWith(github.event.release.tag_name, '@idearium/')
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  cache: npm
+                  node-version: '22'
+                  registry-url: 'https://registry.npmjs.org'
+            - name: Upgrade npm
+              run: npm install -g npm@latest
+            - run: npm install
+            - name: Extract package name
+              id: pkg
+              run: |
+                  tag="${{ github.event.release.tag_name }}"
+                  pkg=$(echo "$tag" | sed 's/-v[0-9].*//')
+                  echo "name=$pkg" >> "$GITHUB_OUTPUT"
+            - name: Run tests
+              run: npm test --workspace="${{ steps.pkg.outputs.name }}" --if-present
+
+    publish:
+        name: Publish
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  cache: npm
+                  node-version: '22'
+                  registry-url: 'https://registry.npmjs.org'
+            - name: Upgrade npm
+              run: npm install -g npm@latest
+            - run: npm install
+            - name: Extract package name
+              id: pkg
+              run: |
+                  tag="${{ github.event.release.tag_name }}"
+                  pkg=$(echo "$tag" | sed 's/-v[0-9].*//')
+                  echo "name=$pkg" >> "$GITHUB_OUTPUT"
+            - name: Publish (beta)
+              if: contains(github.event.release.tag_name, 'beta')
+              run: npm publish --workspace="${{ steps.pkg.outputs.name }}" --tag beta --access public
+            - name: Publish
+              if: "!contains(github.event.release.tag_name, 'beta')"
+              run: npm publish --workspace="${{ steps.pkg.outputs.name }}" --access public

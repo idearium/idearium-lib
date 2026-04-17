@@ -8,7 +8,7 @@ The Idearium JSON logger. Uses [Pino](https://getpino.io/) under the hood.
 ## Installation
 
 ```shell
-$ yarn add @idearium/log
+$ npm install @idearium/log
 ```
 
 ## Usage
@@ -37,17 +37,17 @@ The above produces the following log output:
 
 There are two methods to configure the Idearium logger:
 
--   Using predefined environment variables for the most common configurations.
--   Using an options object for complete customisation.
+- Using predefined environment variables for the most common configurations.
+- Using an options object for complete customisation.
 
 #### Environment variables
 
 The Idearium logger can be configured with environment variables:
 
--   `LOG_ENABLED` - Whether to enable the logger or not. Defaults to `true`.
--   `LOG_LEVEL` - The minimum log level to log. Defaults to `info`. Other accepted values are `trace | debug | info | warn | error | fatal`.
--   `LOG_PRETTY_PRINT` - Whether to pretty print the logs or not, useful for development. Defaults to `false`.
--   `LOG_REDACT_PATHS` - Optionally provide a comma separated list of paths to redact. [https://github.com/pinojs/pino/blob/master/docs/redaction.md#path-syntax](https://github.com/pinojs/pino/blob/master/docs/redaction.md#path-syntax)
+- `LOG_ENABLED` - Whether to enable the logger or not. Defaults to `true`.
+- `LOG_LEVEL` - The minimum log level to log. Defaults to `info`. Other accepted values are `trace | debug | info | warn | error | fatal`.
+- `LOG_PRETTY_PRINT` - Whether to pretty print the logs or not, useful for development. Defaults to `false`.
+- `LOG_REDACT_PATHS` - Optionally provide a comma separated list of paths to redact. [https://github.com/pinojs/pino/blob/master/docs/redaction.md#path-syntax](https://github.com/pinojs/pino/blob/master/docs/redaction.md#path-syntax)
 
 #### Options
 
@@ -77,17 +77,17 @@ Use this to log different data depending on the `LOG_LEVEL`. It's very useful fo
 
 The levels are defined in order as:
 
--   `trace`
--   `debug`
--   `info`
--   `warn`
--   `error`
--   `fatal`
+- `trace`
+- `debug`
+- `info`
+- `warn`
+- `error`
+- `fatal`
 
 Multi accepts two parameters:
 
--   `data`: an object containing nested objects, keyed by the name of the level, which should be included or excluded based on `LOG_LEVEL`.
--   `message`: which will always appear unchanged with the combined data.
+- `data`: an object containing nested objects, keyed by the name of the level, which should be included or excluded based on `LOG_LEVEL`.
+- `message`: which will always appear unchanged with the combined data.
 
 `multi` produces a log at the level defined by the highest log level provided in `data`.
 
@@ -95,10 +95,10 @@ Multi accepts two parameters:
 
 `multi` has the following attributes, when given the same parameters:
 
--   Will always produce a log at the same level regardless of `LOG_LEVEL`.
--   Will always produce a log with the same message, meaning you can rely on the log message for filtering, regardless of `LOG_LEVEL`.
--   Can exclude or include more information based on `LOG_LEVEL`.
--   Does not produce more logs when turning on a lower log level, but can include additional information.
+- Will always produce a log at the same level regardless of `LOG_LEVEL`.
+- Will always produce a log with the same message, meaning you can rely on the log message for filtering, regardless of `LOG_LEVEL`.
+- Can exclude or include more information based on `LOG_LEVEL`.
+- Does not produce more logs when turning on a lower log level, but can include additional information.
 
 #### Examples
 
