@@ -1,4 +1,3 @@
-import React from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
@@ -17,7 +16,7 @@ const features = [
             </>
         ),
         imageUrl: `img/undraw_packages.svg`,
-        title: 'Multiple packages'
+        title: 'Multiple packages',
     },
     {
         description: (
@@ -28,7 +27,7 @@ const features = [
             </>
         ),
         imageUrl: `img/undraw_productivity.svg`,
-        title: 'Developer productivity'
+        title: 'Developer productivity',
     },
     {
         description: (
@@ -38,8 +37,8 @@ const features = [
             </>
         ),
         imageUrl: `img/undraw_es6.svg`,
-        title: 'Modern language'
-    }
+        title: 'Modern language',
+    },
 ];
 
 const Feature = ({ imageUrl, title, description }) => {
@@ -80,7 +79,7 @@ const Home = () => {
                             className={clsx(
                                 'button button--outline button--secondary button--lg',
                                 styles.getStarted,
-                                styles.button
+                                styles.button,
                             )}
                             to={useBaseUrl('docs/')}
                         >

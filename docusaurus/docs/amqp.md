@@ -8,7 +8,7 @@ Explicitly connect to an AMQP server and then publish and consume messages.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/amqp
+$ npm install -E @idearium/amqp
 ```
 
 ### Beta installation
@@ -16,16 +16,16 @@ $ yarn add -E @idearium/amqp
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/amqp@beta
+$ npm install -E @idearium/amqp@beta
 ```
 
 ## Usage
 
 To use `@idearium/amqp`, you'll need to:
 
--   Connect to an AMQP server.
--   Setup consumers.
--   Publish messages.
+- Connect to an AMQP server.
+- Setup consumers.
+- Publish messages.
 
 ### Connect to an AMQP server
 

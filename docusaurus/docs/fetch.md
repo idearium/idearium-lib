@@ -8,7 +8,7 @@ Idearium fetch wrapper.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/fetch
+$ npm install -E @idearium/fetch
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/fetch
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/fetch@beta
+$ npm install -E @idearium/fetch@beta
 ```
 
 ## Usage

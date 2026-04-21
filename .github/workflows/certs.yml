@@ -3,43 +3,16 @@ on:
     push:
         paths:
             - 'packages/certs/**'
-    release:
-        types: [published]
 
 jobs:
     test:
-        if: (github.event_name == 'push' && !contains(github.ref, '@idearium/')) || (github.event_name == 'release' && contains(github.ref, '@idearium/certs-v'))
         name: Test
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  cache: yarn
-                  node-version: lts/*
-                  registry-url: 'https://registry.npmjs.org'
-            - run: yarn
-            - run: yarn workspace @idearium/certs test
-    publish:
-        if: github.event_name == 'release' && contains(github.ref, '@idearium/certs-v')
-        name: Publish
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  cache: yarn
-                  node-version: lts/*
-                  registry-url: https://registry.npmjs.org/
-            - run: yarn
-            - name: Publish (beta)
-              if: contains(github.ref, 'beta')
-              run: yarn workspace @idearium/certs publish --tag beta --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            - name: Publish
-              if: "!contains(github.ref , 'beta')"
-              run: yarn workspace @idearium/certs publish --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  cache: npm
+                  node-version: '24'
+            - run: npm install
+            - run: npm test --workspace=@idearium/certs

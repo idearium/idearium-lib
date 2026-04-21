@@ -8,7 +8,7 @@ Idearium cookie wrapper.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/cookie
+$ npm install -E @idearium/cookie
 ```
 
 ### Beta installation
@@ -16,7 +16,7 @@ $ yarn add -E @idearium/cookie
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/cookie@beta
+$ npm install -E @idearium/cookie@beta
 ```
 
 ## Usage
@@ -25,8 +25,8 @@ To use `@idearium/cookie`, simply require it at the top of your file.
 
 `@idearium/cookie` exports a number of pure functions to help you work with cookies:
 
--   `create` - creates a cookie.
--   `find` - finds a cookie in a HTTP cookie header string.
+- `create` - creates a cookie.
+- `find` - finds a cookie in a HTTP cookie header string.
 
 ### create
 

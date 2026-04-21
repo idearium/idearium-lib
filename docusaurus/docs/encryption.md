@@ -8,7 +8,7 @@ A library to make encrypting and decrypting plain text in Node.js painless.
 ## Installation
 
 ```shell
-$ yarn add -E @idearium/encryption
+$ npm install -E @idearium/encryption
 ```
 
 ### Beta installation
@@ -16,15 +16,15 @@ $ yarn add -E @idearium/encryption
 If you need to install a beta version, you can:
 
 ```shell
-$ yarn add -E @idearium/encryption@beta
+$ npm install -E @idearium/encryption@beta
 ```
 
 ## Usage
 
 To use `@idearium/encryption`, follow these steps:
 
--   [Create a library file.](#create-a-library-file)
--   [Use the library file within your app.](#use-the-library-file)
+- [Create a library file.](#create-a-library-file)
+- [Use the library file within your app.](#use-the-library-file)
 
 ### Create a library file
 
@@ -63,9 +63,9 @@ const matches = assert.equal(text, decrypted);
 
 This library also allows you to do the following:
 
--   Change the encryption algorithm.
--   Directly use the `encrypt` and `decrypt` functions exported by the library.
--   Change the input and output encoding types.
+- Change the encryption algorithm.
+- Directly use the `encrypt` and `decrypt` functions exported by the library.
+- Change the input and output encoding types.
 
 ### Encryption algorithms
 
