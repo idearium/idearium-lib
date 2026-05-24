@@ -4,6 +4,14 @@
 
 -   This is the legacy branch of idearium-lib used to allow maintenance of code on the old lib.
 
+## v5.1.0 - 2026-05-25
+
+### Changed
+
+-   Updated `amqplib` to `2.0.1` for latest RabbitMQ compatibility.
+-   Updated Node.js engine requirement from >=4 to >=18.
+-   Replaced deprecated `new Buffer()` with `Buffer.from()`.
+
 ## v5.0.2 - 2025-01-07
 
 ### Changed
