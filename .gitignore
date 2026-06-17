@@ -93,3 +93,7 @@ typings/
 
 # Serverless directories
 .serverless
+.opencode/*
+!.opencode/skills/
+!.opencode/agents/
+!.opencode/commands/
