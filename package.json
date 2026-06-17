@@ -12,7 +12,6 @@
     "@idearium/eslint-config": "5.0.0",
     "husky": "9.1.7",
     "lint-staged": "17.0.7",
-    "prettier": "3.8.4",
-    "vitest": "4.1.9"
+    "prettier": "3.8.4"
   }
 }
