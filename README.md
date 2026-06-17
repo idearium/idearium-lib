@@ -28,6 +28,12 @@ Easily load custom and OS certificate authority certs into Node.js.
 
 A library to make working with cookies in Node.js easier.
 
+### [@idearium/date](https://idearium.github.io/idearium-lib/docs/date)
+
+![@idearium/date](https://github.com/idearium/idearium-lib/workflows/@idearium/date/badge.svg)
+
+Utilities for working with dates and timezones.
+
 ### [@idearium/encryption](https://idearium.github.io/idearium-lib/docs/encryption)
 
 ![@idearium/encryption](https://github.com/idearium/idearium-lib/workflows/@idearium/encryption/badge.svg)

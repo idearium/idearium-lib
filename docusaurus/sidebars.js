@@ -9,6 +9,7 @@ module.exports = {
             'certs',
             'cloudflare-queues',
             'cookie',
+            'date',
             'encryption',
             'fetch',
             'kue',
