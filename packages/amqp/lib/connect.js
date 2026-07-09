@@ -14,6 +14,7 @@ const redactUrl = (url) => {
 };
 
 module.exports = async (mqUrl, opts = {}) => {
+    const { exitOnClose = false, ...connectOpts } = opts;
     let state = 'disconnected';
 
     if (!mqUrl) {
@@ -26,7 +27,9 @@ module.exports = async (mqUrl, opts = {}) => {
 
     state = 'connecting';
 
-    const [err, connection] = await safePromise(amqp.connect(mqUrl, opts));
+    const [err, connection] = await safePromise(
+        amqp.connect(mqUrl, connectOpts),
+    );
 
     if (err) {
         log.error({ err, url }, 'Could not connect to AMQP server.');
@@ -38,17 +41,20 @@ module.exports = async (mqUrl, opts = {}) => {
 
     log.info({ url }, 'Connected to AMQP server.');
 
-    // This needs to be async so that the throw causes Node.js to exit.
+    // The listener stays async so that, when exitOnClose is set, the throw
+    // surfaces as an unhandled rejection and Node terminates under its
+    // default --unhandled-rejections=throw policy.
     connection.on('close', async (connectionErr) => {
         state = 'disconnected';
 
         log.error(
             { err: connectionErr, url },
-            'Connection to the AMQP server closed.'
+            'Connection to the AMQP server closed.',
         );
 
-        // This didn't wor for some reason?
-        throw new Error('The connection to the AMQP server closed.');
+        if (exitOnClose) {
+            throw new Error('The connection to the AMQP server closed.');
+        }
     });
 
     connection.isConnected = () => state === 'connected';

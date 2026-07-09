@@ -1,7 +1,5 @@
 const multiLog = require('@idearium/log/multi')();
 
-const publishingChannels = {};
-
 const bufferAsJson = (buffer) => {
     let result = '<buffer>';
 
@@ -15,6 +13,8 @@ const bufferAsJson = (buffer) => {
 };
 
 const channels = (connection) => {
+    const publishingChannels = {};
+
     const setupDrain = async ({ exchange, name, routingKey, type }) => {
         // eslint-disable-next-line no-use-before-define
         const channel = await get(name);
@@ -26,7 +26,7 @@ const channels = (connection) => {
                     debug: { type },
                     info: { exchange, name, routingKey },
                 },
-                'Setting up drain queue'
+                'Setting up drain queue',
             );
         }
     };
@@ -45,14 +45,14 @@ const channels = (connection) => {
                 debug: { data: bufferAsJson(data), type },
                 info: { exchange, name, routingKey },
             },
-            'Publishing a queued message'
+            'Publishing a queued message',
         );
 
         const published = channel.publish(
             exchange,
             routingKey,
             data,
-            publishOpts
+            publishOpts,
         );
 
         // Always delete, as amqplib will buffer anyway and we don't want to publish this again.
@@ -75,28 +75,35 @@ const channels = (connection) => {
                     debug: { type },
                     info: { exchange, name, routingKey },
                 },
-                'Emptied drain queue'
+                'Emptied drain queue',
             );
         }
     };
-    const set = async (name) => {
+    const set = (name) => {
         const republish = republishQueuedMessages(name);
 
-        // This is to avoid a race condition in setting up publishing channels.
-        publishingChannels[name] = new Promise((resolve) => {
-            connection.createChannel().then((channel) => {
-                channel.on('drain', republish);
+        const promise = (async () => {
+            const channel = await connection.createChannel();
 
-                return resolve({
-                    channel,
-                    drain: false,
-                    queue: new Set(),
-                    republish,
-                });
-            });
+            channel.on('drain', republish);
+
+            return {
+                channel,
+                drain: false,
+                queue: new Set(),
+                republish,
+            };
+        })();
+
+        publishingChannels[name] = promise;
+
+        promise.catch(() => {
+            if (publishingChannels[name] === promise) {
+                delete publishingChannels[name];
+            }
         });
 
-        return publishingChannels[name];
+        return promise;
     };
 
     const get = async (name) => {
@@ -132,7 +139,7 @@ const channels = (connection) => {
                     debug: { data: bufferAsJson(dataAsBuffer), type },
                     info: { exchange, name, routingKey },
                 },
-                'Queuing a message for publishing'
+                'Queuing a message for publishing',
             );
 
             return queue.add({
@@ -151,14 +158,14 @@ const channels = (connection) => {
                 debug: { data: bufferAsJson(dataAsBuffer), type },
                 info: { exchange, name, routingKey },
             },
-            'Publishing a message'
+            'Publishing a message',
         );
 
         const published = channel.publish(
             exchange,
             routingKey,
             dataAsBuffer,
-            publishOpts
+            publishOpts,
         );
 
         if (!published) {

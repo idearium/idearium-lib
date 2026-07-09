@@ -21,7 +21,9 @@ $ npm install -E @idearium/amqp@beta
 
 ## Usage
 
-To use `@idearium/amqp`, you'll need to:
+`@idearium/amqp` exports a factory `amqp(mqUrl, opts)` that connects to the
+broker and returns `{ consume, publish }`. Call it once at startup, then use the
+returned `client` to set up consumers and publish messages.
 
 - Connect to an AMQP server.
 - Setup consumers.
@@ -29,13 +31,22 @@ To use `@idearium/amqp`, you'll need to:
 
 ### Connect to an AMQP server
 
-Use the following to create a connection to an AMQP server.
+Call the factory with the broker URL and an optional `opts` object. It resolves
+to a `client` exposing `consume` and `publish`.
 
 ```JavaScript
 const amqp = require('@idearium/amqp');
 
-await amqp.connect('amqps://localhost:5671')
+const client = await amqp('amqps://localhost:5671/', { exitOnClose: false });
 ```
+
+`exitOnClose` defaults to `false`, meaning a broker disconnect **does not** crash
+the process — `isConnected()` flips to `false` so subsequent calls surface a
+clear error. This is the right default for long-running API servers. Set
+`exitOnClose: true` for short-lived workers that rely on a process supervisor to
+restart them on broker failure (the close handler throws, surfacing as an
+unhandled rejection that terminates the process under Node's default
+`--unhandled-rejections=throw` policy).
 
 ### Setup consumers
 
@@ -44,7 +55,9 @@ Start by setting up consumers so that messages will be processed:
 ```JavaScript
 const amqp = require('@idearium/amqp');
 
-amqp.consume(
+const client = await amqp('amqps://localhost:5671/');
+
+await client.consume(
     'consumer-name',
     async (data) => {
         console.log('Consuming data', data);
@@ -52,11 +65,11 @@ amqp.consume(
         return true;
     },
     {
-        exchange: 'ampq-test',
-        queue: 'ampq-test',
-        routingKey: 'ampq-test',
+        exchange: 'amqp-test',
+        queue: 'amqp-test',
+        routingKey: 'amqp-test',
     }
-)
+);
 ```
 
 ### Publish messages
@@ -66,18 +79,25 @@ Now you can start publishing messages:
 ```JavaScript
 const amqp = require('@idearium/amqp');
 
-amqp.publish('test-b', { test: true }, {
-    exchange: 'ampq-test',
-    routingKey: 'ampq-test',
-    persistent: true,
-});
+const client = await amqp('amqps://localhost:5671/');
+
+await client.publish(
+    'test-b',
+    { test: true },
+    {
+        exchange: 'amqp-test',
+        routingKey: 'amqp-test',
+        persistent: true,
+    }
+);
 ```
 
 ## Examples
 
 ### Certificates
 
-This example shows how to load certificates and pass it to `connect` to allow making secured connections.
+This example shows how to load certificates and pass them to the factory to make
+secured connections.
 
 ```JavaScript
 // lib/certs.js
@@ -123,19 +143,14 @@ module.exports = async (dir) => {
 const amqp = require('@idearium/amqp');
 const certs = require('./lib/certs');
 
-const createConnection = async () => {
+module.exports = async () => {
     const opts = await certs(`${process.cwd()}/amqp-certs`);
 
-    return client.connect(
-        'amqps://localhost:5671',
-        opts
-    );
-};
-
-module.exports = async (opts = {}) => {
-    await createConnection();
+    const client = await amqp('amqps://localhost:5671', opts);
 
     // Setup consumers
     // Publish messages
+
+    return client;
 };
 ```

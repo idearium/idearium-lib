@@ -24,7 +24,7 @@ const amqp = async (mqUrl = amqpUrl, opts = {}) => {
 
         if (!connection.isConnected()) {
             throw new Error(
-                'You must connect to a server before using consume'
+                'You must connect to a server before using consume',
             );
         }
 
@@ -59,14 +59,14 @@ const amqp = async (mqUrl = amqpUrl, opts = {}) => {
                             debug: { data, type },
                             info: { exchange, name, queue, routingKey },
                         },
-                        'Consuming a message'
+                        'Consuming a message',
                     );
 
                     await consumer(data);
                 } catch (err) {
                     log.error(
                         { err, exchange, name, queue, routingKey, type },
-                        'An error occurred while processing a message'
+                        'An error occurred while processing a message',
                     );
                 }
 
@@ -74,7 +74,7 @@ const amqp = async (mqUrl = amqpUrl, opts = {}) => {
                     channel.ack(msg);
                 }
             },
-            { noAck }
+            { noAck },
         );
 
         log.info({ name, type }, 'Setup consumer');
@@ -85,11 +85,11 @@ const amqp = async (mqUrl = amqpUrl, opts = {}) => {
     const publish = async (name, data, options) => {
         if (!connection.isConnected()) {
             throw new Error(
-                'You must connect to a server before using publish'
+                'You must connect to a server before using publish',
             );
         }
 
-        channels.publish(name, data, options);
+        return channels.publish(name, data, options);
     };
 
     return {
