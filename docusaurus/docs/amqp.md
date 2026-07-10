@@ -21,9 +21,9 @@ $ npm install -E @idearium/amqp@beta
 
 ## Usage
 
-`@idearium/amqp` exports a factory `amqp(mqUrl, opts)` that connects to the
-broker and returns `{ consume, publish }`. Call it once at startup, then use the
-returned `client` to set up consumers and publish messages.
+`@idearium/amqp` is an ESM-only package. It exports `createClient`,
+`createConsumer`, and `createPublisher`. Call `createClient` once at startup to
+connect and get back a `client` with `consume` and `publish` methods.
 
 - Connect to an AMQP server.
 - Setup consumers.
@@ -31,122 +31,130 @@ returned `client` to set up consumers and publish messages.
 
 ### Connect to an AMQP server
 
-Call the factory with the broker URL and an optional `opts` object. It resolves
-to a `client` exposing `consume` and `publish`.
+Call `createClient` with a broker URL (or omit `mqUrl` to fall back to
+`process.env.MQ_URL`). It resolves to a `client` exposing `consume`, `publish`,
+`session`, and `stop`.
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-const client = await amqp('amqps://localhost:5671/', { exitOnClose: false });
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
 ```
 
-`exitOnClose` defaults to `false`, meaning a broker disconnect **does not** crash
-the process — `isConnected()` flips to `false` so subsequent calls surface a
-clear error. This is the right default for long-running API servers. Set
-`exitOnClose: true` for short-lived workers that rely on a process supervisor to
-restart them on broker failure (the close handler throws, surfacing as an
-unhandled rejection that terminates the process under Node's default
-`--unhandled-rejections=throw` policy).
+The underlying `AMQPSession` handles automatic reconnection and consumer
+recovery. If reconnection attempts are exhausted, the `onfailed` lifecycle hook
+logs the error. Call `client.stop(reason)` to cleanly close the connection and
+cancel reconnection.
 
 ### Setup consumers
 
 Start by setting up consumers so that messages will be processed:
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-const client = await amqp('amqps://localhost:5671/');
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
 
-await client.consume(
-    'consumer-name',
-    async (data) => {
+await client.consume({
+    consumer: async (data) => {
         console.log('Consuming data', data);
-
-        return true;
     },
-    {
-        exchange: 'amqp-test',
-        queue: 'amqp-test',
-        routingKey: 'amqp-test',
-    }
-);
+    exchange: 'amqp-test',
+    name: 'consumer-name',
+    queue: 'amqp-test',
+    routingKey: 'amqp-test',
+});
 ```
+
+`consume` accepts a single object with `consumer`, `exchange`, `name`, `queue`,
+and `routingKey` (required), plus optional `durable` (default `true`), `noAck`
+(default `false`), and `type` (default `'topic'`). Messages are published as
+persistent by default and deserialized automatically via the built-in JSON codec.
+The `consumer` callback always receives `data` as an array — a single message is
+wrapped as `[data]`.
 
 ### Publish messages
 
 Now you can start publishing messages:
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-const client = await amqp('amqps://localhost:5671/');
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
 
-await client.publish(
-    'test-b',
-    { test: true },
-    {
-        exchange: 'amqp-test',
-        routingKey: 'amqp-test',
-        persistent: true,
-    }
-);
+await client.publish({
+    data: { test: true },
+    exchange: 'amqp-test',
+    routingKey: 'amqp-test',
+});
 ```
+
+`publish` accepts a single object with `data`, `exchange`, and `routingKey`
+(required), plus optional `durable` (default `true`) and `type` (default
+`'topic'`). Messages are persistent (`deliveryMode: 2`) by default.
 
 ## Examples
 
 ### Certificates
 
-This example shows how to load certificates and pass them to the factory to make
-secured connections.
+This example shows how to load certificates and pass them as `tlsOptions` to
+make secured connections.
 
 ```JavaScript
 // lib/certs.js
+import { readFile, readdir } from 'fs/promises';
+import { join } from 'path';
 
-const fs = require('fs/promises');
-const { join } = require('path');
-const promiseAllSettled = require('@idearium/promise-all-settled');
+const loadFile = async (path) => readFile(path, 'utf-8');
 
-const loadFile = async (path) => fs.readFile(path, 'utf-8');
+const readDir = async (path) => readdir(path);
 
-const readDir = async (path) => fs.readdir(path);
-
-module.exports = async (dir) => {
+export const loadCerts = async (dir) => {
     const content = await readDir(dir);
 
-    const certs = {};
+    const tlsOptions = {};
 
     const certPath = content.find((path) => /\.ce?rt$/.test(path));
     const keyPath = content.find((path) => /\.key$/.test(path));
 
     if (certPath) {
-        certs.crt = await loadFile(join(dir, certPath));
+        tlsOptions.cert = await loadFile(join(dir, certPath));
     }
 
     if (keyPath) {
-        certs.key = await loadFile(join(dir, keyPath));
+        tlsOptions.key = await loadFile(join(dir, keyPath));
     }
 
     if (content.includes('ca')) {
-        [, certs.ca] = await promiseAllSettled(
-            (await readDir(join(dir, 'ca')))
-                .filter((path) => /\.ce?rt$/.test(path))
-                .map((path) => loadFile(join(dir, 'ca', path)))
+        const caFiles = (await readDir(join(dir, 'ca')))
+            .filter((path) => /\.ce?rt$/.test(path));
+
+        const results = await Promise.allSettled(
+            caFiles.map((path) => loadFile(join(dir, 'ca', path))),
         );
+
+        tlsOptions.ca = results
+            .filter(({ status }) => status === 'fulfilled')
+            .map(({ value }) => value);
     }
 
-    return certs;
+    return tlsOptions;
 };
-
 ```
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
-const certs = require('./lib/certs');
+// index.js
+import { createClient } from '@idearium/amqp';
 
-module.exports = async () => {
-    const opts = await certs(`${process.cwd()}/amqp-certs`);
+import { loadCerts } from './lib/certs.js';
 
-    const client = await amqp('amqps://localhost:5671', opts);
+export default async () => {
+    const tlsOptions = await loadCerts(`${process.cwd()}/amqp-certs`);
+
+    const client = await createClient({
+        mqUrl: 'amqps://localhost:5671/',
+        tlsOptions,
+    });
 
     // Setup consumers
     // Publish messages

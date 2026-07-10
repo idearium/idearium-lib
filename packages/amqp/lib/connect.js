@@ -5,6 +5,11 @@ const log = createLog();
 
 const redactUrl = ({ url }) => {
     const [protocol, remainder] = url.split('://');
+
+    if (!remainder) {
+        return url;
+    }
+
     let host = remainder;
 
     if (host.includes('@')) {

@@ -116,6 +116,20 @@ describe('connect', () => {
                 connect({ mqUrl: 'amqps://host:5671/' }),
             ).resolves.toBeDefined();
         });
+
+        it('does not crash when URL has no scheme separator', async () => {
+            const session = { stop: vi.fn() };
+            AMQPSession.connect.mockResolvedValue(session);
+
+            await expect(
+                connect({ mqUrl: 'localhost:5671' }),
+            ).resolves.toBeDefined();
+
+            expect(AMQPSession.connect).toHaveBeenCalledWith(
+                'localhost:5671',
+                expect.objectContaining({}),
+            );
+        });
     });
 
     describe('validation and env-var default', () => {
