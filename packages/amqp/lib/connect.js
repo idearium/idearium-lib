@@ -1,9 +1,15 @@
-const amqp = require('amqplib');
-const safePromise = require('@idearium/safe-promise');
-const log = require('@idearium/log')();
+import { AMQPSession, builtinParsers } from '@cloudamqp/amqp-client';
+import createLog from '@idearium/log';
 
-const redactUrl = (url) => {
+const log = createLog();
+
+const redactUrl = ({ url }) => {
     const [protocol, remainder] = url.split('://');
+
+    if (!remainder) {
+        return url;
+    }
+
     let host = remainder;
 
     if (host.includes('@')) {
@@ -13,45 +19,34 @@ const redactUrl = (url) => {
     return `${protocol}://${host}`;
 };
 
-module.exports = async (mqUrl, opts = {}) => {
-    let state = 'disconnected';
-
+export const connect = async ({
+    mqUrl = process.env.MQ_URL,
+    tlsOptions,
+    ...sessionOptions
+}) => {
     if (!mqUrl) {
         throw new Error('mqUrl parameter is required');
     }
 
-    const url = redactUrl(mqUrl);
+    const url = redactUrl({ url: mqUrl });
 
     log.info({ url }, 'Connecting to AMQP server.');
 
-    state = 'connecting';
-
-    const [err, connection] = await safePromise(amqp.connect(mqUrl, opts));
-
-    if (err) {
-        log.error({ err, url }, 'Could not connect to AMQP server.');
-
-        throw err;
-    }
-
-    state = 'connected';
-
-    log.info({ url }, 'Connected to AMQP server.');
-
-    // This needs to be async so that the throw causes Node.js to exit.
-    connection.on('close', async (connectionErr) => {
-        state = 'disconnected';
-
-        log.error(
-            { err: connectionErr, url },
-            'Connection to the AMQP server closed.'
-        );
-
-        // This didn't wor for some reason?
-        throw new Error('The connection to the AMQP server closed.');
+    const session = await AMQPSession.connect(mqUrl, {
+        tlsOptions,
+        parsers: builtinParsers,
+        defaultContentType: 'application/json',
+        onconnect: () => {
+            log.info({ url }, 'Connected to AMQP server.');
+        },
+        ondisconnect: (err) => {
+            log.warn({ err, url }, 'Connection lost; attempting to reconnect.');
+        },
+        onfailed: (err) => {
+            log.error({ err, url }, 'Reconnection to the AMQP server failed.');
+        },
+        ...sessionOptions,
     });
 
-    connection.isConnected = () => state === 'connected';
-
-    return connection;
+    return session;
 };

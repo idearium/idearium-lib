@@ -21,121 +21,203 @@ $ npm install -E @idearium/amqp@beta
 
 ## Usage
 
-To use `@idearium/amqp`, you'll need to:
+`@idearium/amqp` is an ESM-only package. It exports `createClient`,
+`createConsumer`, and `createPublisher`. Call `createClient` once at startup to
+connect and get back a `client` with `consume` and `publish` methods.
 
 - Connect to an AMQP server.
 - Setup consumers.
 - Publish messages.
 
+### Choosing the right function
+
+| Function          | Best for                                                    | Owns connection?                   | Can consume?           | Can publish?                       |
+| ----------------- | ----------------------------------------------------------- | ---------------------------------- | ---------------------- | ---------------------------------- |
+| `createClient`    | Apps that both consume and publish on a shared connection   | Yes — exposes `session` and `stop` | Yes (`client.consume`) | Yes (`client.publish`)             |
+| `createConsumer`  | Worker processes that only consume messages                 | Yes — self-managed, exposes `stop` | Yes (single consumer)  | No                                 |
+| `createPublisher` | Producers that only publish to a fixed exchange/routing key | Yes — self-managed, exposes `stop` | No                     | Yes (reusable `publish({ data })`) |
+
+Use `createClient` when you need both directions or want to share one
+connection across multiple consumers and publishers. Use `createConsumer` or
+`createPublisher` when you need a single-purpose connection with less setup
+boilerplate.
+
 ### Connect to an AMQP server
 
-Use the following to create a connection to an AMQP server.
+Call `createClient` with a broker URL (or omit `mqUrl` to fall back to
+`process.env.MQ_URL`). It resolves to a `client` exposing `consume`, `publish`,
+`session`, and `stop`.
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-await amqp.connect('amqps://localhost:5671')
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
 ```
+
+The underlying `AMQPSession` handles automatic reconnection and consumer
+recovery. If reconnection attempts are exhausted, the `onfailed` lifecycle hook
+logs the error. Call `client.stop(reason)` to cleanly close the connection and
+cancel reconnection.
 
 ### Setup consumers
 
 Start by setting up consumers so that messages will be processed:
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-amqp.consume(
-    'consumer-name',
-    async (data) => {
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
+
+await client.consume({
+    consumer: async (data) => {
         console.log('Consuming data', data);
-
-        return true;
     },
-    {
-        exchange: 'ampq-test',
-        queue: 'ampq-test',
-        routingKey: 'ampq-test',
-    }
-)
+    exchange: 'amqp-test',
+    name: 'consumer-name',
+    queue: 'amqp-test',
+    routingKey: 'amqp-test',
+});
 ```
+
+`consume` accepts a single object with `consumer`, `exchange`, `name`, `queue`,
+and `routingKey` (required), plus optional `durable` (default `true`), `noAck`
+(default `false`), and `type` (default `'topic'`). Messages are published as
+persistent by default and deserialized automatically via the built-in JSON codec.
+The `consumer` callback always receives `data` as an array — a single message is
+wrapped as `[data]`.
 
 ### Publish messages
 
 Now you can start publishing messages:
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
+import { createClient } from '@idearium/amqp';
 
-amqp.publish('test-b', { test: true }, {
-    exchange: 'ampq-test',
-    routingKey: 'ampq-test',
-    persistent: true,
+const client = await createClient({ mqUrl: 'amqps://localhost:5671/' });
+
+await client.publish({
+    data: { test: true },
+    exchange: 'amqp-test',
+    routingKey: 'amqp-test',
 });
+```
+
+`publish` accepts a single object with `data`, `exchange`, and `routingKey`
+(required), plus optional `durable` (default `true`) and `type` (default
+`'topic'`). Messages are persistent (`deliveryMode: 2`) by default.
+
+### Standalone consumer
+
+Use `createConsumer` when you want a single consumer with its own dedicated
+connection (e.g., a worker process). It connects, sets up the exchange, queue,
+binding, and subscription in one call, and returns `{ name, subscription, stop }`.
+
+```JavaScript
+import { createConsumer } from '@idearium/amqp';
+
+const consumer = await createConsumer({
+    consumer: async (data) => {
+        console.log('Consuming data', data);
+    },
+    exchange: 'amqp-test',
+    name: 'consumer-name',
+    queue: 'amqp-test',
+    routingKey: 'amqp-test',
+    mqUrl: 'amqps://localhost:5671/',
+});
+
+// Gracefully shut down
+consumer.stop('shutdown');
+```
+
+### Standalone publisher
+
+Use `createPublisher` when you want a reusable publish function with its own
+dedicated connection. It accepts `exchange` and `routingKey` at setup time,
+then returns `{ publish, stop }`. Call `publish({ data })` for each message
+and `stop(reason)` to gracefully close the connection.
+
+```JavaScript
+import { createPublisher } from '@idearium/amqp';
+
+const { publish, stop } = await createPublisher({
+    exchange: 'amqp-test',
+    routingKey: 'amqp-test',
+    mqUrl: 'amqps://localhost:5671/',
+});
+
+await publish({ data: { test: true } });
+
+// Gracefully shut down
+stop('shutdown');
 ```
 
 ## Examples
 
 ### Certificates
 
-This example shows how to load certificates and pass it to `connect` to allow making secured connections.
+This example shows how to load certificates and pass them as `tlsOptions` to
+make secured connections.
 
 ```JavaScript
 // lib/certs.js
+import { readFile, readdir } from 'fs/promises';
+import { join } from 'path';
 
-const fs = require('fs/promises');
-const { join } = require('path');
-const promiseAllSettled = require('@idearium/promise-all-settled');
+const loadFile = async (path) => readFile(path, 'utf-8');
 
-const loadFile = async (path) => fs.readFile(path, 'utf-8');
+const readDir = async (path) => readdir(path);
 
-const readDir = async (path) => fs.readdir(path);
-
-module.exports = async (dir) => {
+export const loadCerts = async (dir) => {
     const content = await readDir(dir);
 
-    const certs = {};
+    const tlsOptions = {};
 
     const certPath = content.find((path) => /\.ce?rt$/.test(path));
     const keyPath = content.find((path) => /\.key$/.test(path));
 
     if (certPath) {
-        certs.crt = await loadFile(join(dir, certPath));
+        tlsOptions.cert = await loadFile(join(dir, certPath));
     }
 
     if (keyPath) {
-        certs.key = await loadFile(join(dir, keyPath));
+        tlsOptions.key = await loadFile(join(dir, keyPath));
     }
 
     if (content.includes('ca')) {
-        [, certs.ca] = await promiseAllSettled(
-            (await readDir(join(dir, 'ca')))
-                .filter((path) => /\.ce?rt$/.test(path))
-                .map((path) => loadFile(join(dir, 'ca', path)))
+        const caFiles = (await readDir(join(dir, 'ca')))
+            .filter((path) => /\.ce?rt$/.test(path));
+
+        const results = await Promise.allSettled(
+            caFiles.map((path) => loadFile(join(dir, 'ca', path))),
         );
+
+        tlsOptions.ca = results
+            .filter(({ status }) => status === 'fulfilled')
+            .map(({ value }) => value);
     }
 
-    return certs;
+    return tlsOptions;
 };
-
 ```
 
 ```JavaScript
-const amqp = require('@idearium/amqp');
-const certs = require('./lib/certs');
+// index.js
+import { createClient } from '@idearium/amqp';
 
-const createConnection = async () => {
-    const opts = await certs(`${process.cwd()}/amqp-certs`);
+import { loadCerts } from './lib/certs.js';
 
-    return client.connect(
-        'amqps://localhost:5671',
-        opts
-    );
-};
+export default async () => {
+    const tlsOptions = await loadCerts(`${process.cwd()}/amqp-certs`);
 
-module.exports = async (opts = {}) => {
-    await createConnection();
+    const client = await createClient({
+        mqUrl: 'amqps://localhost:5671/',
+        tlsOptions,
+    });
 
     // Setup consumers
     // Publish messages
+
+    return client;
 };
 ```
