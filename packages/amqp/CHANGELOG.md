@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v2.0.0-beta.1
+## v2.0.0-beta.2
 
 - Switched from `amqplib` to `@cloudamqp/amqp-client` 4.0.0
 - New high-level API with automatic reconnection and consumer recovery
