@@ -29,17 +29,35 @@ describe('createPublisher', () => {
     });
 
     describe('factory behaviour', () => {
-        it('returns an async function', async () => {
+        it('returns { publish, stop }', async () => {
             const { session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const result = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',
             });
 
-            expect(typeof publish).toBe('function');
+            expect(result).toHaveProperty('publish');
+            expect(result).toHaveProperty('stop');
+            expect(typeof result.publish).toBe('function');
+            expect(typeof result.stop).toBe('function');
+        });
+
+        it('calls session.stop() when stop() is invoked', async () => {
+            const { session } = createMockSession();
+            connect.mockResolvedValue(session);
+
+            const { stop } = await createPublisher({
+                exchange: 'ex',
+                routingKey: 'rk',
+                mqUrl: 'amqps://host:5671/',
+            });
+
+            stop('shutdown');
+
+            expect(session.stop).toHaveBeenCalledWith('shutdown');
         });
 
         it('calls connect with { mqUrl, tlsOptions, ...sessionOptions }', async () => {
@@ -152,7 +170,7 @@ describe('createPublisher', () => {
             const { mockExchange, session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',
@@ -167,7 +185,7 @@ describe('createPublisher', () => {
             const { mockExchange, session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',
@@ -186,7 +204,7 @@ describe('createPublisher', () => {
             const { mockExchange, session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'custom-key',
                 mqUrl: 'amqps://host:5671/',
@@ -204,7 +222,7 @@ describe('createPublisher', () => {
             const { mockExchange, session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',
@@ -221,7 +239,7 @@ describe('createPublisher', () => {
             mockExchange.publish.mockRejectedValue(new Error('publish fail'));
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',
@@ -246,11 +264,11 @@ describe('createPublisher', () => {
             ).rejects.toThrow('routingKey parameter is required');
         });
 
-        it('returned function throws when data is undefined', async () => {
+        it('throws when data is undefined', async () => {
             const { session } = createMockSession();
             connect.mockResolvedValue(session);
 
-            const publish = await createPublisher({
+            const { publish } = await createPublisher({
                 exchange: 'ex',
                 routingKey: 'rk',
                 mqUrl: 'amqps://host:5671/',

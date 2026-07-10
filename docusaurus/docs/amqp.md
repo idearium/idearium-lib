@@ -29,6 +29,19 @@ connect and get back a `client` with `consume` and `publish` methods.
 - Setup consumers.
 - Publish messages.
 
+### Choosing the right function
+
+| Function          | Best for                                                    | Owns connection?                   | Can consume?           | Can publish?                       |
+| ----------------- | ----------------------------------------------------------- | ---------------------------------- | ---------------------- | ---------------------------------- |
+| `createClient`    | Apps that both consume and publish on a shared connection   | Yes — exposes `session` and `stop` | Yes (`client.consume`) | Yes (`client.publish`)             |
+| `createConsumer`  | Worker processes that only consume messages                 | Yes — self-managed, exposes `stop` | Yes (single consumer)  | No                                 |
+| `createPublisher` | Producers that only publish to a fixed exchange/routing key | Yes — self-managed, exposes `stop` | No                     | Yes (reusable `publish({ data })`) |
+
+Use `createClient` when you need both directions or want to share one
+connection across multiple consumers and publishers. Use `createConsumer` or
+`createPublisher` when you need a single-purpose connection with less setup
+boilerplate.
+
 ### Connect to an AMQP server
 
 Call `createClient` with a broker URL (or omit `mqUrl` to fall back to
@@ -92,6 +105,52 @@ await client.publish({
 `publish` accepts a single object with `data`, `exchange`, and `routingKey`
 (required), plus optional `durable` (default `true`) and `type` (default
 `'topic'`). Messages are persistent (`deliveryMode: 2`) by default.
+
+### Standalone consumer
+
+Use `createConsumer` when you want a single consumer with its own dedicated
+connection (e.g., a worker process). It connects, sets up the exchange, queue,
+binding, and subscription in one call, and returns `{ name, subscription, stop }`.
+
+```JavaScript
+import { createConsumer } from '@idearium/amqp';
+
+const consumer = await createConsumer({
+    consumer: async (data) => {
+        console.log('Consuming data', data);
+    },
+    exchange: 'amqp-test',
+    name: 'consumer-name',
+    queue: 'amqp-test',
+    routingKey: 'amqp-test',
+    mqUrl: 'amqps://localhost:5671/',
+});
+
+// Gracefully shut down
+consumer.stop('shutdown');
+```
+
+### Standalone publisher
+
+Use `createPublisher` when you want a reusable publish function with its own
+dedicated connection. It accepts `exchange` and `routingKey` at setup time,
+then returns `{ publish, stop }`. Call `publish({ data })` for each message
+and `stop(reason)` to gracefully close the connection.
+
+```JavaScript
+import { createPublisher } from '@idearium/amqp';
+
+const { publish, stop } = await createPublisher({
+    exchange: 'amqp-test',
+    routingKey: 'amqp-test',
+    mqUrl: 'amqps://localhost:5671/',
+});
+
+await publish({ data: { test: true } });
+
+// Gracefully shut down
+stop('shutdown');
+```
 
 ## Examples
 
