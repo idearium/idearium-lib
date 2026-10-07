@@ -14,13 +14,13 @@ jobs:
         if: startsWith(github.event.release.tag_name, '@idearium/')
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v6
               with:
-                  cache: npm
                   node-version: '24'
                   registry-url: 'https://registry.npmjs.org'
-            - run: npm install
+                  package-manager-cache: false
+            - run: npm ci
             - name: Extract package name
               id: pkg
               run: |
@@ -35,13 +35,13 @@ jobs:
         needs: test
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v6
               with:
-                  cache: npm
                   node-version: '24'
                   registry-url: 'https://registry.npmjs.org'
-            - run: npm install
+                  package-manager-cache: false
+            - run: npm ci
             - name: Extract package name
               id: pkg
               run: |
