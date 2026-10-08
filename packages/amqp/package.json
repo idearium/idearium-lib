@@ -10,7 +10,22 @@
         "@idearium/certs": "2.0.0",
         "@idearium/log": "2.1.0",
         "@idearium/promise-all-settled": "1.0.0",
-        "@idearium/safe-promise": "1.0.0",
+        "@idearium/safe-promise": "1.0.0"
+    },
+    "peerDependencies": {
+        "@cloudamqp/amqp-client": ">=3.1",
+        "amqplib": ">=0.10"
+    },
+    "peerDependenciesMeta": {
+        "@cloudamqp/amqp-client": {
+            "optional": true
+        },
+        "amqplib": {
+            "optional": true
+        }
+    },
+    "devDependencies": {
+        "@cloudamqp/amqp-client": "3.1.1",
         "amqplib": "0.10.3"
     },
     "scripts": {
